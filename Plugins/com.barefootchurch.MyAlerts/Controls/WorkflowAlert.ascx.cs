@@ -35,7 +35,8 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
     [Category( "Barefoot Church" )]
     [Description( "Block to display a count of the workflows (UEFs) that are assigned to the current user." )]
     [LinkedPage( "Listing Page", "Page used to view all workflows assigned to the current user.", false, "F3FA9EBE-A540-4106-90E5-2DFB2D72BBF0" )]
-
+    [CategoryField( "Categories", "Optional categories to limit display to.", true, "Rock.Model.WorkflowType", "", "", false, "", "", 1 )]
+    [BooleanField( "Include Child Categories", "Should descendent categories of the selected Categories be included?", true, "", 1 )]
     [IntegerField( "Cache Duration", "Number of seconds to cache the content per person.", false, 60, "", 2 )]
     public partial class WorkflowAlert : Rock.Web.UI.RockBlock
     {
@@ -159,7 +160,13 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         private List<int> GetCategories( RockContext rockContext )
         {
             int entityTypeId = EntityTypeCache.Get( typeof( WorkflowType ) ).Id;
-            return GetCategoryIds( new List<int>(), new CategoryService( rockContext ).GetNavigationItems( entityTypeId, new List<Guid>(), true, CurrentPerson ) );
+
+            var selectedCategories = new List<Guid>();
+            GetAttributeValue( "Categories" ).SplitDelimitedValues().ToList().ForEach( c => selectedCategories.Add( c.AsGuid() ) );
+
+            bool includeChildCategories = GetAttributeValue( "IncludeChildCategories" ).AsBoolean();
+
+            return GetCategoryIds( new List<int>(), new CategoryService( rockContext ).GetNavigationItems( entityTypeId, selectedCategories, includeChildCategories, CurrentPerson ) );
         }
 
         /// <summary>
