@@ -29,13 +29,13 @@ using Rock.Web.Cache;
 namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
 {
     /// <summary>
-    /// Block to display a count of the connection requests assigned to the user current user that are in a critical status.
+    /// Block to display a count of the connection requests assigned to the user current user.
     /// </summary>
     [DisplayName( "My Connection Alerts" )]
     [Category( "Barefoot Church" )]
-    [Description( "Block to display a count of the connection requests assigned to the user current user that are in a critical status." )]
+    [Description( "Block to display a count of the connection requests assigned to the user current users." )]
     [LinkedPage( "Listing Page", "Page used to view all connection requests assigned to the current user.", false, "530860ED-BC73-4A43-8E7C-69533EF2B6AD" )]
-
+    [BooleanField( "Critical Only", "Only count critical connections", true, IsRequired = true )]
     [IntegerField( "Cache Duration", "Number of seconds to cache the content per person.", false, 60, "", 2 )]
     public partial class ConnectionAlert : Rock.Web.UI.RockBlock
     {
@@ -43,41 +43,41 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         {
             base.OnLoad( e );
 
-            criticalConnectionCount();
+            connectionCount();
         }
 
-        protected void criticalConnectionCount()
+        protected void connectionCount()
         {
             // Check for current person
             if ( CurrentPersonAliasId.HasValue )
             {
                 int cacheDuration = GetAttributeValue( "CacheDuration" ).AsInteger();
                 string cacheKey = "MyAlerts:ConnectionCount:PersonAliasId:" + CurrentPersonAliasId.ToString();
-                int? activeCriticalConnections = null;
+                int? activeConnections = null;
                 if ( cacheDuration > 0 )
                 {
-                    activeCriticalConnections = this.GetCacheItem( cacheKey ) as int?;
+                    activeConnections = this.GetCacheItem( cacheKey ) as int?;
                 }
 
-                if ( !activeCriticalConnections.HasValue )
+                if ( !activeConnections.HasValue )
                 {
                     using ( var rockContext = new RockContext() )
                     {
                         // Return the count of connection requests assigned to the current user that are in a critical status
-                        activeCriticalConnections = GetCriticalConnections( rockContext ).Count();
+                        activeConnections = GetConnections( rockContext ).Count();
                         if ( cacheDuration > 0 )
                         {
-                            this.AddCacheItem( cacheKey, activeCriticalConnections, cacheDuration );
+                            this.AddCacheItem( cacheKey, activeConnections, cacheDuration );
                         }
                     }
                 }
 
                 // set the default display
                 var spanLiteral = "";
-                if ( activeCriticalConnections > 0 )
+                if ( activeConnections > 0 )
                 {
                     // add the count of how many workflows need to be assigned/completed
-                    spanLiteral = string.Format( "<span class='badge badge-info'>{0}</span>", activeCriticalConnections );
+                    spanLiteral = string.Format( "<span class='badge badge-info'>{0}</span>", activeConnections );
                 }
 
                 lbConnectionListingPage.Controls.Add( new LiteralControl( spanLiteral ) );
@@ -100,25 +100,25 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         /// </summary>
         /// <param name="rockContext"></param>
         /// <returns></returns>
-        private List<ConnectionRequest> GetCriticalConnections( RockContext rockContext )
+        private List<ConnectionRequest> GetConnections( RockContext rockContext )
         {
-            var criticalConnections = new List<ConnectionRequest>();
+            var connections = new List<ConnectionRequest>();
             if ( CurrentPerson != null )
             {
-                criticalConnections = RockPage.GetSharedItem( "ActiveCriticalConnections" ) as List<ConnectionRequest>;
+                connections = RockPage.GetSharedItem( "ActiveConnections" ) as List<ConnectionRequest>;
 
 
-                if ( criticalConnections == null )
+                if ( connections == null )
                 {
-                    criticalConnections = new ConnectionRequestService( rockContext ).Queryable()
+                    var query = new ConnectionRequestService( rockContext ).Queryable()
                         .Where( r => r.ConnectionState == 0 ) // Active
-                        .Where( r => r.ConnectorPersonAliasId == CurrentPersonAliasId )
-                        .Where( r => r.ConnectionStatus.IsCritical == true )
-                        .ToList();
-                    RockPage.SaveSharedItem( "ActiveCriticalConnections", criticalConnections );
+                        .Where( r => r.ConnectorPersonAliasId == CurrentPersonAliasId );
+                    if ( GetAttributeValue( "CriticalOnly").AsBoolean() ) { query = query.Where( r => r.ConnectionStatus.IsCritical == true ); }
+                    connections = query.ToList();
+                    RockPage.SaveSharedItem( "ActiveConnections", connections );
                 }
             }
-            return criticalConnections;
+            return connections;
 
         }
     }
