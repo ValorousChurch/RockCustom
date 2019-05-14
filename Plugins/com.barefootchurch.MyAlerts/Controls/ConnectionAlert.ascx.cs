@@ -111,7 +111,10 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                 if ( connections == null )
                 {
                     var query = new ConnectionRequestService( rockContext ).Queryable()
-                        .Where( r => r.ConnectionState == 0 ) // Active
+                        .Where(
+                            r => r.ConnectionState == ConnectionState.Active ||
+                            ( r.ConnectionState == ConnectionState.FutureFollowUp && r.FollowupDate < DateTime.Now )
+                        )
                         .Where( r => r.ConnectorPersonAliasId == CurrentPersonAliasId );
                     if ( GetAttributeValue( "CriticalOnly").AsBoolean() ) { query = query.Where( r => r.ConnectionStatus.IsCritical == true ); }
                     connections = query.ToList();
