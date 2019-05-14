@@ -40,6 +40,13 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
     [IntegerField( "Cache Duration", "Number of seconds to cache the content per person.", false, 60, "", 2 )]
     public partial class WorkflowAlert : Rock.Web.UI.RockBlock
     {
+        protected override void OnInit( EventArgs e )
+        {
+            base.OnInit( e );
+
+            RockPage.AddCSSLink( "~/Plugins/com_barefootchurch/MyAlerts/Styles/styles.css", true );
+        }
+
         protected override void OnLoad( EventArgs e )
         {
             base.OnLoad( e );
