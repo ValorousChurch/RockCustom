@@ -58,14 +58,14 @@
                                 <h4>First Adult</h4>
                                 <Rock:RockTextBox ID="tbFirstName" runat="server" Label="First Name" Required="true"></Rock:RockTextBox>
                                 <Rock:RockTextBox ID="tbLastName" runat="server" Label="Last Name" Required="true"></Rock:RockTextBox>
-                                <asp:Panel ID="pnlCellPhone" runat="server" CssClass="row">
+                                <div class="row">
                                     <div class="col-sm-7">
                                         <Rock:PhoneNumberBox ID="pnCell" runat="server" Label="Cell Phone" />
                                     </div>
                                     <div class="col-sm-5">
                                         <Rock:RockCheckBox ID="cbSms" runat="server" Label="&nbsp;" Text="Enable SMS" />
                                     </div>
-                                </asp:Panel>
+                                </div>
                                 <Rock:EmailBox ID="tbEmail" runat="server" Label="Email" Required="false"></Rock:EmailBox>
                             </div>
                             <div class="col-md-6">
@@ -86,13 +86,13 @@
                         <hr />
                         <div class="row">
                             <div class="col-md-6">
-                                <asp:Panel ID="pnlHomePhone" runat="server" CssClass="row">
+                                <div class="row">
                                     <div class="col-sm-7">
                                         <Rock:PhoneNumberBox ID="pnHome" runat="server" Label="Home Phone" />
                                     </div>
                                     <div class="col-sm-5">
                                     </div>
-                                </asp:Panel>
+                                </div>
                                 <Rock:AddressControl ID="acAddress" Label="Address" runat="server" />
                             </div>
                             <div class="col-md-6">

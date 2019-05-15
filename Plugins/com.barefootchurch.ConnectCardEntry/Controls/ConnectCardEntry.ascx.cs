@@ -426,7 +426,7 @@ namespace RockWeb.Plugins.com_barefootchurch
 
 
                             // If person was not found, Look for existing person in same family with same name and birthdate
-                            if (firstAdult == null && child.BirthDate.HasValue)
+                            if ( firstAdult == null && child.BirthDate.HasValue )
                             {
                                 var possibleMatch = new Person { NickName = child.NickName, LastName = child.LastName };
                                 possibleMatch.SetBirthDate( child.BirthDate );
@@ -446,17 +446,17 @@ namespace RockWeb.Plugins.com_barefootchurch
                                 childPerson.RecordStatusValueId = _dvcRecordStatus.Id;
                                 childPerson.ConnectionStatusValueId = _dvcChildConnectionStatus.Id;
 
-                                if (child.Gender != Gender.Unknown)
+                                if ( child.Gender != Gender.Unknown )
                                 {
                                     childPerson.Gender = child.Gender;
                                 }
 
-                                if (child.BirthDate.HasValue)
+                                if ( child.BirthDate.HasValue )
                                 {
                                     childPerson.SetBirthDate( child.BirthDate );
                                 }
 
-                                if (child.GradeOffset.HasValue)
+                                if ( child.GradeOffset.HasValue )
                                 {
                                     childPerson.GradeOffset = child.GradeOffset;
                                 }
@@ -498,7 +498,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                 }
 
                 // Reload page
-                nbMessage.Text = string.Format( "New entry for {0} saved.", addedPeopleNames.AsDelimited( ", ", " and ") );
+                nbMessage.Text = string.Format( "New entry for {0} saved.", addedPeopleNames.AsDelimited( ", ", " and " ) );
                 nbMessage.Visible = true;
                 hfShowSuccess.Value = "true";
                 ClearControls();
@@ -527,7 +527,7 @@ namespace RockWeb.Plugins.com_barefootchurch
         {
             var row = sender as PreRegistrationChildRow;
             var child = Children.FirstOrDefault( m => m.Guid.Equals( row.PersonGuid ) );
-            if (child != null)
+            if ( child != null )
             {
                 Children.Remove( child );
             }
@@ -559,9 +559,9 @@ namespace RockWeb.Plugins.com_barefootchurch
         {
             prChildren.ClearRows();
 
-            foreach (var child in Children)
+            foreach ( var child in Children )
             {
-                if (child != null)
+                if ( child != null )
                 {
                     var childRow = new PreRegistrationChildRow();
                     childRow.ValidationGroup = this.BlockValidationGroup;
@@ -594,7 +594,7 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                     childRow.ValidationGroup = BlockValidationGroup;
 
-                    if (setSelection)
+                    if ( setSelection )
                     {
                         childRow.NickName = child.NickName;
                         childRow.LastName = child.LastName;
@@ -967,7 +967,7 @@ namespace RockWeb.Plugins.com_barefootchurch
         {
             Children = new List<PreRegistrationChild>();
 
-            foreach (var childRow in prChildren.ChildRows)
+            foreach ( var childRow in prChildren.ChildRows )
             {
                 var person = new Person();
                 person.Id = childRow.PersonId;
