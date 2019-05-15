@@ -260,7 +260,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                         firstAdult.RecordTypeValueId = DefinedValueCache.Get( Rock.SystemGuid.DefinedValue.PERSON_RECORD_TYPE_PERSON.AsGuid() ).Id;
                         firstAdult.ConnectionStatusValueId = _dvcConnectionStatus.Id;
                         firstAdult.RecordStatusValueId = _dvcRecordStatus.Id;
-                        firstAdult.Gender = Gender.Unknown;
+                        firstAdult.Gender = rblGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
 
                         family = PersonService.SaveNewPerson( firstAdult, rockContext, cpCampus.SelectedCampusId, false );
                     }
@@ -376,7 +376,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                                 secondAdult.RecordTypeValueId = DefinedValueCache.Get( Rock.SystemGuid.DefinedValue.PERSON_RECORD_TYPE_PERSON.AsGuid() ).Id;
                                 secondAdult.ConnectionStatusValueId = _dvcConnectionStatus.Id;
                                 secondAdult.RecordStatusValueId = _dvcRecordStatus.Id;
-                                secondAdult.Gender = Gender.Unknown;
+                                secondAdult.Gender = rblSecondAdultGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
 
                                 secondAdult.IsEmailActive = true;
                                 secondAdult.EmailPreference = EmailPreference.EmailAllowed;
