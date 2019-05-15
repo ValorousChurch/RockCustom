@@ -310,7 +310,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                         {
                             SetPhoneNumber( rockContext, firstAdult, pnHome, null, Rock.SystemGuid.DefinedValue.PERSON_PHONE_TYPE_HOME.AsGuid(), firstAdultChanges );
                         }
-                        if ( !isMatch || !string.IsNullOrWhiteSpace( pnHome.Number ) )
+                        if ( !isMatch || !string.IsNullOrWhiteSpace( pnCell.Number ) )
                         {
                             SetPhoneNumber( rockContext, firstAdult, pnCell, cbSms, Rock.SystemGuid.DefinedValue.PERSON_PHONE_TYPE_MOBILE.AsGuid(), firstAdultChanges );
                         }
@@ -706,7 +706,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             }
             rblSource.DataBind();
 
-            // Use the user's preference and set the Source Setting (if it is still actually still an option in the list).
+            // Use the user's preference and set the Source Setting (if it is still an option in the list).
             var sourceSetting = GetUserPreference( SOURCE_SETTING ).ToStringSafe();
             if ( rblSource.Items.Contains( new ListItem( sourceSetting, sourceSetting ) ) )
             {
