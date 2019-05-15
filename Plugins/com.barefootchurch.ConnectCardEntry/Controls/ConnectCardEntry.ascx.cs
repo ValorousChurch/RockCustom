@@ -489,7 +489,7 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                 // Save the Connection Requests
                 CreateConnectionRequest( rockContext, firstAdult );
-                CreateConnectionRequest( rockContext, secondAdult );
+                //CreateConnectionRequest( rockContext, secondAdult );
 
                 // Save the Prayer Request
                 if ( _isPrayerRequestEnabled )
