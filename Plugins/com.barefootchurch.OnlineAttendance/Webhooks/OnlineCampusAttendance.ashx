@@ -28,8 +28,13 @@ public class OnlineCampusAttendance : IHttpHandler
     RockContext rockContext = new RockContext();
 
     MetricValue metricValue = GetMetricValue( rockContext );
-    metricValue.YValue += count;
-    rockContext.SaveChanges();
+
+    // MetricValues are read-only unless it is Sunday
+    if ( RockDateTime.Today.DayOfWeek == DayOfWeek.Sunday )
+    {
+      metricValue.YValue += count;
+      rockContext.SaveChanges();
+    }
 
     context.Response.ContentType = "application/json";
     context.Response.Write( string.Format("{{ \"date\":\"{0:yyyy-MM-dd}\", \"value\":{1:n0} }}", metricValue.MetricValueDateTime, metricValue.YValue ) );
