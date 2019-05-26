@@ -37,6 +37,7 @@ public class OnlineCampusAttendance : IHttpHandler
     }
 
     context.Response.ContentType = "application/json";
+    context.Response.AddHeader("Access-Control-Allow-Origin", "https://live.barefootchurch.com");
     context.Response.Write( string.Format("{{ \"date\":\"{0:yyyy-MM-dd}\", \"value\":{1:n0} }}", metricValue.MetricValueDateTime, metricValue.YValue ) );
     context.Response.End();
   }
