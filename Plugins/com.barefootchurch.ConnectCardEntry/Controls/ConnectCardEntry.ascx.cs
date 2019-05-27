@@ -45,6 +45,7 @@ namespace RockWeb.Plugins.com_barefootchurch
 
     // Connection Request Settings
     [ConnectionOpportunityField( "Connection Opportunity", "The connection opportunity that new requests will be made for.", true, "", false, "Connection Request Settings", 0 )]
+    [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 1 )]
     [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 1 )]
     [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 2 )]
 
@@ -688,6 +689,15 @@ namespace RockWeb.Plugins.com_barefootchurch
             bool IsSmsChecked = GetAttributeValue( "IsSmsChecked" ).AsBoolean( true );
             cbSecondAdultSms.Checked = cbSms.Checked = IsSmsChecked;
 
+            // Build Decisions list...
+            var decisionList = GetAttributeValue( "Decisions" ).SplitDelimitedValues( false );
+            cblDecisions.Items.Clear();
+            foreach ( var decision in decisionList )
+            {
+                cblDecisions.Items.Add( new ListItem( decision, decision ) );
+            }
+            cblDecisions.DataBind();
+
             // Build Interests list...
             var interestList = GetAttributeValue( "Interests" ).SplitDelimitedValues( false );
             cblInterests.Items.Clear();
@@ -883,6 +893,13 @@ namespace RockWeb.Plugins.com_barefootchurch
                 StringBuilder sb = new StringBuilder();
 
                 sb.AppendFormat( "#### Entry Point - {0}  \n", rblSource.SelectedValue );
+
+                if ( cblDecisions.SelectedValues.Count > 0 )
+                {
+                    sb.AppendFormat( "#### Decisions  \n" );
+                    sb.AppendFormat( "- {0}", cblDecisions.SelectedValues.AsDelimited( "  \n- " ) );
+                    sb.AppendFormat( "  \n" );
+                }
 
                 if ( cblInterests.SelectedValues.Count > 0 )
                 {

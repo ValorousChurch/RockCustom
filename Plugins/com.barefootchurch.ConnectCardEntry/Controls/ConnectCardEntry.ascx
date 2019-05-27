@@ -123,6 +123,7 @@
                     </div>
                 </asp:Panel>
 
+                <Rock:RockCheckBoxList ID="cblDecisions" runat="server" Label="Decision Made" />
                 <Rock:RockCheckBoxList ID="cblInterests" runat="server" Label="Interested in" />
                 <Rock:RockTextBox ID="tbComments" Label="Comments" runat="server" TextMode="MultiLine" Rows="3" />
                 <Rock:RockTextBox ID="tbPrayerRequests" Label="Prayer Requests" runat="server" TextMode="MultiLine" Rows="2" />
