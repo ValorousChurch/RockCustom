@@ -46,23 +46,23 @@ namespace RockWeb.Plugins.com_barefootchurch
     // Connection Request Settings
     [ConnectionOpportunityField( "Connection Opportunity", "The connection opportunity that new requests will be made for.", true, "", false, "Connection Request Settings", 0 )]
     [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 1 )]
-    [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 1 )]
-    [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 2 )]
+    [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 2 )]
+    [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 3 )]
 
     // Person Settings
-    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Connection Status", "The connection status to use for new individuals (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Person Settings", 2 )]
-    [DefinedValueField( "8522BADD-2871-45A5-81DD-C76DA07E2E7E", "Record Status", "The record status to use for new individuals (default: 'Pending'.)", true, false, "283999EC-7346-42E3-B807-BCE9B2BABB49", "Person Settings", 3 )]
-    [BooleanField( "Is Sms Checked By Default ", "Is the 'Enable SMS' option checked by default.", true, "Person Settings", 4, "IsSmsChecked" )]
+    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Connection Status", "The connection status to use for new individuals (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Person Settings", 4 )]
+    [DefinedValueField( "8522BADD-2871-45A5-81DD-C76DA07E2E7E", "Record Status", "The record status to use for new individuals (default: 'Pending'.)", true, false, "283999EC-7346-42E3-B807-BCE9B2BABB49", "Person Settings", 5 )]
+    [BooleanField( "Is Sms Checked By Default ", "Is the 'Enable SMS' option checked by default.", true, "Person Settings", 6, "IsSmsChecked" )]
 
     // Child Settings
-    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Child Connection Status", "The connection status to use for new children (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Child Settings", 5 )]
+    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Child Connection Status", "The connection status to use for new children (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Child Settings", 7 )]
 
     //Prayer Request Settings
-    [BooleanField( "Is Prayer Request Enabled", "Is the Prayer Request text box visible.", true, "Prayer Request Settings", 6 )]
-    [CategoryField( "Prayer Category", "The  category to use for all new prayer requests.", false, "Rock.Model.PrayerRequest", "", "", false, "4B2D88F5-6E45-4B4B-8776-11118C8E8269", "Prayer Request Settings", 7, "PrayerCategory" )]
+    [BooleanField( "Is Prayer Request Enabled", "Is the Prayer Request text box visible.", true, "Prayer Request Settings", 8 )]
+    [CategoryField( "Prayer Category", "The  category to use for all new prayer requests.", false, "Rock.Model.PrayerRequest", "", "", false, "4B2D88F5-6E45-4B4B-8776-11118C8E8269", "Prayer Request Settings", 9, "PrayerCategory" )]
 
     // Misc
-    [LinkedPage( "Person Profile Page", "The person profile page.", false, "", "", 8 )]
+    [LinkedPage( "Person Profile Page", "The person profile page.", false, "", "", 10 )]
 
     public partial class ConnectCardEntry : Rock.Web.UI.RockBlock
     {
