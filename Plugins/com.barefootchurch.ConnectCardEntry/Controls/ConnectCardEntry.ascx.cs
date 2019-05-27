@@ -881,17 +881,20 @@ namespace RockWeb.Plugins.com_barefootchurch
                 connectionRequest.CampusId = cpCampus.SelectedCampusId;
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendFormat( "*Entry Point*: {0}  \n", rblSource.SelectedValue );
+
+                sb.AppendFormat( "#### Entry Point - {0}  \n", rblSource.SelectedValue );
+
                 if ( cblInterests.SelectedValues.Count > 0 )
                 {
-                    sb.AppendFormat( "*Interested in*:  \n" );
+                    sb.AppendFormat( "#### Interests  \n" );
                     sb.AppendFormat( "- {0}", cblInterests.SelectedValues.AsDelimited( "  \n- " ) );
+                    sb.AppendFormat( "  \n" );
                 }
 
                 if ( !string.IsNullOrWhiteSpace( tbComments.Text ) )
                 {
-                    sb.AppendFormat( "  \n*Additional Comments*:" );
-                    sb.AppendFormat( "  \n{0}", tbComments.Text );
+                    sb.AppendFormat( "#### Additional Comments  \n" );
+                    sb.AppendFormat( "{0}", tbComments.Text );
                 }
 
                 connectionRequest.Comments = sb.ToString();
