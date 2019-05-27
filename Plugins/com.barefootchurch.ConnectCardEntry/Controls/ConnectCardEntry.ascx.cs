@@ -40,7 +40,7 @@ using System.Text;
 namespace RockWeb.Plugins.com_barefootchurch
 {
     [DisplayName( "Connect Card Entry" )]
-    [Category( "com_barefootchurch" )]
+    [Category( "Barefoot Church" )]
     [Description( "A block for rapidly adding new people and adding them to a connection request which can launch a workflow to perform additional processing." )]
 
     // Connection Request Settings
