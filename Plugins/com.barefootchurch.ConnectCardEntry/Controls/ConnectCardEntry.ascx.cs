@@ -411,10 +411,10 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                             }
 
-                            History.EvaluateChange( firstAdultChanges, "Email", firstAdult.Email, tbEmail.Text );
+                            History.EvaluateChange( secondAdultChanges, "Email", secondAdult.Email, tbSecondAdultEmail.Text );
                             secondAdult.Email = tbSecondAdultEmail.Text;
 
-                            History.EvaluateChange( firstAdultChanges, "Connection Status", secondAdult.ConnectionStatusValueId, _dvcConnectionStatus.Id );
+                            History.EvaluateChange( secondAdultChanges, "Connection Status", secondAdult.ConnectionStatusValueId, _dvcConnectionStatus.Id );
                             secondAdult.ConnectionStatusValueId = _dvcConnectionStatus.Id;
 
                             if ( !isSpouseMatch || !string.IsNullOrWhiteSpace( pnHome.Number ) )
