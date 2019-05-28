@@ -264,6 +264,14 @@ namespace RockWeb.Plugins.com_barefootchurch
                         firstAdult.Gender = rblGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
 
                         family = PersonService.SaveNewPerson( firstAdult, rockContext, cpCampus.SelectedCampusId, false );
+
+                        // set SourceofVisit
+                        if ( dvpVisitSource.SelectedDefinedValueId.GetValueOrDefault() > 0 )
+                        {
+                            firstAdult.LoadAttributes();
+                            firstAdult.SetAttributeValue( "SourceofVisit", DefinedValueCache.Get( dvpVisitSource.SelectedDefinedValueId.GetValueOrDefault(), rockContext ).Guid );
+                            firstAdult.SaveAttributeValues();
+                        }
                     }
                 }
 

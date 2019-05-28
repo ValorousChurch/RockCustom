@@ -103,6 +103,7 @@
                                     <div class="col-sm-5">
                                     </div>
                                 </div>
+                                <Rock:DefinedValuePicker ID="dvpVisitSource" runat="server" Label="Source of Visit" DefinedTypeId="33" />
                                 <Rock:AddressControl ID="acAddress" Label="Address" runat="server" />
                             </div>
                             <div class="col-md-6">
