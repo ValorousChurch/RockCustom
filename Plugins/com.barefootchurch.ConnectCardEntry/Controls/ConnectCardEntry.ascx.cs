@@ -900,25 +900,25 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.AppendFormat( "#### Entry Point - {0}  \n", rblSource.SelectedValue );
+                sb.AppendFormat( "#### Entry Point - {0}\n", rblSource.SelectedValue );
 
                 if ( cblDecisions.SelectedValues.Count > 0 )
                 {
-                    sb.AppendFormat( "#### Decisions  \n" );
-                    sb.AppendFormat( "- {0}", cblDecisions.SelectedValues.AsDelimited( "  \n- " ) );
-                    sb.AppendFormat( "  \n" );
+                    sb.AppendFormat( "#### Decisions\n" );
+                    sb.AppendFormat( "- {0}", cblDecisions.SelectedValues.AsDelimited( "\n- " ) );
+                    sb.AppendFormat( "\n" );
                 }
 
                 if ( cblInterests.SelectedValues.Count > 0 )
                 {
-                    sb.AppendFormat( "#### Interests  \n" );
-                    sb.AppendFormat( "- {0}", cblInterests.SelectedValues.AsDelimited( "  \n- " ) );
-                    sb.AppendFormat( "  \n" );
+                    sb.AppendFormat( "#### Interests\n" );
+                    sb.AppendFormat( "- {0}", cblInterests.SelectedValues.AsDelimited( "\n- " ) );
+                    sb.AppendFormat( "\n" );
                 }
 
                 if ( !string.IsNullOrWhiteSpace( tbComments.Text ) )
                 {
-                    sb.AppendFormat( "#### Additional Comments  \n" );
+                    sb.AppendFormat( "#### Additional Comments\n" );
                     sb.AppendFormat( "{0}", tbComments.Text );
                 }
 
