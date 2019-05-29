@@ -131,10 +131,13 @@
                 <div class="col-sm-6">
                     <Rock:RockCheckBoxList ID="cblInterests" runat="server" Label="Interested in" />
                 </div>
-                <Rock:RockTextBox ID="tbComments" Label="Comments" runat="server" TextMode="MultiLine" Rows="3" />
-                <Rock:RockTextBox ID="tbPrayerRequests" Label="Prayer Requests" runat="server" TextMode="MultiLine" Rows="2" />
 
-                <div class="actions">
+                <div class="col-sm-12">
+                    <Rock:RockTextBox ID="tbComments" Label="Comments" runat="server" TextMode="MultiLine" Rows="3" />
+                    <Rock:RockTextBox ID="tbPrayerRequests" Label="Prayer Requests" runat="server" TextMode="MultiLine" Rows="2" />
+                </div>
+
+                <div class="actions col-sm-12">
                     <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary margin-r-lg" Text="Save" OnClick="btnSave_Click" />
                     <asp:LinkButton ID="btnCancel" runat="server" Text="Done" CausesValidation="false" OnClick="btnCancel_Click" />
                 </div>
