@@ -45,24 +45,25 @@ namespace RockWeb.Plugins.com_barefootchurch
 
     // Connection Request Settings
     [ConnectionOpportunityField( "Connection Opportunity", "The connection opportunity that new requests will be made for.", true, "", false, "Connection Request Settings", 0 )]
-    [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 1 )]
-    [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 2 )]
-    [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 3 )]
+    [TextField( "Guest Type", "A comma-delimited list of different guest types that can be selected.  The selected item will be added to the Comment field of the connection request.", true, "Returning Guest, First Time Guest - Local, First Time Guest - Vacationer", "Connection Request Settings", 1 )]
+    [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 2 )]
+    [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 3 )]
+    [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 4 )]
 
     // Person Settings
-    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Connection Status", "The connection status to use for new individuals (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Person Settings", 4 )]
-    [DefinedValueField( "8522BADD-2871-45A5-81DD-C76DA07E2E7E", "Record Status", "The record status to use for new individuals (default: 'Pending'.)", true, false, "283999EC-7346-42E3-B807-BCE9B2BABB49", "Person Settings", 5 )]
-    [BooleanField( "Is Sms Checked By Default ", "Is the 'Enable SMS' option checked by default.", true, "Person Settings", 6, "IsSmsChecked" )]
+    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Connection Status", "The connection status to use for new individuals (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Person Settings", 5 )]
+    [DefinedValueField( "8522BADD-2871-45A5-81DD-C76DA07E2E7E", "Record Status", "The record status to use for new individuals (default: 'Pending'.)", true, false, "283999EC-7346-42E3-B807-BCE9B2BABB49", "Person Settings", 6 )]
+    [BooleanField( "Is Sms Checked By Default ", "Is the 'Enable SMS' option checked by default.", true, "Person Settings", 7, "IsSmsChecked" )]
 
     // Child Settings
-    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Child Connection Status", "The connection status to use for new children (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Child Settings", 7 )]
+    [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Child Connection Status", "The connection status to use for new children (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Child Settings", 8 )]
 
     //Prayer Request Settings
-    [BooleanField( "Is Prayer Request Enabled", "Is the Prayer Request text box visible.", true, "Prayer Request Settings", 8 )]
-    [CategoryField( "Prayer Category", "The  category to use for all new prayer requests.", false, "Rock.Model.PrayerRequest", "", "", false, "4B2D88F5-6E45-4B4B-8776-11118C8E8269", "Prayer Request Settings", 9, "PrayerCategory" )]
+    [BooleanField( "Is Prayer Request Enabled", "Is the Prayer Request text box visible.", true, "Prayer Request Settings", 9 )]
+    [CategoryField( "Prayer Category", "The  category to use for all new prayer requests.", false, "Rock.Model.PrayerRequest", "", "", false, "4B2D88F5-6E45-4B4B-8776-11118C8E8269", "Prayer Request Settings", 10, "PrayerCategory" )]
 
     // Misc
-    [LinkedPage( "Person Profile Page", "The person profile page.", false, "", "", 10 )]
+    [LinkedPage( "Person Profile Page", "The person profile page.", false, "", "", 11 )]
 
     public partial class ConnectCardEntry : Rock.Web.UI.RockBlock
     {
@@ -697,6 +698,17 @@ namespace RockWeb.Plugins.com_barefootchurch
             bool IsSmsChecked = GetAttributeValue( "IsSmsChecked" ).AsBoolean( true );
             cbSecondAdultSms.Checked = cbSms.Checked = IsSmsChecked;
 
+            // Build the Guest Type radio button list...
+            var guestTypeList = GetAttributeValue( "GuestType" ).SplitDelimitedValues( false );
+            rblGuestType.Items.Clear();
+            foreach ( var item in guestTypeList )
+            {
+                rblGuestType.Items.Add( new ListItem( item, item ) );
+            }
+            rblGuestType.DataBind();
+            // First is the default
+            rblGuestType.SelectedValue = guestTypeList[0];
+
             // Build Decisions list...
             var decisionList = GetAttributeValue( "Decisions" ).SplitDelimitedValues( false );
             cblDecisions.Items.Clear();
@@ -900,7 +912,9 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.AppendFormat( "#### Entry Point - {0}\n", rblSource.SelectedValue );
+                sb.AppendFormat( "#### General\n" );
+                sb.AppendFormat( "**Entry Point**: {0}  \n", rblSource.SelectedValue );
+                sb.AppendFormat( "**Guest Type**: {0}  \n", rblGuestType.SelectedValue );
 
                 if ( cblDecisions.SelectedValues.Count > 0 )
                 {

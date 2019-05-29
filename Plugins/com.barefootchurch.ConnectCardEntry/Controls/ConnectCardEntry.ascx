@@ -125,6 +125,7 @@
                 </asp:Panel>
 
                 <div class="col-sm-6">
+                    <Rock:RockRadioButtonList ID="rblGuestType" runat="server" Label="Guest Type" />
                     <Rock:RockCheckBoxList ID="cblDecisions" runat="server" Label="Decision Made" />
                 </div>
                 <div class="col-sm-6">
