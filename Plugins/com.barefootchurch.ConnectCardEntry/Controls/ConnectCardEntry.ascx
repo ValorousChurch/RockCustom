@@ -46,7 +46,7 @@
                         </div>
                         <div class="pull-right">
                                 <Rock:CampusPicker ID="cpCampus" runat="server" CssClass="input-width-lg" Label="Campus" Required="true" AutoPostBack="true" OnSelectedIndexChanged="cpCampus_SelectedIndexChanged" />
-                                <Rock:RockRadioButtonList ID="rblSource" RequiredErrorMessage="An entry source is required." RepeatDirection="Vertical" runat="server" Required="true" AutoPostBack="true" OnSelectedIndexChanged="rblSource_SelectedIndexChanged"></Rock:RockRadioButtonList>
+                                <%-- Rock:RockRadioButtonList ID="rblSource" RequiredErrorMessage="An entry source is required." RepeatDirection="Vertical" runat="server" Required="true" AutoPostBack="true" OnSelectedIndexChanged="rblSource_SelectedIndexChanged"></Rock:RockRadioButtonList --%>
                         </div>
                     </div>
                 </div>

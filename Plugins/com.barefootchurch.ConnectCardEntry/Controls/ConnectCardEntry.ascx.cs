@@ -48,7 +48,7 @@ namespace RockWeb.Plugins.com_barefootchurch
     [TextField( "Guest Type", "A comma-delimited list of different guest types that can be selected.  The selected item will be added to the Comment field of the connection request.", true, "Returning Guest, First Time Guest - Local, First Time Guest - Vacationer", "Connection Request Settings", 1 )]
     [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 2 )]
     [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 3 )]
-    [TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 4 )]
+    //[TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 4 )]
 
     // Person Settings
     [DefinedValueField( "2E6540EA-63F0-40FE-BE50-F2A84735E600", "Connection Status", "The connection status to use for new individuals (default: 'Visitor'.)", true, false, Rock.SystemGuid.DefinedValue.PERSON_CONNECTION_STATUS_VISITOR, "Person Settings", 5 )]
@@ -85,7 +85,7 @@ namespace RockWeb.Plugins.com_barefootchurch
         int? _personProfilePage;
 
         private const string CAMPUS_SETTING = "FirstTimeGuestEntry_SelectedCampus";
-        private const string SOURCE_SETTING = "FirstTimeGuestEntry_SelectedSource";
+        //private const string SOURCE_SETTING = "FirstTimeGuestEntry_SelectedSource";
 
         #endregion
 
@@ -660,10 +660,10 @@ namespace RockWeb.Plugins.com_barefootchurch
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        protected void rblSource_SelectedIndexChanged( object sender, EventArgs e )
+        /*protected void rblSource_SelectedIndexChanged( object sender, EventArgs e )
         {
             SetUserPreference( SOURCE_SETTING, rblSource.SelectedValue );
-        }
+        }*/
 
         /// <summary>
         /// Handles the SelectedIndexChanged event of the cpCampus control.
@@ -728,7 +728,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             cblInterests.DataBind();
 
             // Build the Entry Source radio button list...
-            var entrySourceList = GetAttributeValue( "EntrySource" ).SplitDelimitedValues( false );
+            /*var entrySourceList = GetAttributeValue( "EntrySource" ).SplitDelimitedValues( false );
             rblSource.Items.Clear();
             foreach ( var item in entrySourceList )
             {
@@ -741,7 +741,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             if ( rblSource.Items.Contains( new ListItem( sourceSetting, sourceSetting ) ) )
             {
                 rblSource.SelectedValue = sourceSetting;
-            }
+            }*/
 
             tbPrayerRequests.Visible = _isPrayerRequestEnabled;
         }
@@ -913,7 +913,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                 StringBuilder sb = new StringBuilder();
 
                 sb.AppendFormat( "#### General\n" );
-                sb.AppendFormat( "**Entry Point**: {0}  \n", rblSource.SelectedValue );
+                //sb.AppendFormat( "**Entry Point**: {0}  \n", rblSource.SelectedValue );
                 sb.AppendFormat( "**Guest Type**: {0}  \n", rblGuestType.SelectedValue );
 
                 if ( cblDecisions.SelectedValues.Count > 0 )
