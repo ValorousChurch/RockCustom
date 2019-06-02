@@ -264,8 +264,6 @@ namespace RockWeb.Plugins.com_barefootchurch
                         firstAdult.RecordStatusValueId = _dvcRecordStatus.Id;
                         firstAdult.Gender = rblGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
 
-                        family = PersonService.SaveNewPerson( firstAdult, rockContext, cpCampus.SelectedCampusId, false );
-
                         // set SourceofVisit
                         if ( dvpVisitSource.SelectedDefinedValueId.GetValueOrDefault() > 0 )
                         {
@@ -273,6 +271,8 @@ namespace RockWeb.Plugins.com_barefootchurch
                             firstAdult.SetAttributeValue( "SourceofVisit", DefinedValueCache.Get( dvpVisitSource.SelectedDefinedValueId.GetValueOrDefault(), rockContext ).Guid );
                             firstAdult.SaveAttributeValues();
                         }
+
+                        family = PersonService.SaveNewPerson( firstAdult, rockContext, cpCampus.SelectedCampusId, false );
                     }
                 }
 
