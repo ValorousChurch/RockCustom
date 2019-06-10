@@ -554,6 +554,8 @@ namespace RockWeb.Plugins.com_barefootchurch
         {
             ppGuest.PersonId = null;
             ppGuest.SetValue( null );
+            rblGender.SelectedValue = rblSecondAdultGender.SelectedValue = "0";
+            dpBirthDate.SelectedDate = dpSecondAdultBirthDate.SelectedDate = null;
             tbFirstName.Text = tbLastName.Text = pnCell.Text = tbEmail.Text = pnHome.Text = string.Empty;
             tbSecondAdultFirstName.Text = tbSecondAdultLastName.Text = pnSecondAdultCell.Text = tbSecondAdultEmail.Text = string.Empty;
             tbComments.Text = tbPrayerRequests.Text = string.Empty;
