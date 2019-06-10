@@ -58,11 +58,18 @@
                                 <h4>First Adult</h4>
                                 <Rock:RockTextBox ID="tbFirstName" runat="server" Label="First Name" Required="true"></Rock:RockTextBox>
                                 <Rock:RockTextBox ID="tbLastName" runat="server" Label="Last Name" Required="true"></Rock:RockTextBox>
-                                <Rock:RockRadioButtonList ID="rblGender" runat="server" RepeatDirection="Horizontal" Label="Gender">
-                                    <asp:ListItem Text="Male" Value="1" />
-                                    <asp:ListItem Text="Female" Value="2" />
-                                    <asp:ListItem Text="Unknown" Value="0" Selected="True" />
-                                </Rock:RockRadioButtonList>
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <Rock:RockRadioButtonList ID="rblGender" runat="server" RepeatDirection="Horizontal" Label="Gender">
+                                            <asp:ListItem Text="Male" Value="1" />
+                                            <asp:ListItem Text="Female" Value="2" />
+                                            <asp:ListItem Text="Unknown" Value="0" Selected="True" />
+                                        </Rock:RockRadioButtonList>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <Rock:DatePicker ID="dpBirthDate" runat="server" Label="Birth Date" />
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-7">
                                         <Rock:PhoneNumberBox ID="pnCell" runat="server" Label="Cell Phone" />
@@ -77,11 +84,18 @@
                                 <h4>Second Adult</h4>
                                 <Rock:RockTextBox ID="tbSecondAdultFirstName" runat="server" Label="First Name"></Rock:RockTextBox>
                                 <Rock:RockTextBox ID="tbSecondAdultLastName" runat="server" Label="Last Name"></Rock:RockTextBox>
-                                <Rock:RockRadioButtonList ID="rblSecondAdultGender" runat="server" RepeatDirection="Horizontal" Label="Gender">
-                                    <asp:ListItem Text="Male" Value="1" />
-                                    <asp:ListItem Text="Female" Value="2" />
-                                    <asp:ListItem Text="Unknown" Value="0" Selected="True" />
-                                </Rock:RockRadioButtonList>
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <Rock:RockRadioButtonList ID="rblSecondAdultGender" runat="server" RepeatDirection="Horizontal" Label="Gender">
+                                            <asp:ListItem Text="Male" Value="1" />
+                                            <asp:ListItem Text="Female" Value="2" />
+                                            <asp:ListItem Text="Unknown" Value="0" Selected="True" />
+                                        </Rock:RockRadioButtonList>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <Rock:DatePicker ID="dpSecondAdultBirthDate" runat="server" Label="Birth Date" />
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-sm-7">
                                         <Rock:PhoneNumberBox ID="pnSecondAdultCell" runat="server" Label="Cell Phone" />

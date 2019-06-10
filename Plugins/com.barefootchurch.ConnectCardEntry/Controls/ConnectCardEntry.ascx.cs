@@ -263,6 +263,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                         firstAdult.ConnectionStatusValueId = _dvcConnectionStatus.Id;
                         firstAdult.RecordStatusValueId = _dvcRecordStatus.Id;
                         firstAdult.Gender = rblGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
+                        firstAdult.SetBirthDate( dpBirthDate.SelectedDate );
 
                         // set SourceofVisit
                         if ( dvpVisitSource.SelectedDefinedValueId.GetValueOrDefault() > 0 )
@@ -387,6 +388,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                                 secondAdult.ConnectionStatusValueId = _dvcConnectionStatus.Id;
                                 secondAdult.RecordStatusValueId = _dvcRecordStatus.Id;
                                 secondAdult.Gender = rblSecondAdultGender.SelectedValueAsEnum<Gender>( Gender.Unknown );
+                                secondAdult.SetBirthDate( dpSecondAdultBirthDate.SelectedDate );
 
                                 secondAdult.IsEmailActive = true;
                                 secondAdult.EmailPreference = EmailPreference.EmailAllowed;
