@@ -138,7 +138,7 @@
                 </div>
 
                 <div class="actions col-sm-12">
-                    <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary margin-r-lg" Text="Save" OnClick="btnSave_Click" />
+                    <asp:LinkButton ID="btnSave" runat="server" CssClass="btn btn-primary margin-r-lg" Text="Save" OnClick="btnSave_Click" OnClientClick="javascript:window.scrollTo(0,0);" />
                     <asp:LinkButton ID="btnCancel" runat="server" Text="Done" CausesValidation="false" OnClick="btnCancel_Click" />
                 </div>
             </div>
