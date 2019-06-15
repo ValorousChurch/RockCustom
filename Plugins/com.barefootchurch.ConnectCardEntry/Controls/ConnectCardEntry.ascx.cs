@@ -558,6 +558,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             dpBirthDate.SelectedDate = dpSecondAdultBirthDate.SelectedDate = null;
             tbFirstName.Text = tbLastName.Text = pnCell.Text = tbEmail.Text = pnHome.Text = string.Empty;
             tbSecondAdultFirstName.Text = tbSecondAdultLastName.Text = pnSecondAdultCell.Text = tbSecondAdultEmail.Text = string.Empty;
+            rblGuestType.SetValue( rblGuestType.Items[0].Value );
             tbComments.Text = tbPrayerRequests.Text = string.Empty;
             acAddress.Street1 = acAddress.Street2 = acAddress.City = acAddress.PostalCode = string.Empty;
             pnlNewPerson.Enabled = tbFirstName.Required = tbLastName.Required = true;
@@ -710,8 +711,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                 rblGuestType.Items.Add( new ListItem( item, item ) );
             }
             rblGuestType.DataBind();
-            // First is the default
-            rblGuestType.SelectedValue = guestTypeList[0];
+            rblGuestType.SetValue( rblGuestType.Items[0].Value );
 
             // Build Decisions list...
             var decisionList = GetAttributeValue( "Decisions" ).SplitDelimitedValues( false );
