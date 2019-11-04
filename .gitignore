@@ -1,0 +1,7 @@
+Plugins/*/.nuget/
+Plugins/*/packages/
+Plugins/*/bin/
+Plugins/*/obj/
+.vs
+.DS_Store
+.system
