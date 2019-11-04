@@ -1,0 +1,17 @@
+Background Check - Expired/Misisng
+{%- assign bc = Person | Group:'133215' -%}{%- unless bc != empty or Person.Age < 18-%}L{%- endunless -%}
+
+Background Check - Valid
+{%- assign bc = Person | Group:'133215' -%}{%- if bc != empty -%}n{%- endif -%}
+
+Group Name
+{% for group in GroupType.Groups %}{% if forloop.index > 1 %}; {% endif %}{{ group.Name }}{% endfor %}
+
+Nickname - Short
+{% assign nameLength = Person.NickName | Size %}{% if nameLength <= 10 %}{{Person.NickName}}{% endif %}
+
+Nickname - Long
+{% assign nameLength = Person.NickName | Size %}{% if nameLength > 10 %}{{Person.NickName}}{% endif %}
+
+Timestamp
+{{ 'Now' | Date:'M/d/yy h:mm:ss tt' }}
