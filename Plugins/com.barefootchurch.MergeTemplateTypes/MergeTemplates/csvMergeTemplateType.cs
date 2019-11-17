@@ -35,15 +35,31 @@ namespace com.barefootchurch.MergeTemplates
     [ExportMetadata( "ComponentName", "CSV File" )]
     public class CsvMergeTemplateType : MergeTemplateType
     {
-        /// <summary>
-        /// Gets the supported file extensions
-        /// Returns NULL if the file extension doesn't matter or doesn't apply
-        /// Rock will use this to warn the user if the file extension isn't supported
-        /// </summary>
-        /// <value>
-        /// The supported file extensions.
-        /// </value>
-        public override IEnumerable<string> SupportedFileExtensions
+		/// <summary>
+		/// Gets the attribute value defaults.
+		/// </summary>
+		/// <value>
+		/// The attribute defaults.
+		/// </value>
+		public override Dictionary<string, string> AttributeValueDefaults
+		{
+			get
+			{
+				var defaults = new Dictionary<string, string>();
+				defaults.Add( "Active", "True" );
+				return defaults;
+			}
+		}
+
+		/// <summary>
+		/// Gets the supported file extensions
+		/// Returns NULL if the file extension doesn't matter or doesn't apply
+		/// Rock will use this to warn the user if the file extension isn't supported
+		/// </summary>
+		/// <value>
+		/// The supported file extensions.
+		/// </value>
+		public override IEnumerable<string> SupportedFileExtensions
         {
             get
             {
