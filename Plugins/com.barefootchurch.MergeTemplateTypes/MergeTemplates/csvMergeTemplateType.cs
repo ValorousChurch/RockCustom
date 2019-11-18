@@ -80,8 +80,10 @@ namespace com.barefootchurch.MergeTemplates
 
             var rockContext = new RockContext();
 
+			var binaryFileTypeService = new BinaryFileTypeService( rockContext );
+			int defaultFileTypeId = binaryFileTypeService.Get( Rock.SystemGuid.BinaryFiletype.DEFAULT.AsGuid() ).Id;
+
             var binaryFileService = new BinaryFileService( rockContext );
-            int defaultFileTypeId = binaryFileService.Get( Rock.SystemGuid.BinaryFiletype.DEFAULT.AsGuid() ).Id;
             var outputBinaryFile = new BinaryFile();
 
             int recordCount = mergeObjectList.Count();
