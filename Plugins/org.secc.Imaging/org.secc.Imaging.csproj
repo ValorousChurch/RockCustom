@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Rock">
+      <HintPath>$(SolutionDir)\RockWeb\bin\Rock.dll</HintPath>
+    </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>$(SolutionDir)\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
@@ -59,16 +62,9 @@
     <None Include="packages.config" />
     <None Include="Webhooks\ImageGenerator.ashx" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\Rock\Rock.csproj">
-      <Project>{185A31D7-3037-4DAE-8797-0459849A84BD}</Project>
-      <Name>Rock</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\org.secc.Imaging.dll" "$(SolutionDir)RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\NReco.ImageGenerator.dll" "$(SolutionDir)RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)Webhooks\ImageGenerator.ashx" "$(SolutionDir)RockWeb\Webhooks"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
