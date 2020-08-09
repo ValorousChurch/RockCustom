@@ -6,3 +6,4 @@ Plugins/*/obj/
 .vs
 .DS_Store
 .system
+StyleCop.Cache
