@@ -14,8 +14,6 @@
 // limitations under the License.
 // </copyright>
 //
-using System;
-
 using Rock.Plugin;
 
 namespace com.barefootchurch.MergeTemplates.Migrations
@@ -29,7 +27,7 @@ namespace com.barefootchurch.MergeTemplates.Migrations
         public override void Up()
         {
             // Add Entity Type
-            RockMigrationHelper.UpdateEntityType( "com.barefootchurch.MergeTemplates.CsvMergeTemplateType", "CSV Merge Template", "com.barefootchurch.MergeTemplates.CsvMergeTemplateType", false, true, SystemGuid.EntityType.CSV_MERGE_TEMPLATE );
+            RockMigrationHelper.UpdateEntityType( "com.barefootchurch.MergeTemplates.CsvMergeTemplateType", "CSV Merge Template", "com.barefootchurch.MergeTemplates", false, true, SystemGuid.EntityType.CSV_MERGE_TEMPLATE );
         }
 
         /// <summary>
