@@ -53,6 +53,7 @@
     <Compile Include="Jobs\CleanupScheduledTransactions.cs" />
     <Compile Include="Jobs\FixCombinedGivers.cs" />
     <Compile Include="Jobs\MatchEmailPreference.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
