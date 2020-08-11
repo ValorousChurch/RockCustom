@@ -20,6 +20,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+
 using Rock;
 using Rock.Attribute;
 using Rock.Data;
@@ -36,7 +37,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
     [Description( "Block to display a count of the workflows (UEFs) that are assigned to the current user." )]
     [LinkedPage( "Listing Page", "Page used to view all workflows assigned to the current user.", false, "F3FA9EBE-A540-4106-90E5-2DFB2D72BBF0" )]
     [CategoryField( "Categories", "Optional categories to limit display to.", true, "Rock.Model.WorkflowType", "", "", false, "", "", 1 )]
-    [BooleanField( "Include Child Categories", "Should descendent categories of the selected Categories be included?", true, "", 1 )]
+    [BooleanField( "Include Child Categories", "Should descendant categories of the selected Categories be included?", true, "", 1 )]
     [IntegerField( "Cache Duration", "Number of seconds to cache the content per person.", false, 60, "", 2 )]
     public partial class WorkflowAlert : Rock.Web.UI.RockBlock
     {

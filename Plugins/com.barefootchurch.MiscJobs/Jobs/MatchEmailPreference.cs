@@ -14,22 +14,13 @@
 // limitations under the License.
 // </copyright>
 //
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.IO;
 
 using Quartz;
 
 using Rock;
-using Rock.Attribute;
-using Rock.Model;
 using Rock.Data;
-using Rock.Web.Cache;
-using Rock.Web;
-using Rock.Web.UI;
-using Rock.Communication;
+using Rock.Model;
 
 namespace com.centralaz.GeneralJobs.Jobs
 {
@@ -39,7 +30,6 @@ namespace com.centralaz.GeneralJobs.Jobs
     [DisallowConcurrentExecution]
     public class MatchEmailPreference : IJob
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MatchEmailPreference"/> class.
         /// </summary>
@@ -51,9 +41,8 @@ namespace com.centralaz.GeneralJobs.Jobs
         /// Executes the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public virtual void Execute( IJobExecutionContext context )
+        public virtual void Execute(IJobExecutionContext context)
         {
-
             var rockContext = new RockContext();
             var personService = new PersonService( rockContext );
 

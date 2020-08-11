@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+
 using Quartz;
+
 using Rock.Attribute;
 using Rock.Data;
 using Rock.Model;
@@ -12,7 +14,7 @@ namespace com.bricksandmortarstudio.FixCombinedGivers
     [SlidingDateRangeField( "Date Range", "Apply to Person records created within this time frame. If not set then all records are considered.", false, "", enabledSlidingDateRangeTypes: "Previous, Last, Current, DateRange" )]
     public class FixCombinedGivers : IJob
     {
-        public void Execute( IJobExecutionContext context )
+        public void Execute(IJobExecutionContext context)
         {
             var dataMap = context.JobDetail.JobDataMap;
             RockContext rockContext = null;
@@ -30,6 +32,7 @@ namespace com.bricksandmortarstudio.FixCombinedGivers
                         familyMember.Person.GivingGroupId = familyMember.GroupId;
                         peopleUpdated += 1;
                     }
+
                     rockContext.SaveChanges();
                 }
 

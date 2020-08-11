@@ -18,7 +18,7 @@ using Rock.Plugin;
 
 namespace com.barefootchurch.MergeTemplates.Migrations
 {
-    [MigrationNumber( 1, "1.8.0" )] //TODO: Test and find minimum version
+    [MigrationNumber( 1, "1.8.0" )] // TODO: Test and find minimum version
     public class AddSystemData : Migration
     {
         /// <summary>

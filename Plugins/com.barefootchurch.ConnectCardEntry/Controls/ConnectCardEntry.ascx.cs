@@ -16,7 +16,7 @@
 //
 
 /*
-Origional source:
+Original source:
   - https://github.com/CentralAZ/Rock-CentralAZ/blob/9694ff5ca35573b8f1073f103cbd763760d33e68/RockWeb/Plugins/com_centralaz/Crm/FirstTimeGuestEntry.ascx
   - https://github.com/CentralAZ/Rock-CentralAZ/blob/9694ff5ca35573b8f1073f103cbd763760d33e68/RockWeb/Plugins/com_centralaz/Crm/FirstTimeGuestEntry.ascx.cs
 */
@@ -699,7 +699,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                 cpCampus.SelectedCampusId = CampusCache.All().First().Id;
             }
 
-            // Set SMS Checkbox
+            // Set SMS Check-box
             bool IsSmsChecked = GetAttributeValue( "IsSmsChecked" ).AsBoolean( true );
             cbSecondAdultSms.Checked = cbSms.Checked = IsSmsChecked;
 
@@ -839,8 +839,8 @@ namespace RockWeb.Plugins.com_barefootchurch
         /// </summary>
         /// <param name="rockContext">The rock context.</param>
         /// <param name="person">The person.</param>
-        /// <param name="pnbNumber">The PNB number.</param>
-        /// <param name="cbSms">The cb SMS.</param>
+        /// <param name="pnbNumber">The <see cref="PhoneNumberBox" />.</param>
+        /// <param name="cbSms">The <see cref="RockCheckBox" /> for "Enable SMS".</param>
         /// <param name="phoneTypeGuid">The phone type unique identifier.</param>
         /// <param name="changes">The changes.</param>
         private void SetPhoneNumber( RockContext rockContext, Person person, PhoneNumberBox pnbNumber, RockCheckBox cbSms, Guid phoneTypeGuid, History.HistoryChangeList changes )

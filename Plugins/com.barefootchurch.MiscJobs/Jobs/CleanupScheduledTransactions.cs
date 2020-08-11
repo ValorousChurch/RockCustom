@@ -13,9 +13,7 @@ namespace com.shepherdchurch.Misc.Jobs
     [DisallowConcurrentExecution]
     public class CleanupScheduledTransactions : IJob
     {
-        const int BATCH_SIZE = 100;
-
-        public virtual void Execute( IJobExecutionContext context )
+        public virtual void Execute(IJobExecutionContext context)
         {
             List<string> messages = new List<string>();
 

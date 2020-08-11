@@ -35,38 +35,40 @@ namespace com.barefootchurch.MergeTemplates
     [ExportMetadata( "ComponentName", "CSV File" )]
     public class CsvMergeTemplateType : MergeTemplateType
     {
-		/// <summary>
-		/// Gets the attribute value defaults.
-		/// </summary>
-		/// <value>
-		/// The attribute defaults.
-		/// </value>
-		public override Dictionary<string, string> AttributeValueDefaults
-		{
-			get
-			{
-				var defaults = new Dictionary<string, string>();
-				defaults.Add( "Active", "True" );
-				return defaults;
-			}
-		}
+        /// <summary>
+        /// Gets the attribute value defaults.
+        /// </summary>
+        /// <value>
+        /// The attribute defaults.
+        /// </value>
+        public override Dictionary<string, string> AttributeValueDefaults
+        {
+            get
+            {
+                var defaults = new Dictionary<string, string>()
+                {
+                    { "Active", "True" }
+                };
+                return defaults;
+            }
+        }
 
-		/// <summary>
-		/// Gets the supported file extensions
-		/// Returns NULL if the file extension doesn't matter or doesn't apply
-		/// Rock will use this to warn the user if the file extension isn't supported
-		/// </summary>
-		/// <value>
-		/// The supported file extensions.
-		/// </value>
-		public override IEnumerable<string> SupportedFileExtensions
+        /// <summary>
+        /// Gets the supported file extensions
+        /// Returns NULL if the file extension doesn't matter or doesn't apply
+        /// Rock will use this to warn the user if the file extension isn't supported
+        /// </summary>
+        /// <value>
+        /// The supported file extensions.
+        /// </value>
+        public override IEnumerable<string> SupportedFileExtensions
         {
             get
             {
                 return new string[] { "csv" };
             }
         }
-        
+
         /// <summary>
         /// Creates the document.
         /// </summary>
@@ -74,14 +76,14 @@ namespace com.barefootchurch.MergeTemplates
         /// <param name="mergeObjectList">The list of merge objects (rows).</param>
         /// <param name="globalMergeFields">The global merge fields.</param>
         /// <returns></returns>
-        public override BinaryFile CreateDocument( MergeTemplate mergeTemplate, List<object> mergeObjectList, Dictionary<string, object> globalMergeFields )
+        public override BinaryFile CreateDocument(MergeTemplate mergeTemplate, List<object> mergeObjectList, Dictionary<string, object> globalMergeFields)
         {
             this.Exceptions = new List<Exception>();
 
             var rockContext = new RockContext();
 
-			var binaryFileTypeService = new BinaryFileTypeService( rockContext );
-			int defaultFileTypeId = binaryFileTypeService.Get( Rock.SystemGuid.BinaryFiletype.DEFAULT.AsGuid() ).Id;
+            var binaryFileTypeService = new BinaryFileTypeService( rockContext );
+            int defaultFileTypeId = binaryFileTypeService.Get( Rock.SystemGuid.BinaryFiletype.DEFAULT.AsGuid() ).Id;
 
             var binaryFileService = new BinaryFileService( rockContext );
             var outputBinaryFile = new BinaryFile();
@@ -97,7 +99,7 @@ namespace com.barefootchurch.MergeTemplates
             {
                 return null;
             }
-            
+
             using ( var templateStream = new StreamReader( templateBinaryFile.ContentStream ) )
             using ( var csv = new CsvReader( templateStream ) )
             {
@@ -132,7 +134,7 @@ namespace com.barefootchurch.MergeTemplates
                 csv.WriteRecords( results );
 
                 outputWriter.Flush();
-                
+
                 outputBinaryFile.IsTemporary = true;
                 outputBinaryFile.ContentStream = outputStream;
                 outputBinaryFile.FileName = "MergeTemplateOutput" + Path.GetExtension( templateBinaryFile.FileName );
@@ -152,10 +154,12 @@ namespace com.barefootchurch.MergeTemplates
         /// <param name="mergeObjectList">The merge object list.</param>
         /// <param name="globalMergeFields">The global merge fields.</param>
         /// <returns></returns>
-        private static DotLiquid.Hash GetMergeObjects( List<object> mergeObjectList, Dictionary<string, object> globalMergeFields, int currentRecordIndex )
+        private static DotLiquid.Hash GetMergeObjects(List<object> mergeObjectList, Dictionary<string, object> globalMergeFields, int currentRecordIndex)
         {
-            DotLiquid.Hash mergeObjects = new DotLiquid.Hash();
-            mergeObjects.Add( "Row", mergeObjectList[currentRecordIndex] );
+            DotLiquid.Hash mergeObjects = new DotLiquid.Hash()
+            {
+                { "Row", mergeObjectList[currentRecordIndex] }
+            };
 
             foreach ( var field in globalMergeFields )
             {
