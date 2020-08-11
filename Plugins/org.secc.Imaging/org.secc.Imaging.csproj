@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="Rock">
       <HintPath>..\RockWeb\bin\Rock.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>

@@ -38,15 +38,19 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="DotLiquid">
       <HintPath>..\RockWeb\Bin\DotLiquid.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\RockWeb\Bin\EntityFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Quartz">
       <HintPath>..\RockWeb\Bin\Quartz.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Rock">
       <HintPath>..\RockWeb\Bin\Rock.dll</HintPath>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
