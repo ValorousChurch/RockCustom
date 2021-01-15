@@ -57,21 +57,16 @@ namespace org.secc.PDF
 
             htmlToPdf.Size = PageSize.Letter;
 
-            using ( MemoryStream msPDF = new MemoryStream( htmlToPdf.GeneratePdf( html ) ) )
-            {
-                BinaryFile pdfBinary = new BinaryFile();
-                pdfBinary.Guid = Guid.NewGuid();
-                pdfBinary.FileName = pdfFileName;
-                pdfBinary.MimeType = "application/pdf";
-                pdfBinary.BinaryFileTypeId = new BinaryFileTypeService( rockContext ).Get( new Guid( Rock.SystemGuid.BinaryFiletype.DEFAULT ) ).Id;
+            MemoryStream msPDF = new MemoryStream( htmlToPdf.GeneratePdf( html ) );
+            BinaryFile pdfBinary = new BinaryFile();
+            pdfBinary.Guid = Guid.NewGuid();
+            pdfBinary.FileName = pdfFileName;
+            pdfBinary.MimeType = "application/pdf";
+            pdfBinary.BinaryFileTypeId = new BinaryFileTypeService( rockContext ).Get( new Guid( Rock.SystemGuid.BinaryFiletype.DEFAULT ) ).Id;
 
-                BinaryFileData pdfData = new BinaryFileData();
-                pdfData.Content = msPDF.ToArray();
+            pdfBinary.ContentStream = msPDF;
 
-                pdfBinary.DatabaseData = pdfData;
-
-                return pdfBinary;
-            }
+            return pdfBinary;
         }
 
         public static PDFWorkflowObject GetPDFFormMergeFromEntity(object entity, out List<string> errorMessages)
