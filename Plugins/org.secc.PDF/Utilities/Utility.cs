@@ -15,10 +15,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using NReco.PdfGenerator;
+
 using Rock;
 using Rock.Data;
 using Rock.Model;
@@ -28,17 +27,20 @@ namespace org.secc.PDF
 {
     public class Utility
     {
-        public static BinaryFile HtmlToPdf( string html, string pageHeaderHtml = null, string pageFooterHtml = null, RockContext rockContext = null, string pdfFileName = "GeneratedPDF.pdf", PageMargins margins = null, PageOrientation orientation = PageOrientation.Default )
+        public static BinaryFile HtmlToPdf(string html, string pageHeaderHtml = null, string pageFooterHtml = null, RockContext rockContext = null, string pdfFileName = "GeneratedPDF.pdf", PageMargins margins = null, PageOrientation orientation = PageOrientation.Default)
         {
-            if (rockContext == null)
+            if ( rockContext == null )
             {
                 rockContext = new RockContext();
             }
+
             var htmlToPdf = new HtmlToPdfConverter();
-            if (margins != null)
+
+            if ( margins != null )
             {
                 htmlToPdf.Margins = margins;
             }
+
             htmlToPdf.Orientation = orientation;
 
             // Add the Header
@@ -46,13 +48,14 @@ namespace org.secc.PDF
             {
                 htmlToPdf.PageHeaderHtml = pageHeaderHtml;
             }
+
             // Add the Footer
             if ( pageFooterHtml != null && !string.IsNullOrWhiteSpace( pageFooterHtml ) )
             {
                 htmlToPdf.PageFooterHtml = pageFooterHtml;
             }
-            htmlToPdf.Size = PageSize.Letter;
 
+            htmlToPdf.Size = PageSize.Letter;
 
             using ( MemoryStream msPDF = new MemoryStream( htmlToPdf.GeneratePdf( html ) ) )
             {
@@ -70,7 +73,8 @@ namespace org.secc.PDF
                 return pdfBinary;
             }
         }
-        public static PDFWorkflowObject GetPDFFormMergeFromEntity( object entity, out List<string> errorMessages )
+
+        public static PDFWorkflowObject GetPDFFormMergeFromEntity(object entity, out List<string> errorMessages)
         {
             errorMessages = new List<string>();
 
@@ -83,9 +87,8 @@ namespace org.secc.PDF
             return null;
         }
 
-        public static void EnsureAttributes( WorkflowAction action, RockContext rockContext )
+        public static void EnsureAttributes(WorkflowAction action, RockContext rockContext)
         {
-
             if ( action.Activity.Workflow.Attributes == null || action.Activity.Workflow.AttributeValues.Count == 0 )
             {
                 action.Activity.Workflow.LoadAttributes();
@@ -119,7 +122,7 @@ namespace org.secc.PDF
             }
         }
 
-        private static void CreateAttribute( string name, WorkflowAction action, RockContext rockContext )
+        private static void CreateAttribute(string name, WorkflowAction action, RockContext rockContext)
         {
             Rock.Model.Attribute newAttribute = new Rock.Model.Attribute();
             newAttribute.Key = name;

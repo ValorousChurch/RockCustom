@@ -12,24 +12,24 @@
 // limitations under the License.
 // </copyright>
 //
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
+
 using Rock;
-using Rock.Model;
-using DotLiquid;
 using Rock.Data;
-using Rock.Web.Cache;
 using Rock.Field;
+using Rock.Model;
+using Rock.Web.Cache;
 
 namespace org.secc.PDF
 {
     public class PDFWorkflowObject
     {
         public BinaryFile PDF { get; set; }
+
         public string LavaInput { get; set; }
+
         public Dictionary<string, object> MergeObjects { get; set; }
+
         public string RenderedXHTML
         {
             get
@@ -42,9 +42,9 @@ namespace org.secc.PDF
         {
         }
 
-        public PDFWorkflowObject( WorkflowAction action, RockContext rockContext )
+        public PDFWorkflowObject(WorkflowAction action, RockContext rockContext)
         {
-            //load merge objects
+            // load merge objects
             MergeObjects = new Dictionary<string, object>();
 
             var activity = action.Activity;
