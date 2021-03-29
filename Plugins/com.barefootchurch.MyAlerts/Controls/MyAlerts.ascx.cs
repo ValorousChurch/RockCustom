@@ -35,6 +35,14 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         Key = AttributeKey.CacheDuration )]
 
     // Workflow
+    [BooleanField(
+        "Include Workflows",
+        Category = "Workflows",
+        Description = "Should we include workflows in the count?",
+        IsRequired = true,
+        DefaultValue = "true",
+        Order = 0,
+        Key = AttributeKey.IncludeWorkflows )]
     [CategoryField(
         "Workflow Categories",
         Description = "Only count workflows in the following categories (blank = all).",
@@ -43,7 +51,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         EntityTypeName = "Rock.Model.WorkflowType",
         IsRequired = false,
         DefaultValue = "",
-        Order = 0,
+        Order = 1,
         Key = AttributeKey.WorkflowCategories )]
     [BooleanField(
         "Include Child Categories",
@@ -51,17 +59,25 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         Description = "Should descendant categories of the selected Categories be included?",
         IsRequired = true,
         DefaultValue = "true",
-        Order = 1,
+        Order = 2,
         Key = AttributeKey.IncludeChildCategories )]
     
     // Connection Request
+    [BooleanField(
+        "Include Connections",
+        Category = "Connections",
+        Description = "Should we include connections in the count?",
+        IsRequired = true,
+        DefaultValue = "true",
+        Order = 0,
+        Key = AttributeKey.IncludeConnections )]
     [ConnectionTypesField(
         "Connection Types",
         Category = "Connections",
         Description = "Only count connections in the following categories (blank = all).",
         IsRequired = false,
         DefaultValue = "",
-        Order = 0,
+        Order = 1,
         Key = AttributeKey.ConnectionTypes )]
     [BooleanField(
         "Critical Connections Only",
@@ -69,19 +85,42 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         Description = "Only count critical connections",
         IsRequired = true,
         DefaultValue = "true",
-        Order = 1,
+        Order = 2,
         Key = AttributeKey.CriticalConnectionsOnly )]
 
+    // Project Management
+    [BooleanField(
+        "Include Projects",
+        Category = "ProjectManagement",
+        Description = "Should we include projects in the count?",
+        IsRequired = true,
+        DefaultValue = "true",
+        Order = 0,
+        Key = AttributeKey.IncludeProjects )]
+    [BooleanField(
+        "Include Tasks",
+        Category = "ProjectManagement",
+        Description = "Should we include tasks in the count?",
+        IsRequired = true,
+        DefaultValue = "true",
+        Order = 1,
+        Key = AttributeKey.IncludeTasks )]
+    
     public partial class MyAlerts : Rock.Web.UI.RockBlock
     {
         public static class AttributeKey
         {
             public const string DashboardPage = "DashboardPage";
             public const string CacheDuration = "CacheDuration";
+            public const string IncludeWorkflows = "IncludeWorkflows";
             public const string WorkflowCategories = "WorkflowCategories";
             public const string IncludeChildCategories = "IncludeChildCategories";
+            public const string IncludeConnections = "IncludeConnections";
             public const string ConnectionTypes = "ConnectionTypes";
             public const string CriticalConnectionsOnly = "CriticalConnectionsOnly";
+            public const string IncludeProjects = "IncludeProjects";
+            public const string IncludeTasks = "IncludeTasks";
+            public const string ProjectTypes = "ProjectTypes";
         }
         protected override void OnInit( EventArgs e )
         {
@@ -111,10 +150,26 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                     using ( var rockContext = new RockContext() )
                     {
                         totalAlerts = 0;
-                        totalAlerts += GetWorkflows( rockContext ).Count();
-                        totalAlerts += GetConnections( rockContext ).Count();
-                        //totalAlerts += GetProjects( rockContext ).Count();
-                        //totalAlerts += GetTasks( rockContext ).Count();
+
+                        if( GetAttributeValue( AttributeKey.IncludeWorkflows ).AsBoolean() )
+                        {
+                            totalAlerts += GetWorkflows( rockContext ).Count();
+                        }
+
+                        if ( GetAttributeValue( AttributeKey.IncludeConnections ).AsBoolean() )
+                        {
+                            totalAlerts += GetConnections( rockContext ).Count();
+                        }
+
+                        if ( GetAttributeValue( AttributeKey.IncludeProjects ).AsBoolean() )
+                        {
+                           // totalAlerts += GetProjectCount( rockContext );
+                        }
+
+                        if ( GetAttributeValue( AttributeKey.IncludeTasks ).AsBoolean() )
+                        {
+                            //totalAlerts += GetTaskCount( rockContext );
+                        }
                     }
                 }
 
@@ -125,7 +180,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
 
                 if ( totalAlerts > 0 )
                 {
-                    // add the count of how many workflows need to be assigned/completed
+                    // add a badge for the count of alerts
                     var spanLiteral = string.Format( "<span class='badge badge-danger'>{0}</span>", totalAlerts );
                     lbAlerts.Controls.Add( new LiteralControl( spanLiteral ) );
                 }
