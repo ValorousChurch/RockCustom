@@ -163,12 +163,12 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
 
                         if ( GetAttributeValue( AttributeKey.IncludeProjects ).AsBoolean() )
                         {
-                           // totalAlerts += GetProjectCount( rockContext );
+                            totalAlerts += GetProjectCount( rockContext );
                         }
 
                         if ( GetAttributeValue( AttributeKey.IncludeTasks ).AsBoolean() )
                         {
-                            //totalAlerts += GetTaskCount( rockContext );
+                            totalAlerts += GetTaskCount( rockContext );
                         }
                     }
                 }
@@ -286,6 +286,56 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
             }
             return connections;
 
+        }
+
+        /// <summary>
+        /// Gets a count of all the active projects for the current person
+        /// </summary>
+        /// <param name="rockContext"></param>
+        /// <returns></returns>
+        private int GetProjectCount(RockContext rockContext)
+        {
+            var serviceType = typeof( com.blueboxmoon.ProjectManagement.Model.ProjectService );
+            if ( serviceType != null )
+            {
+                var serviceInstance = Activator.CreateInstance( serviceType, rockContext ) as IService;
+                if ( serviceInstance != null )
+                { 
+                    System.Reflection.MethodInfo method = serviceInstance.GetType().GetMethod( "MyProjects" );
+                    dynamic result = method.Invoke( serviceInstance, new object[] { CurrentPerson, true, false, false } );
+                    if ( result != null && result.Count != null )
+                    {
+                        return result.Count;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Gets a count of all the active tasks for the current person
+        /// </summary>
+        /// <param name="rockContext"></param>
+        /// <returns></returns>
+        private int GetTaskCount(RockContext rockContext)
+        {
+            var serviceType = typeof( com.blueboxmoon.ProjectManagement.Model.TaskService );
+            if ( serviceType != null )
+            {
+                var serviceInstance = Activator.CreateInstance( serviceType, rockContext ) as IService;
+                if ( serviceInstance != null )
+                {
+                    System.Reflection.MethodInfo method = serviceInstance.GetType().GetMethod( "MyTasks" );
+                    dynamic result = method.Invoke( serviceInstance, new object[] { CurrentPerson, true, false } );
+                    if ( result != null && result.Count != null )
+                    {
+                        return result.Count;
+                    }
+                }
+            }
+
+            return 0;
         }
 
         /// <summary>
