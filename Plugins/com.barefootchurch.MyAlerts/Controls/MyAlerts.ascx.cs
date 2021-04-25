@@ -105,7 +105,15 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         DefaultValue = "true",
         Order = 1,
         Key = AttributeKey.IncludeTasks )]
-    
+    [BooleanField(
+        "Available Tasks Only",
+        Category = "ProjectManagement",
+        Description = "Only count tasks that are not blocked by other tasks.",
+        IsRequired = true,
+        DefaultValue = "true",
+        Order = 2,
+        Key = AttributeKey.AvailableTasksOnly )]
+
     public partial class MyAlerts : Rock.Web.UI.RockBlock
     {
         public static class AttributeKey
@@ -120,6 +128,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
             public const string CriticalConnectionsOnly = "CriticalConnectionsOnly";
             public const string IncludeProjects = "IncludeProjects";
             public const string IncludeTasks = "IncludeTasks";
+            public const string AvailableTasksOnly = "AvailableTasksOnly";
             public const string ProjectTypes = "ProjectTypes";
         }
 
@@ -328,7 +337,23 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                     dynamic result = method.Invoke( serviceInstance, new object[] { CurrentPerson, true, false } );
                     if ( result != null && result.Count != null )
                     {
-                        return result.Count;
+                        int count = 0;
+                        if ( GetAttributeValue( AttributeKey.AvailableTasksOnly ).AsBoolean() )
+                        {
+                            foreach ( var task in result )
+                            {
+                                if ( !task.IsBlocked )
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            count = result.Count;
+                        }
+
+                        return count;
                     }
                 }
             }
