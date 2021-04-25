@@ -61,7 +61,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         DefaultValue = "true",
         Order = 2,
         Key = AttributeKey.IncludeChildCategories )]
-    
+
     // Connection Request
     [BooleanField(
         "Include Connections",
@@ -122,7 +122,8 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
             public const string IncludeTasks = "IncludeTasks";
             public const string ProjectTypes = "ProjectTypes";
         }
-        protected override void OnInit( EventArgs e )
+
+        protected override void OnInit(EventArgs e)
         {
             base.OnInit( e );
 
@@ -130,7 +131,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
             RockPage.AddScriptLink( "~/Plugins/com_barefootchurch/MyAlerts/MyAlerts.js" );
         }
 
-        protected override void OnLoad( EventArgs e )
+        protected override void OnLoad(EventArgs e)
         {
             base.OnLoad( e );
 
@@ -151,7 +152,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                     {
                         totalAlerts = 0;
 
-                        if( GetAttributeValue( AttributeKey.IncludeWorkflows ).AsBoolean() )
+                        if ( GetAttributeValue( AttributeKey.IncludeWorkflows ).AsBoolean() )
                         {
                             totalAlerts += GetWorkflows( rockContext ).Count();
                         }
@@ -184,14 +185,13 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                     var spanLiteral = string.Format( "<span class='badge badge-danger'>{0}</span>", totalAlerts );
                     lbAlerts.Controls.Add( new LiteralControl( spanLiteral ) );
                 }
-
             }
         }
 
         /// <summary>
         /// Navigates to the Dashboard page.
         /// </summary>
-        protected void lbAlerts_Click( object sender, EventArgs e )
+        protected void lbAlerts_Click(object sender, EventArgs e)
         {
             NavigateToLinkedPage( AttributeKey.DashboardPage );
         }
@@ -201,7 +201,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         /// </summary>
         /// <param name="rockContext"></param>
         /// <returns></returns>
-        private List<WorkflowAction> GetWorkflows( RockContext rockContext )
+        private List<WorkflowAction> GetWorkflows(RockContext rockContext)
         {
             var formActions = new List<WorkflowAction>();
 
@@ -230,7 +230,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         /// </summary>
         /// <param name="rockContext"></param>
         /// <returns></returns>
-        private List<WorkflowAction> GetActiveForms( RockContext rockContext )
+        private List<WorkflowAction> GetActiveForms(RockContext rockContext)
         {
             var formActions = RockPage.GetSharedItem( "ActiveForms" ) as List<WorkflowAction>;
 
@@ -242,13 +242,12 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
 
             // find first form for each activity
             var firstForms = new List<WorkflowAction>();
-            foreach( var activityId in formActions.Select( a => a.ActivityId ).Distinct().ToList() )
+            foreach ( var activityId in formActions.Select( a => a.ActivityId ).Distinct().ToList() )
             {
                 firstForms.Add( formActions.First( a => a.ActivityId == activityId ) );
             }
 
             return firstForms;
-
         }
 
         /// <summary>
@@ -265,8 +264,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                 var query = new ConnectionRequestService( rockContext ).Queryable()
                     .Where(
                         r => r.ConnectionState == ConnectionState.Active ||
-                        ( r.ConnectionState == ConnectionState.FutureFollowUp && r.FollowupDate < RockDateTime.Now )
-                    )
+                        ( r.ConnectionState == ConnectionState.FutureFollowUp && r.FollowupDate < RockDateTime.Now ) )
                     .Where( r => r.ConnectorPersonAliasId == CurrentPersonAliasId );
 
                 var types = GetAttributeValue( AttributeKey.ConnectionTypes ).SplitDelimitedValues().ToList();
@@ -279,13 +277,13 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
                 {
                     query = query.Where( r => r.ConnectionStatus.IsCritical == true );
                 }
-                
+
                 connections = query.ToList();
 
                 RockPage.SaveSharedItem( "ActiveConnections", connections );
             }
-            return connections;
 
+            return connections;
         }
 
         /// <summary>
@@ -300,7 +298,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
             {
                 var serviceInstance = Activator.CreateInstance( serviceType, rockContext ) as IService;
                 if ( serviceInstance != null )
-                { 
+                {
                     System.Reflection.MethodInfo method = serviceInstance.GetType().GetMethod( "MyProjects" );
                     dynamic result = method.Invoke( serviceInstance, new object[] { CurrentPerson, true, false, false } );
                     if ( result != null && result.Count != null )
@@ -343,7 +341,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         /// </summary>
         /// <param name="rockContext"></param>
         /// <returns></returns>
-        private List<int> GetCategories( RockContext rockContext )
+        private List<int> GetCategories(RockContext rockContext)
         {
             int entityTypeId = EntityTypeCache.Get( typeof( WorkflowType ) ).Id;
 
@@ -364,7 +362,7 @@ namespace RockWeb.Plugins.com_barefootchurch.MyAlerts
         /// <param name="ids"></param>
         /// <param name="categories"></param>
         /// <returns></returns>
-        private List<int> GetCategoryIds( List<int> ids, List<CategoryNavigationItem> categories )
+        private List<int> GetCategoryIds(List<int> ids, List<CategoryNavigationItem> categories)
         {
             foreach ( var categoryNavItem in categories )
             {
