@@ -37,11 +37,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="RestSharp">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RockWeb\bin\RestSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
+    <Reference Include="RestSharp.Newtonsoft.Json">
       <HintPath>..\RockWeb\Bin\RestSharp.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -52,22 +51,18 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="DotLiquid">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RockWeb\bin\DotLiquid.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RockWeb\bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RockWeb\bin\Rock.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock.Migrations">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\RockWeb\bin\Rock.Migrations.dll</HintPath>
       <Private>False</Private>
     </Reference>
