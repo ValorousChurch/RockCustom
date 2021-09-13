@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 
-using iTextSharp.text.pdf;
+using NReco.PdfGenerator;
 
 using Rock;
 using Rock.Attribute;
@@ -37,8 +37,9 @@ namespace org.secc.PDF
     [CodeEditorField( "Lava", "The lava to convert to a PDF", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 300, order: 1 )]
     [CodeEditorField( "Header", "The html/lava to use in the page header.", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 100, required: false, order: 2 )]
     [CodeEditorField( "Footer", "The html/lava to use in the page footer.", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 100, required: false, order: 3 )]
-    [WorkflowAttribute( "PDF", "Binary File attribute to output PDF to.", fieldTypeClassNames: new string[] { "Rock.Field.Types.FileFieldType" }, order: 4 )]
-    [TextField( "Document Name", "The name of the document <span class='tip tip-lava'></span>.", true, "LavaDocument.pdf", order: 5 )]
+    [BooleanField( "Remove Margins", "Remove the default margins on the PDF file.", false, order: 4 )]
+    [WorkflowAttribute( "PDF", "Binary File attribute to output PDF to.", fieldTypeClassNames: new string[] { "Rock.Field.Types.FileFieldType" }, order: 5 )]
+    [TextField( "Document Name", "The name of the document <span class='tip tip-lava'></span>.", true, "LavaDocument.pdf", order: 6 )]
     class LavaPDF : ActionComponent
     {
         /// <summary>
@@ -57,8 +58,22 @@ namespace org.secc.PDF
             string header = GetActionAttributeValue( action, "Header" ).ResolveMergeFields( GetMergeFields( action ) );
             string footer = GetActionAttributeValue( action, "Footer" ).ResolveMergeFields( GetMergeFields( action ) );
             string documentName = GetActionAttributeValue( action, "DocumentName" ).ResolveMergeFields( GetMergeFields( action ) );
+            bool noMargins = GetActionAttributeValue( action, "RemoveMargins" ).AsBoolean();
 
-            BinaryFile pdfBinary = Utility.HtmlToPdf( html, header, footer, rockContext, documentName );
+            PageMargins margins = null;
+
+            if ( noMargins )
+            {
+                margins = new PageMargins
+                {
+                    Top = 0,
+                    Right = 0,
+                    Bottom = 0,
+                    Left = 0
+                };
+            }
+            
+            BinaryFile pdfBinary = Utility.HtmlToPdf( html, header, footer, rockContext, documentName, margins );
 
             Guid guid = GetAttributeValue( action, "PDF" ).AsGuid();
             if ( !guid.IsEmpty() )
