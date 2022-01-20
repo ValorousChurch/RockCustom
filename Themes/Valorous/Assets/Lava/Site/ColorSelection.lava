@@ -1,0 +1,103 @@
+<style>
+    .add-your-spot {
+        position: absolute;
+        right: 1em;
+        top: 1.5em;
+        background-color: white;
+        padding: 20px;
+        border-radius: 20px;
+        -webkit-transition: all .6s ease-in-out;
+        transition: all .6s ease-in-out;
+        margin: 2rem 2rem 60px 2rem;
+        width: 300px;
+    }
+    @media (max-width: 767px) {
+        .add-your-spot {
+            right: -200vw;
+            z-index: 0;
+        }
+    }
+    .add-your-spot--close {
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 100%;
+        display: inline-block;
+        height: 35px;
+        top: .75em;
+        right: .75em;
+        width: 35px;
+        background-color: #fff;
+        position: absolute;
+        border: none;
+    }
+
+    .add-your-spot--close i {
+        line-height: 25px;
+        position: relative;
+        display: block;
+    }
+    .add-to-story--condensed {
+        position: absolute;
+        right: -2em;
+        top: 1.5em;
+        background-color: white;
+        padding: 5px;
+        border-radius: 40px;
+        -webkit-transition: all .6s ease-in-out;
+        transition: all .6s ease-in-out;
+        cursor: pointer;
+    }
+    .goodbye {
+        right: -200vw;
+        z-index: 0;
+    }
+</style>
+
+<div class="absolute z-10 overflow-hidden" style="height: 500px; width: 100%; max-width:450px; right: 0;">
+	<div class="add-your-spot md:mr-16 mt-0 goodbye">
+        <a class="add-your-spot--close text-center no-underline"  aria-label="Close">
+            <i class="fa fa-times text-black" aria-hidden="true"></i>
+        </a>
+        <div class="entry-header">
+            <h3 class="text-primary font-bold mt-0 pr-10">Your ministry brand matters!</h3>
+            <p class="text-primary">Explore different colors below, and when ready, you can easily customize your own colors in the theme settings!</p>
+        </div>
+        <div class="entry-body text-center">
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compassorange" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#f59e0b"></a>
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compassred" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#f56565"></a>
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compasspurple" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#9f7aea"></a>
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compassgreen" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#48bb78"></a>
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compass" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#136fb9"></a>
+        <a href="{{ 'Global' | Page:'Path' }}?theme=compasspink" class="btn btn-primary rounded-full h-16 w-16" style="background-color:#ed64a6"></a>
+        </div>
+    </div>
+
+    <div class="add-to-story--condensed mt-0 pr-16">
+        <div class="flex flex-justify flex-center mb-0">
+            <span class="flex-2 rounded-full bg-c-primary text-white font-semibold flex items-center justify-center py-3 px-6 w-16 h-16 m-2">
+                <i class="fa fa-angle-left text-white text-3xl pr-1" aria-hidden="true"></i>
+            </span>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".add-your-spot--close").click(function () {
+            $(".add-your-spot").css('right','-200vw');
+            $(".add-to-story--condensed").removeClass('goodbye');
+            $(".add-your-spot").addClass('goodbye');
+        });
+
+        $(".add-to-story--condensed").click(function () {
+            $(".add-to-story--condensed").addClass('goodbye');
+            $(".add-your-spot").removeClass('goodbye');
+            $(".add-your-spot").css('right','0px');
+        });
+
+        /*if ($( document ).width() < 768) {
+            $(".add-to-story--condensed").removeClass('goodbye');
+            $(".add-your-spot").addClass('goodbye');
+        }*/
+    });
+</script>

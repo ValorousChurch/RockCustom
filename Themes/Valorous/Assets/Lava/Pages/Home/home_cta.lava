@@ -1,0 +1,18 @@
+<section class="text-gray-600 body-font bg-c-primary py-24">
+    <div class="container px-5 mx-auto flex flex-wrap">
+        <h2 class="text-white font-bold title-font mb-2 xl:pr-3 xl:w-2/5 mt-0">
+            Need Prayer? No matter what you're facing, we'd love to pray with you!
+        </h2>
+        <div class="xl:w-3/5 xl:pl-6">
+            <p class="leading-relaxed text-white">There are times when life is overwhelming, when all we have is questions. In those moments, hope can feel far away. The great thing about prayer is that it shifts our perspective toward the One who stands ready to listen.</p>
+            <div class="md:flex xl:mt-4 mt-6">
+                <button class="md:flex text-gray-900 bg-white border-0 py-4 px-16 focus:outline-none hover:bg-gray-200 text-uppercase font-bold transition duration-200 ease-in-out">Ask for Prayer</button>
+                <a class="text-white py-4 px-16 inline-flex items-center ml-4 transition duration-400 ease-in">Connect
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
+                        <path d="M5 12h14M12 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,44 @@
+{{- '/Themes/Compass/Assets/Vendor/lightgallery/css/lightgallery-bundle.css' | AddCssLink -}}
+{{- '/Themes/Compass/Assets/Vendor/lightgallery/lightgallery.min.js' | AddScriptLink -}}
+<!-- lightgallery plugins -->
+{{- '/Themes/Compass/Assets/Vendor/lightgallery/plugins/thumbnail/lg-thumbnail.umd.js' | AddScriptLink -}}
+{{- '/Themes/Compass/Assets/Vendor/lightgallery/plugins/zoom/lg-zoom.umd.js' | AddScriptLink -}}
+
+<style>
+.lg-backdrop {
+    background-color: rgba(0, 0, 0, 0.90);
+}
+</style>
+{%- assign lgId = uniqueid -%}
+
+<div id="lightgallery-{{ lgId }}" class="">
+    {%- for item in items -%}
+        {%- assign image = '' -%}
+        {%- if item.image != null -%}{%- assign image = item.image -%}{%- else -%}{%- assign image = 'https://picsum.photos/1000/1000' -%}{%- endif -%}
+        <a href="{{ image }}" data-lg-size="{{- item.imagesize -}}" class="{{ item.anchorclasses }}" data-sub-html="{{- item.content -}}">
+            <img alt="{{- item.imgtitle -}}" src="{{- image -}}" class="{{- item.classes -}}" />
+            <div class="portfolio-box-caption hover:bg-c-primary-800">
+                <div class="portfolio-box-caption-content">
+                    <div class="project-category text-faded">
+                        {{- item.imgsubtile -}}
+                    </div>
+                    <div class="project-name">
+                        {{- item.imgtitle -}}
+                    </div>
+                </div>
+            </div>
+        </a>
+    {%- endfor -%}
+</div>
+
+{% javascript %}
+window.onload = (event) => {
+   lightGallery(document.getElementById('lightgallery-{{ lgId }}'), {
+        plugins: [lgZoom, lgThumbnail],
+        licenseKey:"E4537569-B03A400E-BF499ACD-E453B8D7",
+        speed: 500,
+        download: false,
+        counter: false
+    });
+};
+{% endjavascript %}

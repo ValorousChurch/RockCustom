@@ -1,0 +1,19 @@
+<script src="/Themes/Compass/Scripts/wowjs/wow.min.js" ></script>
+<link href="/Themes/Compass/Scripts/wowjs/animate.min.css" rel="stylesheet" type="text/css"/>
+<style>
+    .wow { visibility: hidden; }
+</style>
+<script>
+$(document).ready(function() {
+    function afterReveal (el) {
+        el.addEventListener('animationend', function () {
+            el.opacity = "1";
+        });
+    }
+    new WOW({ callback: afterReveal }).init();
+});
+</script>
+{%- assign css_string = " wow " | Append:animate -%}
+<div class="{{- css_string -}} {{addclass}}" data-wow-duration="{{- duration -}}" data-wow-delay="{{- delay -}}">
+    {{ blockContent }}
+</div>

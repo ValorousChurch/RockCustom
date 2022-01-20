@@ -1,0 +1,19 @@
+{% cache key:'ne-services' duration:'1800' %}
+    {% assign domain = "https://9embers.online.church" %}
+    {% assign jsonResults = '' %}
+    {% webrequest url:'{{domain}}/auth/guest' method:'POST' return:'auth' %}
+        {%- assign dateTimeNow = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss zzz' %}
+        {%- capture body -%}{"operationName":"ServicesConnectionQuery","variables":{"limit":1,"from":"{{dateTimeNow}}"},"query":"query ServicesConnectionQuery($from: Timestamp, $limit: Int = 0) {currentOrganization { id servicesConnection(from: $from, limit: $limit) { services { id startTime scheduleTime endTime __typename } __typename } __typename  }}"}{%- endcapture -%}
+        {% webrequest url:'{{domain}}/graphql' method:'POST' body:'{{body}}' requestcontenttype:'application/json' headers:'Authorization^Bearer {{auth.access_token}}' %}
+            {% assign jsonResults = results | ToJSON %}
+        {% endwebrequest %}
+    {% endwebrequest %}
+    {% assign rawJSON = jsonResults | ReplaceFirst:'{', '' | ReplaceLast:'}', ''  %}
+    {% capture updatedJSON %}
+        {
+            "domain": "{{ domain }}",
+            {{ rawJSON }}
+        }
+    {% endcapture %}
+    {{ updatedJSON }}
+{% endcache %}

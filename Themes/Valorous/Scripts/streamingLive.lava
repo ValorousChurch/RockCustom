@@ -1,0 +1,54 @@
+<div class="streaming-later">
+    Not Streaming yet.
+</div>
+
+<div class="streaming-now" style="display:none">
+    STREAMING NOW!!
+</div>
+
+<img class="img-responsive jarallax-img" src="https://picsum.photos/1200/800" style="margin: 0 auto; padding: 20px;"/>
+
+<script>
+    var ncc_goLive;
+    ncc_goLive = function() {
+        $('.jarallax-img').css("filter","brightness(50%)");
+        $('.streaming-now').show();
+    };
+    ncc_loadCountdown = function(data){
+        var now = new Date();
+        try {
+            var startTimeString = data.data.currentOrganization.servicesConnection.services[0].startTime;
+            var startTime = new Date(startTimeString);
+            var endTime = new Date(data.data.currentOrganization.servicesConnection.services[0].endTime);
+        } catch {
+            // If we don't get service times, just bail
+            return;
+        }
+        // If we are in between the start and end times then it's LIVE!
+        if (startTime < now && now < endTime) {
+            return ncc_goLive();
+        }
+    }
+    ncc_eventUrl = "/webhooks/Lava.ashx/livestreaming/services";
+    msie = /msie/.test(navigator.userAgent.toLowerCase())
+    if (msie && window.XDomainRequest) {
+        var xdr = new XDomainRequest();
+        xdr.open("get", ncc_eventUrl);
+        xdr.onload = function() {
+            ncc_loadCountdown(jQuery.parseJSON(xdr.responseText))
+        };
+        xdr.send();
+    } else {
+        $.ajax({
+            url: ncc_eventUrl,
+            dataType: "json",
+            crossDomain: true,
+            success: function(data) {
+                ncc_loadCountdown(data);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                return console.log(thrownError);
+            }
+        });
+    }
+</script>

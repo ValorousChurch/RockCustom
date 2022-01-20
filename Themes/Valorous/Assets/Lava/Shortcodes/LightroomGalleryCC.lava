@@ -1,0 +1,35 @@
+{% comment %} [9 Embers] Light Gallery - Content Channel {% endcomment %}
+
+<section class="gallery no-padding">
+    <div class="container-fluid" style="max-width:1800px">
+        <div class="row no-gutter">
+            {% contentchannelitem where:'ContentChannelId == {{- id -}}' sort:'Order Desc' limit:'6' %}
+                {[ lightgallery ]}
+                {% for item in contentchannelitemItems %}
+                    {%- assign imageFile = item | Attribute:'Image', 'FileName' -%}
+                    {%- assign imageGuid = item | Attribute:'Image', 'RawValue' -%}
+                    {%- unless imageGuid == "" -%}
+                    {%- assign imageId = uniqueid -%}
+                        {% assign iTitle = item.Title %}
+                        {% assign iSubtile = item.StartDateTime | Date:'MMM dd, yyyy' %}
+
+                        {% capture imageItem %}
+                            [[ item imgtitle:'{{ iTitle }}'
+                                    imgsubtile:'{{ iSubtile }}'
+                                    image:'/GetImage.ashx/{{- imageFile -}}?Guid={{- imageGuid -}}&width=1050&height=700&mode=crop'
+                                    classes:'img-responsive'
+                                    anchorclasses:'portfolio-box col-lg-4 col-sm-6 px-0'
+                                    imagesize:'1050-700' ]]
+                                    {{ item.Content }}
+                            [[ enditem ]]
+                        {% endcapture %}
+
+                        {{ imageItem }}
+
+                    {%- endunless -%}
+                {% endfor %}
+                {[ endlightgallery ]}
+            {% endcontentchannelitem %}
+        </div>
+    </div>
+</section>

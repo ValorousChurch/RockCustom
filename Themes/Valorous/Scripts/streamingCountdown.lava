@@ -1,0 +1,172 @@
+{% comment %} // liveStream = function() {
+// boxcast.getChannelBroadcasts("g783co2rmx4aptcndgav")
+//   .then(function(broadcast) {
+//     console.log('broadcast',broadcast);
+//     $.each(broadcast, function(k,v) {
+//         console.log('Loaded broadcast Object', v);
+// 		console.log('Loaded broadcast', v.timeframe);
+// 		if (v.timeframe != 'past' ){
+// 			      $('.jarallax-img').css("filter","brightness(50%)");
+//             $('.streaming-now').show();
+//         }
+//     });
+//      setTimeout(liveStream, 30000);
+//   })
+//   .catch(function(error) {
+//     console.error('Error loading broadcast', error);
+//   });
+// }
+// <div id="boxcast-widget-g783co2rmx4aptcndgav"></div><script type="text/javascript" charset="utf-8">(function(d, s, c, o) {var js = d.createElement(s), fjs = d.getElementsByTagName(s)[0];var h = (('https:' == document.location.protocol) ? 'https:' : 'http:');js.src = h + '//js.boxcast.com/v3.min.js';js.onload = function() { boxcast.noConflict()('#boxcast-widget-'+c).loadChannel(c, o); };js.charset = 'utf-8';fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'g783co2rmx4aptcndgav', {"showTitle":1,"showDescription":1,"showHighlights":1,"showRelated":true,"defaultVideo":"next","market":"unknown","showDocuments":true,"showIndex":true,"showDonations":false,"layout":"playlist-to-right"}));</script> {% endcomment %}
+<style type="text/css">
+  #ncc_action_counter_container { display: none; }
+  #ncc_action_counter { overflow: auto; width: auto; height: 100%; }
+  #ncc_action_counter .description, #ncc_action_counter .time li .label { font-size: 0.6em; }
+  #ncc_action_counter .time { list-style: none; display: inline-block; }
+  #ncc_action_counter .time li { float: left; padding: 0 5px 0 5px; text-align: center; border-right: 1px solid grey;}
+  #ncc_action_counter .time li h4 {line-height: 1.2; vertical-align: middle; padding-top: 5px; }
+  #ncc_action_counter .time li:first-child { }
+  #ncc_action_counter .time li:last-child { padding: 0 10px 0 10px; border-right: none; }
+  #ncc_action_counter .time li span { font-size: 1.2em; color: black}
+  #ncc_action_counter .live { display: none }
+  .card {
+      -webkit-transition: all ease .5s;
+      -moz-transition: all ease .5s;
+      -ms-transition: all ease .5s;
+      -o-transition: all ease .5s;
+      transition: all ease .5s;
+  }
+  @media (min-width: 992px) and (max-width: 1199px) {
+      .live-stream-container {
+          padding: 0px !important;
+      }
+      .action-image {
+          width: 40% !important;
+      }
+      .action-content {
+          clear: both;
+          padding-top: 10px !important;
+      }
+  }
+</style>
+{% comment %} <div id="ncc_action_counter_loader" class="g-margin-x-auto--xs text-center">
+    <p>loading</p>
+</div> {% endcomment %}
+<div id="ncc_action_counter_container" class="alertBar container-fluid" style="border-width: 2px;">
+    <div class="row">
+        <div class="col-md-12 text-center g-padding-x-0--xs g-padding-b-0--sm">
+            <div id="ncc_action_counter">
+                <span class="g-display-inline-block--xs g-margin-t-15--xs live-stream-container" style="vertical-align: top;padding: 20px 0px;">
+                    <span class="live-stream coming-soon">
+                        <h6 class="notlive uppercase g-color--black g-font-weight--700" style="vertical-align:middle">Next Live Streaming</h6>
+                        <h6 class="live uppercase g-color--black g-font-weight--700" style="vertical-align:middle">Live Now</h6>
+                    </span>
+                </span>
+                <ul class="time g-padding-x-0--xs">
+                    <li><h4 class="g-font-weight--700"><span class="ncc_days">00</span></h4> <span class="label uppercase" style="top: -10px;position: relative;">days</span></li>
+                    <li><h4 class="g-font-weight--700"><span class="ncc_hours">00</span></h4> <span class="label uppercase" style="top: -10px;position: relative;">hours</span></li>
+                    <li><h4 class="g-font-weight--700"><span class="ncc_minutes">00</span></h4> <span class="label uppercase" style="top: -10px;position: relative;">mins</span></li>
+                    <li><h4 class="g-font-weight--700"><span class="ncc_seconds">00</span></h4> <span class="label uppercase" style="top: -10px;position: relative;">secs</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<img class="img-responsive jarallax-img" src="https://picsum.photos/1200/800" style="margin: 0 auto; padding: 20px;"/>
+
+
+  <script>
+$(document).ready(function(){
+    if ($('#ncc_action_counter_container').length) {
+      var ncc_days, ncc_goLive, ncc_hours, ncc_intervalId, ncc_minutes, ncc_seconds;
+
+      ncc_goLive = function() {
+
+        $("#ncc_action_counter_container").show();
+        $("#ncc_action_counter .time").hide();
+        $("#ncc_action_counter .notlive").hide();
+        $("#ncc_action_counter .live").show();
+
+        $('.jarallax-img').css("filter","brightness(50%)");
+        $('.streaming-now').show();
+      };
+
+      ncc_loadCountdown = function(data){
+        var ncc_seconds_till;
+			  var now = new Date();
+			  try {
+			      var startTimeString = data.data.currentOrganization.servicesConnection.services[0].startTime;
+			      var startTime = new Date(startTimeString);
+			      var endTime = new Date(data.data.currentOrganization.servicesConnection.services[0].endTime);
+			  } catch {
+			      // If we don't get service times, just bail
+			      return;
+			  }
+			  // If we are in between the start and end times then it's LIVE!
+              if (startTime < now && now < endTime) {
+                return ncc_goLive();
+              } else {
+                // Parse ISO 8601 date string
+                date = startTimeString.match(/^(\d{4})-0?(\d+)-0?(\d+)[T ]0?(\d+):0?(\d+):0?(\d+)Z$/)
+                dateString = date[2] + "/" + date[3] + "/" + date[1] + " " + date[4] + ":" + date[5] + ":" + date[6] + " +0000"
+                ncc_seconds_till = ((new Date(dateString)) - (new Date())) / 1000;
+                ncc_days = Math.floor(ncc_seconds_till / 86400);
+                ncc_hours = Math.floor((ncc_seconds_till % 86400) / 3600);
+                ncc_minutes = Math.floor((ncc_seconds_till % 3600) / 60);
+                ncc_seconds = Math.floor(ncc_seconds_till % 60);
+                return ncc_intervalId = setInterval(function() {
+                  if (--ncc_seconds < 0) {
+                    ncc_seconds = 59;
+                    if (--ncc_minutes < 0) {
+                      ncc_minutes = 59;
+                      if (--ncc_hours < 0) {
+                        ncc_hours = 23;
+                        if (--ncc_days < 0) {
+                          ncc_days = 0;
+                        }
+                      }
+                    }
+                  }
+                  $("#ncc_action_counter .ncc_days").html((ncc_days.toString().length < 2) ? "0" + ncc_days : ncc_days);
+                  $("#ncc_action_counter .ncc_hours").html((ncc_hours.toString().length < 2 ? "0" + ncc_hours : ncc_hours));
+                  $("#ncc_action_counter .ncc_minutes").html((ncc_minutes.toString().length < 2 ? "0" + ncc_minutes : ncc_minutes));
+                  $("#ncc_action_counter .ncc_seconds").html((ncc_seconds.toString().length < 2 ? "0" + ncc_seconds : ncc_seconds));
+                  if (ncc_seconds === 0 && ncc_minutes === 0 && ncc_hours === 0 && ncc_days === 0) {
+                    ncc_goLive();
+                    return clearInterval(ncc_intervalId);
+                  }
+                  $("#ncc_action_counter_loader").fadeOut().next().delay(500);
+                  $("#ncc_action_counter_container").fadeIn( 300 );
+                }, 1000);
+              }
+            }
+            ncc_days = void 0;
+            ncc_hours = void 0;
+            ncc_minutes = void 0;
+            ncc_seconds = void 0;
+            ncc_intervalId = void 0;
+            ncc_eventUrl = "/webhooks/Lava.ashx/livestreaming/services";
+            msie = /msie/.test(navigator.userAgent.toLowerCase())
+            if (msie && window.XDomainRequest) {
+                var xdr = new XDomainRequest();
+                xdr.open("get", ncc_eventUrl);
+                xdr.onload = function() {
+                  ncc_loadCountdown(jQuery.parseJSON(xdr.responseText))
+                };
+                xdr.send();
+            } else {
+              $.ajax({
+                url: ncc_eventUrl,
+                dataType: "json",
+                crossDomain: true,
+                success: function(data) {
+                  ncc_loadCountdown(data);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                  return console.log(thrownError);
+                }
+              });
+          }
+        }
+    });
+</script>

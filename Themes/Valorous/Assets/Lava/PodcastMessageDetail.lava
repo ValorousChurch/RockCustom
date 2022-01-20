@@ -1,0 +1,40 @@
+﻿	{% assign videoLink = Item | Attribute:'VideoLink','RawValue' %}
+	{% assign videoEmbed = Item | Attribute:'VideoEmbed' %}
+	{% assign audioLink = Item | Attribute:'AudioLink','RawValue' %}
+
+	<article class="message-detail mt-8">
+
+		{% if videoEmbed != '' %}
+			{{ videoEmbed }}
+		{% endif %}
+
+		<h1>{{ Item.Title }}</h1>
+
+		<p>
+			<strong> {{ Item | Attribute:'Speaker' }} - {{ Item.StartDateTime | Date:'M/d/yyyy' }}</strong>
+		</p>
+
+		<div class="row">
+			<div class="col-md-8">
+				{{ Item.Content }}
+			</div>
+			<div class="col-md-4">
+				{% if videoLink != '' or audioLink != '' %}
+					<div class="panel panel-default">
+						<div class="panel-heading">Downloads &amp; Resources</div>
+						<div class="list-group">
+
+							{% if videoLink != '' %}
+								<a href="{{ videoLink }}" class="list-group-item"><i class="fa fa-film"></i> Video Download</a>
+							{% endif %}
+
+							{% if audioLink != '' %}
+								<a href="{{ audioLink }}" class="list-group-item"><i class="fa fa-volume-up"></i> Audio Download</a>
+							{% endif %}
+
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		</row>
+	</article>

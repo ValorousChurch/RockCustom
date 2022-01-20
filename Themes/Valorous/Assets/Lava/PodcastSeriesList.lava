@@ -1,0 +1,106 @@
+﻿<style>
+	.current-series h1 {
+		background-color: rgba(0, 0, 0, 0.3);
+		text-align: center;
+		font-size: 16px;
+		font-weight: 600;
+		color: #fff;
+		margin: 0;
+		padding: 6px;
+		bottom: 0;
+		position: relative;
+	}
+
+	.series {
+		position: relative;
+	}
+
+
+	.series-dates {
+		opacity: .6;
+	}
+
+	.series-body {
+		padding: 15px;
+	}
+
+	.series-summary {
+	}
+
+	.series-link:hover {
+		text-decoration: none;
+	}
+</style>
+
+{% assign currentSeries = Items | First %}
+{% assign currentSeriesImageGuid = currentSeries | Attribute:'SeriesImage','RawValue' %}
+<div class="container-fluid pb-4">
+{% if Pagination.CurrentPage == 1 %}
+<a href="{{ LinkedPages.DetailPage }}?Item={{ currentSeries.Id }}">
+  <header>
+	  <img src="/GetImage.ashx?Guid={{ currentSeriesImageGuid }}" class="rounded-lg mt-8 shadow-md overflow-hidden relative img-responsive" />
+	  <p class="w-full py-4 text-center text-gray-600 mb-0 uppercase font-bold">Current Series</p>
+  </header>
+</a>
+{% endif %}
+
+<div class="flex flex-wrap mx-10 pb-10">
+	{% for item in Items %}
+	{% assign seriesImageGuid = item | Attribute:'SeriesImage','RawValue' %}
+
+	<div class="col-md-4 col-sm-6 margin-b-md xs:px-0 sm:px-6">
+		<a class="series-link" href="{{ LinkedPages.DetailPage }}?Item={{ item.Id }}">
+		<article class="series bg-white transition overflow-hidden shadow-md hover:shadow-xl duration-100 ease-linear transform hover:z-10 hover:scale-105 my-3 rounded">
+			{% if detailImageGuid != '' %}
+				<img src="/GetImage.ashx?Guid={{ seriesImageGuid }}" class="img-responsive" />
+				{% comment %} <div class="hover:bg-gray-300 bg-contain bg-center bg-black bg-no-repeat" style="" background-image: url('/GetImage.ashx?Guid={{ seriesImageGuid }}');" ></div> {% endcomment %}
+			{% endif %}
+
+			<div class="series-body">
+				<h3 class="text-color">{{ item.Title }}</h3>
+				<p class="series-dates text-color">
+					{{ item.StartDateTime | Date:'M/d/yyyy' }}
+						{% if item.StartDateTime != item.ExpireDateTime %}
+							- {{ item.ExpireDateTime | Date:'M/d/yyyy' }}
+						{% endif %}
+				</p>
+
+				<p class="series-summary text-color">
+					{{ item | Attribute:'Summary' }}
+				</p>
+			</div>
+		</article>
+		</a>
+	</div>
+
+{% endfor -%}
+</div>
+
+
+{% if Pagination.TotalPages > 1 %}
+<div class="mx-12">
+  {% assign nextPageString = Pagination.NextPage | ToString %}
+  {% assign prevPageString = Pagination.PreviousPage | ToString %}
+
+  {% if Pagination.PreviousPage == -1 %}
+  <div class="rounded btn btn-default pull-left py-4 px-6">
+    <i class="fa fa-chevron-left"></i> Prev
+  </div>
+  {% else %}
+  <a class="rounded btn btn-primary pull-left py-4 px-6" href="{{ Pagination.UrlTemplate | Replace:'PageNum', prevPageString }}">
+    <i class="fa fa-chevron-left"></i> Prev
+  </a>
+  {% endif %}
+
+  {% if Pagination.NextPage == -1 %}
+  <div class="rounded btn btn-default pull-right py-4 px-6">
+    Next <i class="fa fa-chevron-right"></i>
+  </div>
+  {% else %}
+  <a class="rounded btn btn-primary pull-right py-4 px-6" href="{{ Pagination.UrlTemplate | Replace:'PageNum', nextPageString }}">
+    Next <i class="fa fa-chevron-right"></i>
+  </a>
+  {% endif %}
+</div>
+{% endif %}
+</div>
