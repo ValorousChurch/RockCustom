@@ -70,6 +70,7 @@
 
     <form id="form1" runat="server">
 
+        <Rock:Zone Name="Alert" runat="server" />
         <nav id="mainNav" class="navbar navbar-default navbar-fixed-top compass shadow-md">
             <div class="container-fluid no-gutter">
                 <Rock:Zone Name="NavLogo" runat="server" />
