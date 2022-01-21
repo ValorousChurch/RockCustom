@@ -1,4 +1,17 @@
 ﻿<style>
+	.current-series {
+		height: 220px;
+		background-size: cover;
+		background-position: center center;
+		background-repeat: no-repeat;
+	}
+
+	@media (min-width: 992px) {
+		.current-series {
+			height: 420px;
+		}
+	}
+
 	.current-series h1 {
 		background-color: rgba(0, 0, 0, 0.3);
 		text-align: center;
@@ -7,14 +20,19 @@
 		color: #fff;
 		margin: 0;
 		padding: 6px;
-		bottom: 0;
-		position: relative;
 	}
 
 	.series {
+		border: 1px solid rgba(0, 0, 0, .3);
 		position: relative;
 	}
 
+	.series h1 {
+		font-size: 20px;
+		font-weight: 600;
+		margin-top: 4px;
+		margin-bottom: 0;
+	}
 
 	.series-dates {
 		opacity: .6;
@@ -22,42 +40,65 @@
 
 	.series-body {
 		padding: 15px;
+		height: 172px;
 	}
 
 	.series-summary {
+		height: 60px;
+		overflow: hidden;
 	}
 
 	.series-link:hover {
 		text-decoration: none;
 	}
+
+	.series-image {
+		height: 158px;
+		width: 100%;
+		background-size: cover;
+		background-position: center center;
+		background-repeat: no-repeat;
+	}
+
+	.series-image:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		transition: all .1s ease-in-out;
+	}
+
+	.series-image:hover:after {
+		background: rgba(0,0,0,.2);
+	}
 </style>
 
 {% assign currentSeries = Items | First %}
 {% assign currentSeriesImageGuid = currentSeries | Attribute:'SeriesImage','RawValue' %}
-<div class="container-fluid pb-4">
+
 {% if Pagination.CurrentPage == 1 %}
 <a href="{{ LinkedPages.DetailPage }}?Item={{ currentSeries.Id }}">
-  <header>
-	  <img src="/GetImage.ashx?Guid={{ currentSeriesImageGuid }}" class="rounded-lg mt-8 shadow-md overflow-hidden relative img-responsive" />
-	  <p class="w-full py-4 text-center text-gray-600 mb-0 uppercase font-bold">Current Series</p>
+  <header class="current-series" style="background-image: url('/GetImage.ashx?Guid={{ currentSeriesImageGuid }}')">
+	  <h1>Current Series</h1>
   </header>
 </a>
 {% endif %}
 
-<div class="flex flex-wrap mx-10 pb-10">
+<div class="row margin-t-lg">
 	{% for item in Items %}
 	{% assign seriesImageGuid = item | Attribute:'SeriesImage','RawValue' %}
 
-	<div class="col-md-4 col-sm-6 margin-b-md xs:px-0 sm:px-6">
+	<div class="col-md-4 col-sm-6 margin-b-md">
 		<a class="series-link" href="{{ LinkedPages.DetailPage }}?Item={{ item.Id }}">
-		<article class="series bg-white transition overflow-hidden shadow-md hover:shadow-xl duration-100 ease-linear transform hover:z-10 hover:scale-105 my-3 rounded">
+		<article class="series">
 			{% if detailImageGuid != '' %}
-				<img src="/GetImage.ashx?Guid={{ seriesImageGuid }}" class="img-responsive" />
-				{% comment %} <div class="hover:bg-gray-300 bg-contain bg-center bg-black bg-no-repeat" style="" background-image: url('/GetImage.ashx?Guid={{ seriesImageGuid }}');" ></div> {% endcomment %}
+				<div class="series-image" style="background-image: url('/GetImage.ashx?Guid={{ seriesImageGuid }}');" ></div>
 			{% endif %}
 
 			<div class="series-body">
-				<h3 class="text-color">{{ item.Title }}</h3>
+				<h1 class="text-color">{{ item.Title }}</h1>
 				<p class="series-dates text-color">
 					{{ item.StartDateTime | Date:'M/d/yyyy' }}
 						{% if item.StartDateTime != item.ExpireDateTime %}
@@ -78,29 +119,28 @@
 
 
 {% if Pagination.TotalPages > 1 %}
-<div class="mx-12">
+<div class="margin-t-lg">
   {% assign nextPageString = Pagination.NextPage | ToString %}
   {% assign prevPageString = Pagination.PreviousPage | ToString %}
 
   {% if Pagination.PreviousPage == -1 %}
-  <div class="rounded btn btn-default pull-left py-4 px-6">
+  <div class="btn btn-default pull-left">
     <i class="fa fa-chevron-left"></i> Prev
   </div>
   {% else %}
-  <a class="rounded btn btn-primary pull-left py-4 px-6" href="{{ Pagination.UrlTemplate | Replace:'PageNum', prevPageString }}">
+  <a class="btn btn-primary pull-left" href="{{ Pagination.UrlTemplate | Replace:'PageNum', prevPageString }}">
     <i class="fa fa-chevron-left"></i> Prev
   </a>
   {% endif %}
 
   {% if Pagination.NextPage == -1 %}
-  <div class="rounded btn btn-default pull-right py-4 px-6">
+  <div class="btn btn-default pull-right">
     Next <i class="fa fa-chevron-right"></i>
   </div>
   {% else %}
-  <a class="rounded btn btn-primary pull-right py-4 px-6" href="{{ Pagination.UrlTemplate | Replace:'PageNum', nextPageString }}">
+  <a class="btn btn-primary pull-right" href="{{ Pagination.UrlTemplate | Replace:'PageNum', nextPageString }}">
     Next <i class="fa fa-chevron-right"></i>
   </a>
   {% endif %}
 </div>
 {% endif %}
-</div>

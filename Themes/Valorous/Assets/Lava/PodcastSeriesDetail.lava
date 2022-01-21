@@ -29,35 +29,32 @@
 	}
 </style>
 
-{% if Item  %}
+{% assign item = Items | First %}
+{% if item %}
 
 	<article class="series-detail">
-		{% assign seriesImageGuid = Item | Attribute:'SeriesImage','RawValue' %}
+		{% assign seriesImageGuid = item | Attribute:'SeriesImage','RawValue' %}
+		<div class="series-banner" style="background-image: url('/GetImage.ashx?Guid={{ seriesImageGuid }}');" ></div>
 
-		<img src="/GetImage.ashx?Guid={{ seriesImageGuid }}" class="rounded-lg mt-8 shadow-md overflow-hidden relative img-responsive" />
-
-
-
-		<h1 class="series-title">{{ Item.Title }}</h1>
+		<h1 class="series-title">{{ item.Title }}</h1>
 		<p class="series-dates">
-			<strong>{{ Item.StartDateTime | Date:'M/d/yyyy' }}
-				{% if Item.StartDateTime != Item.ExpireDateTime %}
-					- {{ Item.ExpireDateTime | Date:'M/d/yyyy' }}
+			<strong>{{ item.StartDateTime | Date:'M/d/yyyy' }}
+				{% if item.StartDateTime != item.ExpireDateTime %}
+					- {{ item.ExpireDateTime | Date:'M/d/yyyy' }}
 				{% endif %}
 			</strong>
 		</p>
 
 
-		<script>function fbs_click() { u = location.href; t = document.title; window.open('http://www.facebook.com/sharer.php?u=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436'); return false; }</script>
-		<script>function ics_click() { text = `{{ EventItemOccurrence.Schedule.iCalendarContent }}`.replace('END:VEVENT', 'SUMMARY: {{ Event.Name }}\r\nLOCATION: {{ EventItemOccurrence.Location }}\r\nEND:VEVENT'); var element = document.createElement('a'); element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text)); element.setAttribute('download', '{{ Event.Name }}.ics'); element.style.display = 'none'; document.body.appendChild(element); element.click(); document.body.removeChild(element); }</script>
-		<ul class="socialsharing">
+		<script>function fbs_click() { u = location.href; t = document.title; window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(u) + '&t=' + encodeURIComponent(t), 'sharer', 'toolbar=0,status=0,width=626,height=436'); return false; }</script>
+    <ul class="socialsharing">
 			<li>
-				<a href="http://www.facebook.com/share.php?u=<url>" onclick="return fbs_click()" target="_blank" class="socialicon socialicon-facebook" title="" data-original-title="Share via Facebook">
+				<a href="https://www.facebook.com/sharer/sharer.php?u={{ 'Global' | Page:'Url' | EscapeDataString }}" onclick="return fbs_click()" target="_blank" class="socialicon socialicon-facebook" title="" data-original-title="Share via Facebook">
 					<i class="fa fa-fw fa-facebook"></i>
 				</a>
 			</li>
 			<li>
-				<a href="http://twitter.com/home?status={{ 'Global' | Page:'Url' | EscapeDataString }}" class="socialicon socialicon-twitter" title="" data-original-title="Share via Twitter">
+				<a href="https://twitter.com/intent/tweet?text={{ 'Global' | Page:'Url' | EscapeDataString }}" class="socialicon socialicon-twitter" title="" data-original-title="Share via Twitter">
 					<i class="fa fa-fw fa-twitter"></i>
 				</a>
 			</li>
@@ -69,14 +66,14 @@
 		</ul>
 
 		<div class="margin-t-lg">
-			{{ Item.Content }}
+			{{ item.Content }}
 		</div>
 
 		<h4 class="messages-title margin-t-lg">In This Series</h4>
 		<ol class="messages">
-			{% for message in Item.ChildItems %}
+			{% for message in item.ChildItems %}
 				<li>
-					<a href="/message/{{ message.ChildContentChannelItem.Id }}">
+					<a href="{{ LinkedPages.DetailPage }}?Item={{ message.ChildContentChannelItem.Id }}">
 						{{ message.ChildContentChannelItem.Title }}
 					</a>
         </li>
