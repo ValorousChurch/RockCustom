@@ -134,9 +134,9 @@ aside {
 
 // This Pushes the Top of the Page to exclude Navigation Bar from overlapping it
 .exclude-nav {
-  margin-top: 100px;
+  margin-top: 75px;
   @media (max-width: @desktop-to-mobile-nav-width) {
-    margin-top: 80px;
+    margin-top: 75px;
   }
 }
 // disables default bootstrap navbar open/close animations
@@ -167,7 +167,7 @@ aside {
   }
   .sans-serif-font;
   .navbar-header .navbar-brand {
-    height: 100px;
+    height: 75px;
     padding: 25px;
     // max-width: 65%;
     color: @compass-primary;
@@ -361,9 +361,9 @@ aside {
     }
   }
   @media (max-width: @desktop-to-mobile-nav-width) {
-    height: 80px;
+    height: 75px;
     .navbar-header .navbar-brand {
-      height: 80px;
+      height: 75px;
       color: @compass-primary;
       font-size: 14px;
       padding: 10px 10px 10px 35px;
@@ -418,9 +418,12 @@ aside {
       width: 100%;
     }
   }
+  .transition-all;
+  .navbar-brand img { max-width: inherit; } // Fix safari losing the logo
   @media (min-width: @desktop-to-mobile-nav-width) {
-    background-color: fade(white, 90%);
+    //background-color: fade(white, 90%);
     border-color: fade(white, 30%);
+
     .navbar-default .navbar-collapse {
       border-color: #e7e7e7;
       border-bottom: 2px solid #e7e7e7;
@@ -439,7 +442,7 @@ aside {
       }
     }
     .navbar-header .navbar-brand {
-      height: 100px;
+      height: 75px;
       padding: 10px !important;
       margin-left: 10px;
       color: #24292C;
@@ -465,7 +468,7 @@ aside {
       background-color: white;
       border-color: fade(@gray-darker, 5%);
       .navbar-header .navbar-brand {
-        height: 80px;
+        height: 75px;
         color: @compass-primary;
         font-size: 14px;
         &:hover,
@@ -497,7 +500,26 @@ aside {
     }
   }
 }
-
+/* Transparent nav bar on home page */
+.home {
+  .navbar-default.affix-top:not(.navOpen) {
+    background-color: transparent;
+    box-shadow: none !important;
+    .navbar-brand img {
+      filter: invert(100%) contrast(200%);
+    }
+    a {
+      color: white !important;
+    }
+    .navbar-toggle span {
+      background-color: white !important;
+    }
+  }
+  .exclude-nav {
+    margin-top: 0 !important;
+  }
+}
+/* END: Transparent nav bar on home page */
 .navbar-fixed-bottom, .navbar-fixed-top {
   z-index: 1000;
   overflow: hidden;
@@ -509,7 +531,7 @@ header.page {
   width: 100%;
   min-height: auto;
   background-position: center;
-  // background-image: url('/Themes/Compass/Assets/img/header.jpg');
+  // background-image: url('/Themes/Valorous/Assets/img/header.jpg');
   text-align: center;
   color: white;
 
@@ -723,7 +745,7 @@ header.page {
   overflow: hidden;
   text-indent: 100%;
   white-space: nowrap;
-  background: @compass-primary url('/Themes/Compass/Assets/img/theme/compass-top-arrow.svg') no-repeat center 50%;
+  background: @compass-primary url('/Themes/Valorous/Assets/img/theme/compass-top-arrow.svg') no-repeat center 50%;
   visibility: hidden;
   opacity: 0;
   -webkit-transition: opacity .3s 0s, visibility 0s .3s, background-color .3s 0s;
@@ -796,9 +818,6 @@ header.page {
 
 // Extras
 // -- Highlight Color Customization
-.modal {
-  top: 10% !important;
-}
 
 ::-moz-selection {
   color: white;
@@ -838,4 +857,26 @@ footer {
   }
 }
 
+/* Fix pagination colors */
+.pagination {
+  li > a,
+  li > span {
+    color: @compass-primary;
+    text-decoration: none !important;
+  }
+}
+/* END Fix pagination colors */
+/* Fix sub-page navigation */
+.nav-sub {
+  margin-bottom: 20px;
+}
+/* END Fix sub-page navigation */
+/* Fix misc small fixes */
+.breadcrumb { background-color: transparent; }
+.label-default { background-color: @compass-primary; }
+.calendar-month a { text-decoration: none !important; }
+/* END misc small fixes */
+/* Fix */
+
+/* END Fix */
 @import "_css-overrides.less";

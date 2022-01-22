@@ -33,7 +33,7 @@
   </asp:PlaceHolder>
 
   <!-- Start Content Area -->
-  <main class="container my-8 w-full xs:max-w-6xl md:max-w-screen-xl mx-auto">
+  <main class="container my-6 w-full xs:max-w-6xl md:max-w-screen-xl mx-auto">
 
     <Rock:Zone Name="Feature" runat="server" />
 
