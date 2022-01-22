@@ -4,8 +4,8 @@
   "description": "Built with Rock Version: hotfix-1.12.3",
   "main": "index.js",
   "scripts": {
-    "build": "npx tailwindcss-cli@latest build ./css/tailwind.css -o ./src/tailwind.css",
-    "prod:build": "NODE_ENV=production npx tailwindcss-cli@latest build ./css/tailwind.css -o ./src/tailwind.css"
+    "build": "npx tailwindcss-cli@latest build -i ./css/tailwind.css -o ./src/tailwind.css",
+    "prod:build": "NODE_ENV=production npx tailwindcss-cli@latest build -i ./css/tailwind.css -o ./src/tailwind.css"
   },
   "keywords": [],
   "author": "",
