@@ -9,7 +9,6 @@
   <asp:PlaceHolder runat="server">
     <% var page = PageCache.Get( ( ( RockPage ) Page ).PageId ); %>
     <% var showPageTitle = page.PageDisplayTitle; %>
-    <% var showPageBreadcrumbs = page.PageDisplayBreadCrumb; %>
     <% if(showPageTitle) { %>
       <header class="page bg-primary exclude-nav">
         <div class="fluid-container">
@@ -24,6 +23,13 @@
     <% } else { %>
       <header class="exclude-nav"></header>
     <% } %>
+  </asp:PlaceHolder>
+
+  <Rock:Zone Name="SubNav" runat="server" />
+
+  <asp:PlaceHolder runat="server">
+    <% var page = PageCache.Get( ( ( RockPage ) Page ).PageId ); %>
+    <% var showPageBreadcrumbs = page.PageDisplayBreadCrumb; %>
     <% if(showPageBreadcrumbs) { %>
       <div class="breadcrumb-container">
         <Rock:PageBreadCrumbs ID="PageBreadCrumbs" runat="server" />
