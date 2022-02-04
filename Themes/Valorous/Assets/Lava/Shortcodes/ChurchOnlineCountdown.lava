@@ -30,16 +30,16 @@
 </style>
 
 <div id="ne_co_cd" style="min-height: 100px; position: relative;">
-    <div id="ne_action_counter_loader" class="text-center ne-font">
+    <div id="ne_action_counter_loader" class="tw-text-center ne-font">
         <h4 style="font-weight: 600"><img src="/Themes/Compass/Assets/img/svg-loaders/three-dots.svg" width="100" alt="" style="padding-top:10px" title="Loading Next Service"></p>
     </div>
-    <div class="live text-center -mt-8">
-        <h1 class="font-bold uppercase tracking-wider text-3xl md:text-6xl">Live Streaming Now</h1>
+    <div class="live tw-text-center tw-mt-8">
+        <h1 class="tw-font-bold tw-uppercase tw-tracking-wider tw-text-3xl md:tw-text-6xl">Live Streaming Now</h1>
         {% comment %} <a id="watchLive" class="btn btn-lg" href="/streaming">Watch Live</a> {% endcomment %}
     </div>
     <div id="ne_action_counter_container" class="alertBar container-fluid">
         <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-md-12 tw-text-center">
                 <div id="ne_action_counter">
                     <span class="live-stream-container" style="vertical-align: top;padding: 20px 0px;">
                         <span class="live-stream coming-soon" style="display:block;">

@@ -9,11 +9,11 @@
 {% endif %}
 {% if Page.DisplayChildPages and Page.Pages != empty %}
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse xs:px-0 sm:px-0 md:px-0" id="compass-nav">
+    <div class="collapse navbar-collapse xs:tw-px-0 sm:tw-px-0 md:tw-px-0" id="compass-nav">
         <ul class="nav navbar-nav navbar-right">
         {% for childPage in Page.Pages %}
           <li {% if childPage.Current %} class="active"{% endif%}>
-              <a href="{{ childPage.Url }}" class="hover:text-c-primary">{{ childPage.Title }}</a>
+              <a href="{{ childPage.Url }}" class="hover:tw-text-c-primary">{{ childPage.Title }}</a>
           </li>
         {% endfor %}
         {% for includedPage in IncludePageList %}
@@ -29,7 +29,7 @@
             width: 70px;
             height: 40px;
         ">
-            <a href="{{MyAccountURL}}" class="g-position--relative hover:text-c-primary no-hover" style="
+            <a href="{{MyAccountURL}}" class="hover:tw-text-c-primary no-hover" style="
                 vertical-align: middle;
                 display: inline-block;
                 position: absolute;
@@ -37,7 +37,7 @@
                 height: 40px;
                 top: -10px;
             ">
-                <img src="{{ CurrentPerson.PhotoUrl }}&amp;width=40" class="img-responsive img-circle g-display-inline-block--xs" style="
+                <img src="{{ CurrentPerson.PhotoUrl }}&amp;width=40" class="img-responsive img-circle" style="
                     max-width: 40px;
                     background-color: white;
                     border-radius: 40px;
@@ -47,18 +47,18 @@
                     right: 3%;
                     ">
             </a>
-            <a href="{{MyAccountURL}}" class="visible-xs visible-sm hover:text-c-primary">My Account</a>
+            <a href="{{MyAccountURL}}" class="visible-xs visible-sm hover:tw-text-c-primary">My Account</a>
         </li>
         <li class="visible-xs visible-sm">
-            <a href="{{MyAccountURL}}" class="hover:text-c-primary">My Account</a>
+            <a href="{{MyAccountURL}}" class="hover:tw-text-c-primary">My Account</a>
         </li>
         <li>
-            <a href="{{HomeURL}}?logout=true" class="hover:text-c-primary"><span class="hidden-md hidden-lg" style="padding-right: 10px
+            <a href="{{HomeURL}}?logout=true" class="hover:tw-text-c-primary"><span class="hidden-md hidden-lg" style="padding-right: 10px
             ">Logout</span><i class="fa fa-sign-out" style="display: inline-block;"></i></a>
         </li>
         {% else %}
         <li>
-            <a href="{{LoginURL}}?returnurl=%252fmyaccount" class="hover:text-c-primary">Login <i class="fa fa-sign-in"></i></a>
+            <a href="{{LoginURL}}?returnurl=%252fmyaccount" class="hover:tw-text-c-primary">Login <i class="fa fa-sign-in"></i></a>
         </li>
         {% endif %}
         </ul>

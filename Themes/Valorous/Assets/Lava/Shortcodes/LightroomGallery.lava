@@ -17,9 +17,9 @@
         {%- if item.image != null -%}{%- assign image = item.image -%}{%- else -%}{%- assign image = 'https://picsum.photos/1000/1000' -%}{%- endif -%}
         <a href="{{ image }}" data-lg-size="{{- item.imagesize -}}" class="{{ item.anchorclasses }}" data-sub-html="{{- item.content -}}">
             <img alt="{{- item.imgtitle -}}" src="{{- image -}}" class="{{- item.classes -}}" />
-            <div class="portfolio-box-caption hover:bg-c-primary-800">
+            <div class="portfolio-box-caption hover:tw-bg-c-primary-800">
                 <div class="portfolio-box-caption-content">
-                    <div class="project-category text-faded">
+                    <div class="project-category tw-text-faded">
                         {{- item.imgsubtile -}}
                     </div>
                     <div class="project-name">

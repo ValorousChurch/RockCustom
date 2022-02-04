@@ -12,7 +12,7 @@
     <% var showPageTitle = page.PageDisplayTitle; %>
     <% var showPageBreadcrumbs = page.PageDisplayBreadCrumb; %>
     <% if(showPageTitle) { %>
-      <header class="page bg-primary exclude-nav">
+      <header class="page tw-bg-c-primary exclude-nav">
         <div class="fluid-container">
           <div class="row header-content">
             <div class="col-lg-12 header-content-inner">
@@ -33,7 +33,7 @@
   </asp:PlaceHolder>
 
   <!-- Start Content Area -->
-  <main class="container my-6 w-full xs:max-w-6xl md:max-w-screen-xl mx-auto">
+  <main class="container tw-my-6">
 
     <Rock:Zone Name="Feature" runat="server" />
 

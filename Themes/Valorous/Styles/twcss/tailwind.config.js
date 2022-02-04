@@ -1,11 +1,15 @@
 const colors = require('tailwindcss/colors');
 module.exports = {
-  important: true,
-  purge: [
-    './../../Assets/Lava/**/*.lava',
-    './../../Layouts/*.aspx',
-    './../../Layouts/Site.Master'
-  ],
+  important: '#body',
+  purge: {
+    enabled: false,
+    content: [
+      './../../Assets/Lava/**/*.lava',
+      './../../Layouts/*.aspx',
+      './../../Layouts/Site.Master'
+    ]
+  },
+  prefix: 'tw-',
   darkMode: false, // or 'media' or 'class'
   theme: {
     screens: {

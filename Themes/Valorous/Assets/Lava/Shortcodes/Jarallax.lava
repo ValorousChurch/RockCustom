@@ -159,15 +159,15 @@
     </script>
 
         {% if blockContent != '' -%}
-            <div class="parallax-content z-10 absolute w-full h-full">
+            <div class="parallax-content tw-z-10 tw-absolute tw-w-full tw-h-full">
                 {{ blockContent }}
             </div>
-        {% else- %}
+        {% else -%}
             {{ blockContent }}
         {% endif -%}
 
         {% if churchonlinecountdown == 'true' -%}
-        <div class="bg-c-primary pt-16 pb-8 md:pt-20 md:pb-10 opacity-80 z-50 absolute bottom-0 block w-full text-white">
+        <div class="tw-bg-c-primary tw-pt-16 tw-pb-8 md:tw-pt-20 md:tw-pb-10 tw-opacity-80 tw-z-50 tw-absolute tw-bottom-0 tw-block tw-w-full tw-text-white">
             <div class="streaming-now">
                 {% include '/Themes/Compass/Assets/Lava/Shortcodes/ChurchOnlineCountdown.lava' %}
             </div>

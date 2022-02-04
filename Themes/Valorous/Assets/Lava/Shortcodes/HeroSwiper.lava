@@ -186,7 +186,7 @@ customcontent  - false
 </style>
 
 <!-- Slider main container -->
-<div class="swiper-container {% if heightclasses == '' %}xs:h-screen-75 sm:h-screen-75 md:h-screen/2 lg:h-screen-75 xl:h-screen-75 min-h-300{% else %}{{ heightclasses }}{% endif %} relative" id="swiper-{{- heroSwiperId -}}">
+<div class="swiper-container {% if heightclasses == '' %}xs:tw-h-screen-75 sm:tw-h-screen-75 md:tw-h-screen/2 lg:tw-h-screen-75 xl:tw-h-screen-75 tw-min-h-300{% else %}{{ heightclasses }}{% endif %} relative" id="swiper-{{- heroSwiperId -}}">
     <div class="swiper-wrapper">
 
         {%- for item in items -%}
@@ -194,20 +194,20 @@ customcontent  - false
             {%- if item.image != null -%}{%- assign slideImage = item.image -%}{%- else -%}{%- assign slideImage = 'https://picsum.photos/900/360' -%}{%- endif -%}
             <!-- SLIDE  -->
             <div class="swiper-slide">
-                <div data-background="{{- slideImage -}}" class="{% if item.imageposition == null %}bg-center{% else %}bg-{{- item.imageposition -}}{% endif %} slider_image swiper-slide__inner swiper-lazy {% if item.darkoverlay == null %}after:bg-black{% endif %}">
+                <div data-background="{{- slideImage -}}" class="{% if item.imageposition == null %}tw-bg-center{% else %}tw-bg-{{- item.imageposition -}}{% endif %} slider_image swiper-slide__inner swiper-lazy {% if item.darkoverlay == null %}after:tw-bg-black{% endif %}">
                     <div>
-                        <section class="swiper-lazy text-white body-font h-full w-full absolute z-10 left-0 top-0">
-                            <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col h-full">
-                                <div class="text-center lg:w-2/3 w-full">
+                        <section class="swiper-lazy tw-text-white tw-body-font tw-h-full tw-w-full tw-absolute tw-z-10 tw-left-0 tw-top-0">
+                            <div class="container tw-mx-auto tw-flex tw-px-5 tw-py-24 tw-items-center tw-justify-center tw-flex-col tw-h-full">
+                                <div class="tw-text-center lg:tw-w-2/3 tw-w-full">
                                     {% comment %} TITLE {% endcomment %}
                                     {%- if item.title != null -%}
-                                    <h1 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.2s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="title-font mb-1 font-bold text-white">
+                                    <h1 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.2s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="tw-title-font tw-mb-1 tw-font-bold tw-text-white">
                                         {{- item.title -}}
                                     </h1>
                                     {%- endif -%}
                                     {% comment %} SUBTITLE {% endcomment %}
                                     {%- if item.subtitle != null -%}
-                                    <h3 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.4s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="text-normal text-white leading-normal text-lg md:text-3xl">
+                                    <h3 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.4s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="tw-text-normal tw-text-white tw-leading-normal tw-text-lg md:tw-text-3xl">
                                         {{- item.subtitle -}}
                                     </h3>
                                     {%- endif -%}
@@ -224,8 +224,8 @@ customcontent  - false
     </div>
     {% comment %} <div class="swiper-pagination swiper-pagination-white mb-2"></div> {% endcomment %}
     {% if arrows == 'true' %}
-    <div class="swiper-button-next swiper-button-white mx-4"></div>
-    <div class="swiper-button-prev swiper-button-white mx-4"></div>
+    <div class="swiper-button-next swiper-button-white tw-mx-4"></div>
+    <div class="swiper-button-prev swiper-button-white tw-mx-4"></div>
     {% endif %}
     <!-- Progressbar -->
     <div class="swiper-progress-bar">

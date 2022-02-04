@@ -9,8 +9,8 @@
         title:'Need another slide?'
         subtitle:'The more the better! Easily add images, and find other ways for the community to be involved.' ]]
         <div data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="1.2s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s">
-            <p class="mt-10 mb-4">Oh and of-course, a call to action button below!</p>
-            <button class="flex mx-auto mt-0 mb-24 text-white bg-c-primary border-0 py-4 px-16 focus:outline-none hover:bg-c-primary-700 text-uppercase font-bold transition duration-200 ease-in-out">Connect</button>
+            <p class="tw-mt-10 tw-mb-4">Oh and of-course, a call to action button below!</p>
+            <button class="tw-flex tw-mx-auto tw-mt-0 tw-mb-24 tw-text-white tw-bg-c-primary tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-c-primary-700 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out">Connect</button>
         </div>
     [[ enditem ]]
 {[ endheroswiper ]}

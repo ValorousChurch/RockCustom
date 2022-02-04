@@ -1,19 +1,19 @@
 <script>$(function(){ $('body').addClass('home') });</script>
 
-{[ jarallax image:'/Themes/Valorous/Assets/img/theme/hero-thumbnail.jpg' videourl:'https://vimeo.com/668704446' height:'100vh' speed:'-25' position:'80% 50%' churchonlinecountdown:'false' addclass:'relative w-full h-full' ]}
+{[ jarallax image:'/Themes/Valorous/Assets/img/theme/hero-thumbnail.jpg' videourl:'https://vimeo.com/668704446' height:'100vh' speed:'-25' position:'80% 50%' churchonlinecountdown:'false' addclass:'tw-relative tw-w-full tw-h-full' ]}
 
-    <div class="d-flex w-full h-full justify-content-center align-items-center" style="background:rgba(0,0,0,0.25)">
-        <div class="max-w-6xl mx-5">
+    <div class="tw-flex tw-w-full tw-h-full tw-justify-center tw-items-center" style="background:rgba(0,0,0,0.25)">
+        <div class="tw-max-w-6xl tw-mx-5">
             {[ wow animate:'fadeInDown' duration:'0.4s' delay:'0.4s' ]}
-                <h1 class="font-bold uppercase tracking-wider text-base md:text-3xl">welcome home</h1>
+                <h1 class="tw-font-bold tw-uppercase tw-tracking-wider tw-text-base md:tw-text-3xl">welcome home</h1>
             {[ endwow ]}
             {[ wow animate:'fadeInDown' duration:'0.4s' delay:'0.6s' ]}
-                <div class="flex my-6 justify-center">
-                    <div class="w-16 h-2 rounded-full bg-c-primary bg-opacity-50 inline-flex"></div>
+                <div class="tw-flex tw-my-6 tw-justify-center">
+                    <div class="tw-w-16 tw-h-2 tw-rounded-full tw-bg-c-primary tw-bg-opacity-50 tw-inline-flex"></div>
                 </div>
             {[ endwow ]}
             {[ wow animate:'fadeIn' duration:'0.4s' delay:'0.8s' ]}
-                <h2 class="leading-normal text-xs md:text-xl">We are a church that welcomes the curious as well as the disenfranchised. Valorous Church wants people to live their purpose and pursue something greater than themselves.</h2>
+                <h2 class="tw-leading-normal tw-text-xs md:tw-text-xl">We are a church that welcomes the curious as well as the disenfranchised. Valorous Church wants people to live their purpose and pursue something greater than themselves.</h2>
             {[ endwow ]}
         </div>
     </div>

@@ -66,12 +66,12 @@
   <script src="<%# ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
 
 </head>
-<body runat="server" id="body" class="compass-body">
+<body runat="server" id="body" class="compass-body tw-debug-screens">
 
   <form id="form1" runat="server">
 
     <Rock:Zone Name="Alert" runat="server" />
-    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top compass shadow-md">
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top compass tw-shadow-md">
       <div class="container-fluid no-gutter">
         <Rock:Zone Name="NavLogo" runat="server" />
         <Rock:Zone Name="Nav" runat="server" />
@@ -108,7 +108,7 @@
     </asp:UpdateProgress>
 
   </form>
-  <a href="#0" class="compass-top js-compass-top bg-c-primary rounded">Top</a>
+  <a href="#0" class="compass-top js-compass-top tw-bg-c-primary tw-rounded">Top</a>
   <!-- Theme JavaScript -->
   <script src="/Themes/Valorous/Scripts/compass.js"></script>
 
