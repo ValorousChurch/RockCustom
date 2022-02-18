@@ -500,7 +500,7 @@ aside {
     }
   }
 }
-/* Transparent nav bar on home page */
+/* Transparent nav bar */
 .home {
   .navbar-default.affix-top:not(.navOpen) {
     background-color: transparent;
@@ -519,7 +519,12 @@ aside {
     margin-top: 0 !important;
   }
 }
-/* END: Transparent nav bar on home page */
+@media (min-width: 768px) {
+  .transparent-navbar {
+    .home
+  }
+}
+/* END: Transparent nav bar */
 .navbar-fixed-bottom, .navbar-fixed-top {
   z-index: 1000;
   overflow: hidden;
@@ -531,7 +536,8 @@ header.page {
   width: 100%;
   min-height: auto;
   background-position: center;
-  // background-image: url('/Themes/Valorous/Assets/img/header.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
   text-align: center;
   color: white;
 
@@ -544,6 +550,7 @@ header.page {
     text-align: center;
     padding: 100px 15px 100px;
     width: 100%;
+
     .header-content-inner {
       h1 {
         font-weight: 700;
@@ -554,24 +561,51 @@ header.page {
       }
       hr {
         margin: 30px auto;
+        width: 50px;
       }
       p {
         font-weight: 300;
         color: fade(white, 70%);
         font-size: 16px;
-        margin-bottom: 50px;
+        margin-bottom: 0;
+      }
+    }
+  }
+  &.has-image {
+    min-height: 250px;
+
+    .header-content {
+      padding: 0 15px;
+      position: absolute;
+      bottom: 15px;
+      h1 {
+        font-weight: 300 !important;
       }
     }
   }
   @media (min-width: 768px) {
+    &.has-image {
+      min-height: 500px;
+    }
+
+    &:not(.has-image) {
+      .header-content {
+        position: absolute;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }
+    }
     min-height: 100%;
     padding: 100px 0;
+
     .header-content {
-      position: absolute;
-      top: 50%;
-      -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-      transform: translateY(-50%);
+      // position: absolute;
+      // top: 50%;
+      // -webkit-transform: translateY(-50%);
+      // -ms-transform: translateY(-50%);
+      // transform: translateY(-50%);
       padding: 0 50px;
       .header-content-inner {
         // max-width: 1000px;

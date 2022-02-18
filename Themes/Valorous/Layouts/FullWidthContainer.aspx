@@ -7,7 +7,7 @@
 <asp:Content ID="ctMain" ContentPlaceHolderID="main" runat="server">
 
   <!-- Start Content Area -->
-  <asp:PlaceHolder runat="server">
+  <%-- <asp:PlaceHolder runat="server">
     <% var page = PageCache.Get( ( ( RockPage ) Page ).PageId ); %>
     <% var showPageTitle = page.PageDisplayTitle; %>
     <% if(showPageTitle) { %>
@@ -24,7 +24,7 @@
     <% } else { %>
       <header class="exclude-nav"></header>
     <% } %>
-  </asp:PlaceHolder>
+  </asp:PlaceHolder> --%>
 
   <Rock:Zone Name="SubNav" runat="server" />
 
