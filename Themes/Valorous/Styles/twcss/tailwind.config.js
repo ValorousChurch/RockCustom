@@ -20,6 +20,9 @@ module.exports = {
       xl: "1201px"
     },
     fontSize: {
+      '4xs':  '1rem',
+      '3xs':  '1.25rem',
+      '2xs':  '1.5rem',
       'xs':   '1.75rem',
       'sm':   '1.875rem',
       'tiny': '1.875rem',

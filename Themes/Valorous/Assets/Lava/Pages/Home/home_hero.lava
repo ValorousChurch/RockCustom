@@ -13,7 +13,7 @@
                 </div>
             {[ endwow ]}
             {[ wow animate:'fadeIn' duration:'0.4s' delay:'0.8s' ]}
-                <h2 class="tw-leading-normal tw-text-xs md:tw-text-xl">We are a church that welcomes the curious as well as the disenfranchised. Valorous Church wants people to live their purpose and pursue something greater than themselves.</h2>
+                <p class="tw-leading-normal tw-m-0 tw-text-2xs md:tw-text-xl">We are a church that welcomes the curious as well as the disenfranchised. Valorous Church wants people to live their purpose and pursue something greater than themselves.</p>
             {[ endwow ]}
         </div>
     </div>
