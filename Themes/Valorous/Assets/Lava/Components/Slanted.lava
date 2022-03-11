@@ -1,0 +1,53 @@
+{%- assign channelTitleSize  =  ContentChannel | Attribute:'TitleSize' | Default:'h1' -%}
+{%- assign channelContentAlignment  =  ContentChannel | Attribute:'ContentAlignment' -%}
+{%- assign channelForegroundColor  =  ContentChannel | Attribute:'ForegroundColor' -%}
+{%- assign channelBackgroundColor =  ContentChannel | Attribute:'BackgroundColor' -%}
+{%- assign contentItemStyle = '' -%}
+
+{% stylesheet id:'contentcomponent-vc-slanted' compile:'less' cacheduration:'1' %}
+.contentcomponent-vc-slanted {
+    margin: 75px -50px 0;
+    transform: skew(0, 2deg);
+    .row {
+        padding: 50px 50px 25px;
+        transform: skew(0, -2deg);
+        div {
+            margin-bottom: 25px;
+        }
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+}
+{% endstylesheet %}
+
+{%- for item in Items limit:1 -%}
+    {%- if channelBackgroundColor != '' -%}
+        {%- capture contentItemStyle -%}{{ contentItemStyle }}background-color:{{ channelBackgroundColor }};{%- endcapture -%}
+    {%- else -%}
+            {%- capture contentItemStyle -%}{{ contentItemStyle }}background-color:#e9ecef;{%- endcapture -%}
+    {%- endif -%}
+    {%- if channelForegroundColor != '' -%}
+        {%- capture contentItemStyle -%}{{ contentItemStyle }}color:{{ channelForegroundColor }};{%- endcapture -%}
+    {%- endif -%}
+    {%- assign portraitImageGuid = item | Attribute:'Image','RawValue' -%}
+    {%- assign landscapeImageGuid = item | Attribute:'Image2','RawValue' -%}
+<section class="contentComponent contentcomponent-vc-slanted" style="{{ contentItemStyle }}">
+    <div class="row">
+        <div class="col-md-4 hidden-xs hidden-sm">
+            <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ portraitImageGuid }}" class="img-responsive" />
+        </div>
+        <div class="col-sm-12 hidden-md hidden-lg">
+            <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ landscapeImageGuid }}" class="img-responsive" />
+        </div>
+        <div class="col-sm-12 col-md-8">
+            <{{ channelTitleSize }}>{{ item.Title }}</{{ channelTitleSize }}>
+              {{ item.Content }}
+        </div>
+    </div>
+</section>
+{%- endfor -%}
