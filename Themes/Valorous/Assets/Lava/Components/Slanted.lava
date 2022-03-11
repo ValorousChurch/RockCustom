@@ -6,13 +6,13 @@
 
 {% stylesheet id:'contentcomponent-vc-slanted' compile:'less' cacheduration:'1' %}
 .contentcomponent-vc-slanted {
-    margin: 75px -50px 0;
+    //margin: 75px -50px 0;
     transform: skew(0, 2deg);
     .row {
-        padding: 50px 50px 25px;
+        //padding: 50px 50px 25px;
         transform: skew(0, -2deg);
         div {
-            margin-bottom: 25px;
+            //margin-bottom: 25px;
         }
     }
     p:last-child {
@@ -36,17 +36,17 @@
     {%- endif -%}
     {%- assign portraitImageGuid = item | Attribute:'Image','RawValue' -%}
     {%- assign landscapeImageGuid = item | Attribute:'Image2','RawValue' -%}
-<section class="contentComponent contentcomponent-vc-slanted" style="{{ contentItemStyle }}">
-    <div class="row">
-        <div class="col-md-4 hidden-xs hidden-sm">
+<section class="contentComponent contentcomponent-vc-slanted tw-mt-16 tw--mx-6 md:tw--mx-16" style="{{ contentItemStyle }}">
+    <div class="row tw-p-6 tw-pt-12 md:tw-px-16">
+        <div class="col-md-4 hidden-xs hidden-sm tw-mb-6 md:tw-mb-10">
             <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ portraitImageGuid }}" class="img-responsive" />
         </div>
-        <div class="col-sm-12 hidden-md hidden-lg">
+        <div class="col-sm-12 hidden-md hidden-lg tw-mb-6 md:tw-mb-10">
             <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ landscapeImageGuid }}" class="img-responsive" />
         </div>
-        <div class="col-sm-12 col-md-8">
+        <div class="col-sm-12 col-md-8 tw-mb-6 md:tw-mb-10">
             <{{ channelTitleSize }}>{{ item.Title }}</{{ channelTitleSize }}>
-              {{ item.Content }}
+            {{ item.Content }}
         </div>
     </div>
 </section>

@@ -6,12 +6,10 @@
 
 {% stylesheet id:'contentcomponent-vc-sidebyside' compile:'less' cacheduration:'1' %}
 .contentcomponent-vc-sidebyside {
-    margin-top: 50px;
     .row + .row {
-        margin-top: 75px;
+        margin-top: 5em;
     }
     p {
-        font-size: 1.3em;
         &:last-child {
             margin-bottom: 0;
         }
