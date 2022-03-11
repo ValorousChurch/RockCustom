@@ -37,7 +37,7 @@
         </div>
       <% } %>
     </asp:PlaceHolder>
-
+  <main class="container-fluid tw-m-6 md:tw-mx-16 md:tw-my-10">
     <Rock:Zone Name="Feature" runat="server" />
 
     <!-- Ajax Error -->
@@ -69,7 +69,7 @@
         <Rock:Zone Name="Section D" runat="server" />
       </div>
     </div>
-
+  </main>
     <!-- End Content Area -->
 
 </asp:Content>
