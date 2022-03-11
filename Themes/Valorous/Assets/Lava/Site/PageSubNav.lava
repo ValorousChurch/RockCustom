@@ -1,5 +1,5 @@
 {% if Page.DisplayChildPages and Page.Pages != empty or IncludePageList != empty %}
-<div class="tw-bg-gray-800 tw-py-4">
+<div class="tw-bg-gray-800 tw-py-2 sub-nav">
     <div class="container">
         <section class="nav-sub tw-m-0 tw-text-center">
             <ul class="tw-mx-0 tw-my-8 md:tw-my-0 md:tw-flex md:tw-justify-center md:tw-flex-row tw-list-none tw-inline-block tw-text-left" style="font-size: 1.3em">
