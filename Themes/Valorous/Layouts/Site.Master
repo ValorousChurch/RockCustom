@@ -84,7 +84,7 @@
       </div>
     </nav>
 
-    <div class="overflow-hidden">
+    <div id="body-wrap">
       <!-- Page Header -->
       <Rock:Lava runat="server">
         {%- assign showIcon = CurrentPage.PageDisplayIcon -%}

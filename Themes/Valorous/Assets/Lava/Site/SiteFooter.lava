@@ -1,27 +1,19 @@
 <section id="connect" class="bg-gray-200">
     <div class="container tw-text-center xs:tw-max-w-full md:tw-max-w-auto">
         <div class="row">
-
-            <div class="col-lg-8 col-lg-offset-2">
+            <div class="col-lg-9 tw-float-none mx-auto">
                 <div class="col-sm-3">
                     <img class="tw-mx-auto tw-mb-12" style="max-width: 200px;" src="/Themes/Valorous/Assets/img/Theme/Valorous-Vertical-Grey.svg" alt="{{ 'Global' | Attribute:'OrganizationName' }}">
                 </div>
                 <div class="col-sm-9">
                     <div class="call-to-action">
-                            <h2 class="tw-font-bold"><!--Built with <i class="fa fa-heart text-c-primary"></i> at
-                            <a href="https://9embers.com/" target="_blank">
-                            <img src="https://9embers.com/Themes/9embers_v2/Assets/img/logo/9Embers.svg" class="img-responsive inline-block w-64 ml-3 -mt-5 py-4"/>
-                            </a>
-                            <br-->
+                        <h2 class="tw-font-bold" style="line-height: 0">
                             <small class="tw-text-gray-900">Connect With Us! We'd love to hear from you!</small>
                         </h2>
                         <div class="tw-flex tw-mt-6 tw-justify-center tw-pb-4">
                             <div class="tw-w-32 tw-h-1 tw-rounded-full tw-bg-c-primary tw-bg-opacity-50 tw-inline-flex tw-ml-1"></div>
                         </div>
-                        <div class="social light tw-text-4xl xs:tw-text-3xl">
-                          <!--a class="text-gray-700">
-                            <i id="twitter" class="fa fa-twitter sr-icons"></i>
-                          </a-->
+                        <div class="social light tw-text-4xl xs:tw-text-lg">
                           <a class="tw-text-gray-700" href="https://facebook.com/valorous.church" target="_blank">
                             <i id="facebook" class="fa fa-facebook sr-icons"></i>
                           </a>
@@ -39,6 +31,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </section>

@@ -2,10 +2,10 @@
 
 {[ jarallax image:'/Themes/Valorous/Assets/img/theme/hero-thumbnail.jpg' videourl:'https://vimeo.com/668704446' height:'100vh' speed:'-25' position:'80% 50%' churchonlinecountdown:'false' addclass:'tw-relative tw-w-full tw-h-full' ]}
 
-    <div class="tw-flex tw-w-full tw-h-full tw-justify-center tw-items-center" style="background:rgba(0,0,0,0.25)">
+    <div class="tw-flex tw-w-full tw-h-full tw-justify-center tw-items-center" style="background:rgba(0,0,0,0.35)">
         <div class="tw-max-w-6xl tw-mx-5">
             {[ wow animate:'fadeInDown' duration:'0.4s' delay:'0.4s' ]}
-                <h1 class="tw-font-bold tw-uppercase tw-tracking-wider tw-text-base md:tw-text-3xl">welcome home</h1>
+                <h1 class="tw-font-bold tw-uppercase tw-tracking-wider tw-text-xs md:tw-text-xl">Together, We Are Valorous</h1>
             {[ endwow ]}
             {[ wow animate:'fadeInDown' duration:'0.4s' delay:'0.6s' ]}
                 <div class="tw-flex tw-my-6 tw-justify-center">
@@ -13,7 +13,7 @@
                 </div>
             {[ endwow ]}
             {[ wow animate:'fadeIn' duration:'0.4s' delay:'0.8s' ]}
-                <p class="tw-leading-normal tw-m-0 tw-text-2xs md:tw-text-xl">We are a church that welcomes the curious as well as the disenfranchised. Valorous Church wants people to live their purpose and pursue something greater than themselves.</p>
+                <p class="tw-leading-snug md:tw-leading-normal tw-m-0 tw-text-3xs md:tw-text-base">With an unshakable hope in Jesus, we are a church who believes we can face and experience victory over any challenge that comes our way. To the warriors and the weary, the courageous and the curious, the families and to those who feel on the outside: we welcome you.</p>
             {[ endwow ]}
         </div>
     </div>

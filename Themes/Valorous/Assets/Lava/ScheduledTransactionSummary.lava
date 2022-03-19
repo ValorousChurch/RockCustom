@@ -4,7 +4,7 @@
         <h1 class="condensed">Hello, {{ CurrentPerson.NickName }}</h1>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 text-center">
         {% if ScheduledTransactions.size == 1 %}
             <p>
                 You currently have <span class='label label-default'>1</span> giving profile active.
@@ -34,6 +34,6 @@
             <a class="btn btn-default pull-left" href="{{ LinkedPages.ManageScheduledTransactionsPage }}">Manage</a>
             <a class="btn btn-default pull-right" href="{{ LinkedPages.TransactionHistoryPage }}">View History</a>
         </div>
-        <a class="btn btn-primary btn-block margin-t-md" href="{{ LinkedPages.TransactionEntryPage }}">Make a Contribution</a>
+        <!--a class="btn btn-primary btn-block margin-t-md" href="{{ LinkedPages.TransactionEntryPage }}">Make a Contribution</a-->
     </div>
 </div>

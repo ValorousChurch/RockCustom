@@ -1,58 +1,85 @@
+<!-- Service Times -->
+<section class="tw-text-gray-300 tw-body-font tw-py-0 tw-bg-c-primary">
+  <div class="container tw-px-5 tw-py-16 tw-mx-auto">
+    <div class="tw-flex tw-flex-wrap sm:tw-m-4 tw-mx-4 tw-mb-5 tw-mt-4 md:tw-space-y-0">
+      <div class="tw-p-4 tw-w-full md:tw-w-1/2 lg:tw-w-1/2 xl:tw-w-1/2 tw-flex tw-flex-col tw-text-center tw-items-center">
+        <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-gray-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
+          <i class="fa fa-map-marker-alt tw-text-3xl"></i>
+        </div>
+        <div class="tw-flex-grow">
+          <h2 class="tw-text-white tw-title-font tw-font-medium tw-mb-5">Weekend Service Times</h2>
+          <p class="tw-leading-relaxed">Join us in-person on Sundays at 9:30am and 11:15am.</p>
+          <a class="tw-mt-3 tw-text-white tw-inline-flex tw-items-center" href="https://goo.gl/maps/iHLsrb1a7cnm4iWh6">Get Directions
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="tw-p-4 tw-w-full md:tw-w-1/2 lg:tw-w-1/2 xl:tw-w-1/2 tw-flex tw-flex-col tw-text-center tw-items-center">
+        <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-gray-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
+          <i class="fa fa-globe tw-text-3xl"></i>
+        </div>
+        <div class="tw-flex-grow">
+          <h2 class="tw-text-white tw-title-font tw-font-medium tw-mb-5">Church Online</h2>
+          <p class="tw-leading-relaxed">Join us live online Sundays at 9:30am and 11:15am.</p>
+          <a class="tw-mt-3 tw-text-white tw-inline-flex tw-items-center" href="https://live.valorouschurch.com">Watch Online
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Get Involved -->
 <section class="tw-text-gray-600 tw-body-font tw-py-0">
   <div class="container tw-px-5 tw-py-24 tw-mx-auto">
     <div class="tw-text-center tw-mb-20">
-      <h1 class="tw-text-gray-900 tw-mb-4 tw-mt-0 tw-font-bold">Welcome to Compass</h1>
-      <p class="xl:tw-w-2/4 lg:tw-w-3/4 tw-mx-auto tw-text-gray-500s">Easily navigate through storms without struggling using this theme! We've done all the heavy lifting for you.</p>
+      <h1 class="tw-text-gray-900 tw-mb-4 tw-mt-0 tw-font-bold">Get Involved</h1>
+      <p class="xl:tw-w-2/4 lg:tw-w-3/4 tw-mx-auto tw-text-gray-500s">See what God can do through you!</p>
       <div class="tw-flex tw-mt-6 tw-justify-center">
         <div class="tw-w-16 tw-h-1 tw-rounded-full tw-bg-c-primary tw-bg-opacity-50 tw-inline-flex"></div>
       </div>
     </div>
     <div class="tw-flex tw-flex-wrap sm:tw-m-4 tw-mx-4 tw-mb-10 tw-mt-4 md:tw-space-y-0">
-      <div class="tw-p-4 md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
         <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-10 tw-h-10" viewBox="0 0 24 24">
-            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-          </svg>
+          <i class="fa fa-handshake tw-text-3xl"></i>
         </div>
         <div class="tw-flex-grow">
-          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5 tw-font-bold">Colors</h2>
-          <p class="tw-leading-relaxed">Tired of consistently trying to update colors across your website? Not any more! Simply change a few colors in the Rock Compass Theme settings, and we take care of the rest!</p>
-          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center">Learn More
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Serving</h2>
+          <p class="tw-leading-relaxed">Each of us has been gifted uniquely by God to fulfill a significant purpose placed inside of us when we were created (Ephesians 2:10). We call this your God Potential, and encourage you to grow by serving the local church.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/connect/volunteer">Get Involved
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
         </div>
       </div>
-      <div class="tw-p-4 md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
         <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-10 tw-h-10" viewBox="0 0 24 24">
-            <circle cx="6" cy="6" r="3"></circle>
-            <circle cx="6" cy="18" r="3"></circle>
-            <path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"></path>
-          </svg>
+          <i class="fa fa-usd tw-text-3xl"></i>
         </div>
         <div class="tw-flex-grow">
-          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5 tw-font-bold">Simplified Navigation</h2>
-          <p class="tw-leading-relaxed">Have you ever struggled getting your church logo to display correctly? How about a friendly user login? Does it look right on mobile? Fear not! It's as easy as uploading an image.</p>
-          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center">Learn More
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Giving</h2>
+          <p class="tw-leading-relaxed">Your continued generosity is impacting lives locally, nationally, and around the world with the hope of Jesus. We have a variety of ways you can support this vision financially. Thank you for investing into the lives of others.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/give">Online Giving
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
           </a>
         </div>
       </div>
-      <div class="tw-p-4 md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
         <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
-          <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-10 tw-h-10" viewBox="0 0 24 24">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+          <i class="fa fa-users tw-text-3xl"></i>
         </div>
         <div class="tw-flex-grow">
-          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5 tw-font-bold">Shortcodes</h2>
-          <p class="tw-leading-relaxed">We know you love'em. We do too! All UI components in this theme is easily configured with shortcodes. Not sure how? We've documented it for you!</p>
-          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center">Learn More
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Life Groups</h2>
+          <p class="tw-leading-relaxed">Life Groups are at the heartbeat of our church – they are our commitment to create a healthy sense of community and family. Life Groups are the best way to meet new people and forge genuine relationships with others.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/connect/group-finder">Join A Group
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
             </svg>
@@ -60,6 +87,5 @@
         </div>
       </div>
     </div>
-    <button class="tw-flex tw-mx-auto tw-mt-20 tw-text-white tw-bg-c-primary tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-c-primary-700 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out">Connect</button>
   </div>
 </section>

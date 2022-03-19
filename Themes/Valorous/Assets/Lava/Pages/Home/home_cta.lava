@@ -1,17 +1,12 @@
 <section class="tw-text-gray-600 tw-body-font tw-bg-c-primary tw-py-24">
     <div class="container tw-px-5 tw-mx-auto tw-flex tw-flex-wrap">
-        <h2 class="tw-text-white tw-font-bold tw-title-font tw-mb-2 xl:tw-pr-3 xl:tw-w-2/5 tw-mt-0">
+        <h2 class="tw-text-white tw-title-font tw-mb-2 xl:tw-pr-3 xl:tw-w-2/5 tw-mt-0 tw-mb-2">
             Need Prayer? No matter what you're facing, we'd love to pray with you!
         </h2>
         <div class="xl:tw-w-3/5 xl:tw-pl-6">
             <p class="tw-leading-relaxed tw-text-white">There are times when life is overwhelming, when all we have is questions. In those moments, hope can feel far away. The great thing about prayer is that it shifts our perspective toward the One who stands ready to listen.</p>
             <div class="md:tw-flex xl:tw-mt-4 tw-mt-6">
-                <button class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out">Ask for Prayer</button>
-                <a class="tw-text-white tw-py-4 tw-px-16 tw-inline-flex tw-items-center tw-ml-4 tw-transition tw-duration-400 tw-ease-in">Connect
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                    </svg>
-                </a>
+                <a class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out btn btn-primary" href="">Submit a Request</a>
             </div>
         </div>
     </div>
