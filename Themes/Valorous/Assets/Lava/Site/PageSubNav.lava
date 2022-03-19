@@ -5,14 +5,15 @@
             <ul class="tw-mx-0 tw-my-8 md:tw-my-0 md:tw-flex md:tw-justify-center md:tw-flex-row tw-list-none tw-inline-block tw-text-left" style="font-size: 1.3em">
     {% for childPage in Page.Pages %}
                 <li class="tw-border-0 tw-px-8 tw-py-1">
-                    <a href="{{ childPage.Url }}" class="tw-py-3 tw-border-l-2 md:tw-border-l-0 tw-pl-4 md:tw-pl-0 tw-border-c-primary hover:tw-text-white hover:tw-no-underline {% if childPage.Current %}tw-text-white tw-font-bold{% else %}tw-text-gray-300{% endif%}">{{ childPage.Title }}</a>
+                    <a href="{{ childPage.Url }}" class="tw-py-3 tw-border-l-2 md:tw-border-l-0 tw-pl-4 md:tw-pl-0 tw-border-c-primary hover:tw-text-white hover:tw-no-underline {% if childPage.Current %}tw-text-white tw-font-bold{% else %}tw-text-gray-300{% endif%}" {{ childPage.Description }}>{{ childPage.Title }}</a>
                 </li>
     {% endfor %}
     {% if IncludePageList %}
         {% for childPage in IncludePageList %}
             {% assign page = childPage | PropertyToKeyValue %}
+            {% assign domain = page.Value | Url:'host' %}
                 <li class="tw-border-0 tw-px-8 tw-py-1">
-                    <a href="{{ page.Value }}" class="tw-py-3 tw-border-l-2 md:tw-border-l-0 tw-pl-4 md:tw-pl-0 tw-border-c-primary hover:tw-text-white hover:tw-no-underline tw-text-gray-300">{{ page.Key }}</a>
+                    <a href="{{ page.Value }}" class="tw-py-3 tw-border-l-2 md:tw-border-l-0 tw-pl-4 md:tw-pl-0 tw-border-c-primary hover:tw-text-white hover:tw-no-underline tw-text-gray-300" {% if domain and domain != 'valorouschurch.com' and domain != '' %}target="_blank"{% endif %}>{{ page.Key }}</a>
                 </li>
         {% endfor %}
     {% endif %}
