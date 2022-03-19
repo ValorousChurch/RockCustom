@@ -71,7 +71,7 @@
   <script src="<%# ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
 
 </head>
-<body runat="server" id="body" class="compass-body tw-debug-screens">
+<body runat="server" id="body" class="compass-body">
 
   <form id="form1" runat="server">
 
@@ -157,7 +157,11 @@
   <a href="#0" class="compass-top js-compass-top tw-bg-c-primary tw-rounded">Top</a>
   <!-- Theme JavaScript -->
   <script src="/Themes/Valorous/Scripts/compass.js"></script>
-
+  <script>
+    $(function(){
+      if(sessionStorage.getItem('debug') == 1) $('body').addClass('tw-debug-screens');
+    });
+  </script>
 </body>
 
 </html>
