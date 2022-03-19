@@ -6,7 +6,7 @@
         <div class="xl:tw-w-3/5 xl:tw-pl-6">
             <p class="tw-leading-relaxed tw-text-white">There are times when life is overwhelming, when all we have is questions. In those moments, hope can feel far away. The great thing about prayer is that it shifts our perspective toward the One who stands ready to listen.</p>
             <div class="md:tw-flex xl:tw-mt-4 tw-mt-6">
-                <a class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out btn btn-primary" href="">Submit a Request</a>
+                <a class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out btn btn-primary" href="/prayer">Submit a Request</a>
             </div>
         </div>
     </div>
