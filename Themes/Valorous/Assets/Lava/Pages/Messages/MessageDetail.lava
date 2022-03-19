@@ -81,7 +81,11 @@
 		</div><!-- end resources -->
         <div class="col-md-8 "><!-- begin speaker bio -->
             <div class="col-xs-5 col-sm-4 col-sm-3 col-md-3 mb-2 photo-wrap">
-                <img src="/getimage.ashx?Guid={{ speakerPerson.Photo.Guid }}&amp;w=220&amp;h=220&amp;format=jpg&amp;quality=70&amp;mode=crop&amp;scale=both" class="img-responsive rounded shadow-md" alt="{{ speakerPerson.FullName }}" style="border:3px solid white">
+            {% assign imageGuid = speaker | Attribute:'Photo','Guid' %}
+            {% unless imageGuid and imageGuid != '' %}
+                {% assign imageGuid = speakerPerson.Photo.Guid %}
+            {% endunless %}
+                <img src="/getimage.ashx?Guid={{ imageGuid }}&amp;w=220&amp;h=220&amp;format=jpg&amp;quality=70&amp;mode=crop&amp;scale=both" class="img-responsive rounded shadow-md" alt="{{ speakerPerson.FullName }}" style="border:3px solid white">
             </div>
             <div class="details col-xs-12 col-sm-8 col-sm-9 col-md-9">
                 <h3 class="name-title mt-0">{{ speaker.Value }}</h4>
