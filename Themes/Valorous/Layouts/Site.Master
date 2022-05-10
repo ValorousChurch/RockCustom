@@ -112,7 +112,7 @@
                       {%- if titleOverride and titleOverride != '' -%}
                         {{- titleOverride -}}
                       {%- else -%}
-                        {{- CurrentPage.PageTitle -}}
+                        <span id="page-title">{{- CurrentPage.PageTitle -}}</span>
                       {%- endif -%}
                     </h1>
                     {%- if showDescription and CurrentPage.Description != '' -%}
@@ -128,6 +128,7 @@
           <header class="exclude-nav"></header>
         {%- endif -%}
       </Rock:Lava>
+      <span id="rock-title" class="hidden"><Rock:PageTitle ID="PageTitle" runat="server" /></span>
 
       <asp:ContentPlaceHolder ID="main" runat="server"></asp:ContentPlaceHolder>
     </div>
@@ -159,7 +160,15 @@
   <script src="/Themes/Valorous/Scripts/compass.js"></script>
   <script>
     $(function(){
+      // Show debug screen
       if(sessionStorage.getItem('debug') == 1) $('body').addClass('tw-debug-screens');
+
+      // Replace page title
+      var pageTitle = $( '#page-title' );
+      var rockTitle = $( '#rock-title' );
+      if ( pageTitle.length > 0 && rockTitle.length > 0 ) {
+        pageTitle.text( rockTitle.text() );
+      }
     });
   </script>
 </body>
