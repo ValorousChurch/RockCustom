@@ -6,11 +6,12 @@
 <head runat="server">
   <title></title>
 
-  <script src="<%# ResolveRockUrl("~/Scripts/modernizr.js", true) %>"></script>
   <script src="<%# System.Web.Optimization.Scripts.Url("~/Scripts/Bundles/RockJQueryLatest" ) %>"></script>
 
-  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" />
-  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>" />
+  <!-- Theme Included CSS Files -->
+  <link href="<%# ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
+  <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
+  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
 
   <style>
     html, body {
