@@ -18,6 +18,8 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.IO;
 
+using iTextSharp.text.pdf;
+
 using Rock;
 using Rock.Attribute;
 using Rock.Data;
