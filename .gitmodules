@@ -1,0 +1,3 @@
+[submodule "Plugins/rock-developer-tools.git"]
+	path = Plugins/rock-developer-tools.git
+	url = https://github.com/cabal95/rock-developer-tools.git
