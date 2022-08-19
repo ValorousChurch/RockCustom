@@ -48,6 +48,7 @@ namespace RockWeb.Plugins.com_barefootchurch
     [TextField( "Guest Type", "A comma-delimited list of different guest types that can be selected.  The selected item will be added to the Comment field of the connection request.", true, "Returning Guest, First Time Guest - Local, First Time Guest - Vacationer", "Connection Request Settings", 1 )]
     [TextField( "Decisions", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Salvation, Recommit", "Connection Request Settings", 2 )]
     [TextField( "Interests", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "Baptism, Volunteering, Joining a Group, Leading a Group, Partnering", "Connection Request Settings", 3 )]
+    [TextField( "Other", "A comma-delimited list of different options that can be checked.  These will be added to the Comment field of the connection request.", true, "", "Connection Request Settings", 4 )]
     //[TextField( "Entry Source", "A comma-delimited list of places where the data entry can occur. The selected item will be added to the Comment field of the connection request.", true, "Weekend, Kids World, Unleashed, Other", "Connection Request Settings", 4 )]
 
     // Person Settings
@@ -731,6 +732,15 @@ namespace RockWeb.Plugins.com_barefootchurch
             }
             cblInterests.DataBind();
 
+            // Build Other list...
+            var otherList = GetAttributeValue( "Other" ).SplitDelimitedValues( false );
+            cblOthers.Items.Clear();
+            foreach ( var other in otherList )
+            {
+                cblOthers.Items.Add( new ListItem( other, other ) );
+            }
+            cblOthers.DataBind();
+
             // Build the Entry Source radio button list...
             /*var entrySourceList = GetAttributeValue( "EntrySource" ).SplitDelimitedValues( false );
             rblSource.Items.Clear();
@@ -931,6 +941,13 @@ namespace RockWeb.Plugins.com_barefootchurch
                 {
                     sb.AppendFormat( "#### Interests\n" );
                     sb.AppendFormat( "- {0}", cblInterests.SelectedValues.AsDelimited( "\n- " ) );
+                    sb.AppendFormat( "\n" );
+                }
+
+                if ( cblOthers.SelectedValues.Count > 0 )
+                {
+                    sb.AppendFormat( "#### Others\n" );
+                    sb.AppendFormat( "- {0}", cblOthers.SelectedValues.AsDelimited( "\n- " ) );
                     sb.AppendFormat( "\n" );
                 }
 

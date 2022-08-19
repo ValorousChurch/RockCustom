@@ -144,6 +144,7 @@
                 </div>
                 <div class="col-sm-6">
                     <Rock:RockCheckBoxList ID="cblInterests" runat="server" Label="Interested in" />
+                    <Rock:RockCheckBoxList ID="cblOthers" runat="server" Label="Other Items" />
                 </div>
 
                 <div class="col-sm-12">
