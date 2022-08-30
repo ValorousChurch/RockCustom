@@ -1,0 +1,253 @@
+{% stylesheet compile:'less' %}
+/* Calendar Block Overrides */
+.calendar-lava {
+    .col-md-3.hidden-print {
+        width: 100%;
+        clear: both;
+
+        .panel.panel-default {
+            width: 50%;
+            float: left;
+            position: relative;
+            min-height: 1px;
+            //padding-right: 15px;
+            //padding-left: 15px;
+            background: none;
+            border: none;
+
+            //&>.panel-heading+.panel-collapse>.panel-body {
+            //    border-top-color: #ddd;
+            //}
+
+            .panel-heading {
+                background: #fff;
+                border: 1px solid #BFBFBF;
+                padding: 0;
+
+                a {
+                    display: block;
+                    padding: 10px 15px;
+
+                    &:after {
+                        content: "\f0d7";
+                        font-weight: 900;
+                        font-family: 'FontAwesome';
+                        position: absolute;
+                        top: 10px;
+                        right: 45px;
+                    }
+                }
+            }
+
+            .panel-body .controls {
+                column-count: 4;
+                column-width: 100px;
+
+                .checkbox {
+                    width: max-content;
+                }
+            }
+        }
+    }
+
+    .col-md-9 {
+        width: 100%;
+    }
+
+    .btn-group.hidden-print {
+        margin: 30px auto;
+        width: 100%;
+        text-align: center;
+        float: none;
+        display:none;
+
+        a.btn-default {
+            float: none;
+            margin: 0 auto;
+            min-width: 100px;
+        }
+    }
+
+    #collapseOne .panel-body,
+    #collapseTwo .panel-body {
+        background: #fff;
+        border: 1px solid #BFBFBF;
+    }
+}
+
+@media screen and (max-width:767px){
+    .calendar-lava .col-md-3.hidden-print .panel.panel-default {
+        width: 100%;
+        float: none;
+        clear: both;
+        position: relative;
+        //padding-right: 15px;
+        //padding-left: 15px;
+    }
+}
+
+/* Event Item Styles */
+.card {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 25px -5px, rgba(0, 0, 0, 0.09) 0px 10px 10px -5px;
+        transform: translateY(-10px);
+    }
+
+    .icons {
+        font-size: .75em;
+        font-weight: 500;
+
+        i {
+            font-size: 3em;
+            padding-bottom: 10px;
+        }
+    }
+}
+{% endstylesheet %}
+
+//- Limit display to next x months (6 by default)
+{% assign monthsLimit = monthsLimit | Default:'6' | AsInteger %}
+{% assign dateLimit = 'Now' | DateAdd:6,'M' | Date:'yyyy-MM-dd' %}
+
+//- {% assign eventItemOccurrenceCount = EventItemOccurrences | Size %}
+{% assign eventItemOccurrenceCount = 0 %}
+{% for item in EventItemOccurrences %}
+    {% assign itemDate = item.Date | Date:'yyyy-MM-dd' %}
+    {% if itemDate > dateLimit %}
+        {% break %}
+    {% endif %}
+    {% assign eventItemOccurrenceCount = eventItemOccurrenceCount | Plus:1 %}
+{% endfor %}
+
+{% if eventItemOccurrenceCount == 0 %}
+<div class="panel panel-default margin-t-md">
+    <div class="margin-all-md"> There are no events found that match that criteria.</div>
+</div>
+{% endif %}
+
+//- Pagination Calculations
+{% unless perPage and perPage > 0 %}
+    {% assign perPage = 12 %}
+{% endunless %}
+{% assign pages = eventItemOccurrenceCount |  DividedBy: perPage | Ceiling %}
+{% assign currentPage = 'Global' | PageParameter:'page' | Default:'1' %}
+{% assign offset = currentPage | Minus:1 | Times:perPage %}
+
+<div class="row d-flex flex-wrap tw-clear-both">
+{% assign now = 'Now' | Date:'yyyy-MM-dd HH:mm:ss' %}
+{% for eventItemOccurrence in EventItemOccurrences limit:perPage offset:offset %}
+    {% assign itemDate = eventItemOccurrence.Date | Date:'yyyy-MM-dd' %}
+    {% if itemDate > dateLimit %}
+        {% break %}
+    {% endif %}
+    {% assign startDate = eventItemOccurrence.EventItemOccurrence | Attribute:'StartDate' | Date:'yyyy-MM-dd' %}
+    {% if startDate and startDate != '' and startDate > now %}
+        {% continue %}
+    {% endif %}
+    {% if eventItemOccurrence.DetailPage != null %}
+        {% assign eventLink = eventItemOccurrence.DetailPage %}
+    {% else %}
+        {% assign eventLink = '/events/' | Append:eventItemOccurrence.EventItemOccurrence.Id %}
+    {% endif %}
+    {% assign eventLinkRelative = eventLink | RegExMatch:'^/' %}
+    {% assign childcare = eventItemOccurrence.EventItemOccurrence | Attribute:'ChildcareAvailable' | AsBoolean %}
+    {% assign location = eventItemOccurrence.EventItemOccurrence | Attribute:'CustomLocation','Object' %}
+    {% assign registration = eventItemOccurrence.EventItemOccurrence | Attribute:'RegistrationStatusOverride' %}
+    {% assign registrationEnd = eventItemOccurrence.EventItemOccurrence | Attribute:'RegistrationCloseOverride' | Date:'yyyy-MM-dd HH:mm:ss' %}
+    {% if registrationEnd and registrationEnd != '' and registrationEnd <= now %}
+        {% assign registration = 'Closed' %}
+    {% endif %}
+    {% unless registration and registration != '' %}
+        {% eventitemoccurrence id:'{{ eventItemOccurrence.EventItemOccurrence.Id }}' lazyloadenabled:'false' securityenabled:'false' selectmany:'Linkages.Select(RegistrationInstance).Where(IsActive == true)' iterator:'registrationInstances' %}
+            {% assign size = registrationInstances | Size %}
+            {% if size > 0 %}
+                //- {% assign registrationStart = registrationInstances[0].StartDateTime | Date:'yyyy-MM-dd HH:mm:ss' %}
+                {% assign registrationEnd = registrationInstances[0].EndDateTime | Date:'yyyy-MM-dd HH:mm:ss' %}
+                {% if registrationEnd <= now %}
+                    {% assign registration = 'Closed' %}
+                {% else %}
+                    {% assign registration = 'Open' %}
+                {% endif %}
+            {% endif %}
+        {% endeventitemoccurrence %}
+    {% endunless %}
+    <div class="event-item col-xs-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 border-0">
+            <a href="{{ eventLink }}"{% unless eventLinkRelative %} target="_blank"{% endunless %}>
+                {%- assign eventDomain = eventItemOccurrence.EventItemOccurrence.EventItem | Attribute:'EventDomain','Object' %}
+                <img width="100%" height="130px" src="{{ eventDomain | Attribute:'HeaderImage','Url' }}" class="event-image card-img-top" alt="{{ eventDomain.Value }}"/>
+            </a>
+            <div class="card-body pb-2">
+                <a href="{{ eventLink }}" {% unless eventLinkRelative %}target="_blank" {% endunless %}class="event-calendar-title tw-no-underline">
+                    <h4 class="text-center text-primary mb-4">
+                        <span class="text-uppercase">{{ eventItemOccurrence.Name }}</span>
+    {% assign subtitle = eventItemOccurrence.EventItemOccurrence | Attribute:'Subtitle' | Trim %}
+    {% if subtitle and subtitle != '' %}
+                        <br><small>{{ subtitle }}</small>
+    {% endif %}
+                    </h4>
+                </a>
+                <h4 class="text-center mb-4">
+    {% if eventItemOccurrence.Date != eventItemOccurrence.EndDate %}
+                    {{ eventItemOccurrence.Date | Date:'ddd. MMM. d' }} - {{ eventItemOccurrence.EndDate | Date:'ddd. MMM. d' }}
+    {% else %}
+                    {{ eventItemOccurrence.Date | Date:'dddd MMM. d' }}
+        {% if eventItemOccurrence.Time and eventItemOccurrence.Time != '' %}
+                    <br><small>{{ eventItemOccurrence.Time }}</small>
+        {% endif %}
+    {% endif %}
+                </h4>
+            </div><!-- /card-body -->
+            <div class="text-center card-footer pt-0 pb-3 bg-transparent border-0">
+                <div class="row text-center icons d-flex flex-wrap justify-content-center">
+                    <div class="col-xs-4 border-gray-500 border-right">
+    {% case registration %}
+        {% when 'Open' %}
+                        <i class="fa fa-calendar-alt text-green-400"></i><br>
+                        Registration Open
+        {% when 'Closed' %}
+                        <i class="fa fa-calendar-alt text-red-500"></i><br>
+                        Registration Closed
+        {% else %}
+                        <i class="fa fa-calendar-alt text-gray-400"></i><br>
+                        Registration Not&nbsp;Required
+    {% endcase %}
+                    </div><!-- /registration -->
+    {% if location and location != '' %}
+        {% assign icon = location | Attribute:'CustomIcon' | Default:'fa fa-map-marker-alt' %}
+                    <div class="col-xs-4 border-gray-500 border-right">
+                        <i class="{{ icon }} text-primary"></i><br>
+                        {{ location }}
+                    </div><!-- /Location -->
+    {% endif %}
+                    <div class="col-xs-4">
+    {% if childcare %}
+                        <i class="fa fa-child text-blue-400"></i><br>
+                        Childcare Avialable
+    {% else %}
+                        <i class="fa fa-child text-gray-300"></i><br>
+                        Childcare Not&nbsp;Avialable
+    {% endif %}
+                    </div><!-- /childcare -->
+                </div><!-- /icons -->
+            </div><!-- /card-footer -->
+            <div class="text-center card-footer p-0">
+                <a href="{{ eventLink }}" {% unless eventLinkRelative %}target="_blank" {% endunless %}class="event-more-info btn btn-primary tw-py-3 w-100 h-100">
+                    More Info &nbsp;<i class="fa fa-chevron-circle-right"></i>
+                </a>
+            </div><!-- /card-footer -->
+        </div><!-- /card -->
+    </div><!-- /event-item -->
+{% endfor %}
+</div><!-- /row -->
+
+//- Pagination
+{%- if pages > 1 -%}
+    {% assign fragment = pagerFragment | Default:'' %}
+    <style>.pagination>.disabled>span{color:#ccc}</style>
+    {[ pager current:'{{ currentPage }}' total:'{{ pages }}' usequery:'true' class:'text-center' fragment:'{{ fragment }}' ]}
+{%- endif -%}
