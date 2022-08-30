@@ -1,0 +1,148 @@
+<style>.nav-tabs{margin-left:0}</style>
+<script>
+function loadVideo(el,guid) {
+    $(el).parent().html('<iframe src="/media-player/' + guid + '" style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>');
+}
+</script>
+
+{% unless PageParameter["Year"] and PageParameter["Year"] != '' %}
+<div class="alert alert-warning">You must select a year from the dropdown above.</div>
+{% else %}
+    {% assign thisYear = 'Now' | Date:'yyyy' | AsInteger %}
+    {% assign year = PageParameter['Year'] | AsInteger | Default:thisYear | AsInteger %}
+    {% assign song = PageParameter['Song'] | Default:'' %}
+    {% assign personWorship = PageParameter['PersonWorship'] | Default:'' %}
+    {% assign personProduction = PageParameter['PersonProduction'] | Default:'' %}
+
+    {% assign data = 'WorshipArchives' | PersistedDataset | Where:'Year', year %}
+    {% capture filteredData %}
+[
+        {% for service in data %}
+            {% if song != '' %}
+                {% assign hasSong = service.Songs | Contains:song %}
+                {% unless hasSong %}{% continue %}{% endunless %}
+            {% endif %}
+            {% if personWorship != '' %}
+                {% assign hasPersonWorship = service.People.Worship | ToJSON | RegExMatch:personWorship %}
+                {% unless hasPersonWorship %}{% continue %}{% endunless %}
+            {% endif %}
+            {% if personProduction != '' %}
+                {% assign hasPersonProduction = service.People.Production | ToJSON | RegExMatch:personProduction %}
+                {% unless hasPersonProduction %}{% continue %}{% endunless %}
+            {% endif %}
+    {{ service | ToJSON }},
+        {% endfor %}
+]
+    {% endcapture %}
+    {% assign filteredData = filteredData | FromJSON %}
+    {% assign dataSize = filteredData | Size %}
+    {% if dataSize == 0 %}
+<div class="alert alert-warning">No services were found that match your filter selections.</div>
+    {% else %}
+        {% assign startItem = PageParameter["Page"] | Default:'1' | AsInteger | Times:pageSize | Minus:1 %}
+        {% for service in filteredData %}
+            {% assign index = forloop.index0 %}
+            {% capture title -%}
+        {{- service.Date | Date:'MMMM d, yyyy' }}
+                {% if service.SpecialTitle %}
+            <span class="text-muted">[{{ service.SpecialTitle }}]</span>
+                {% endif %}
+            {%- endcapture %}
+{[ panel title:title ]}
+    <div class="row">
+        <div class="col-md-6 mb-2">
+            <h2 class="mt-0">Recordings</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#worshiprec{{ index }}">Broadcast</a></li>
+            {% if service.Videos.Multiviewer.VideoGuid and service.Videos.Multiviewer.VideoGuid != '' %}
+                <li><a data-toggle="tab" href="#mvrec{{ index }}">Multiviewer</a></li>
+            {% endif %}
+            </ul>
+
+            <div class="tab-content">
+                <div id="worshiprec{{ index }}" class="tab-pane fade in active">
+            {% if service.Videos.Worship.VideoGuid and service.Videos.Worship.VideoGuid != '' %}
+                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                            <img class="img-responsive" src="{{ service.Videos.Worship.Thumbnail }}">
+                            <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Worship.VideoGuid }}');">Load Video</button>
+                        </div>
+            {% else %}
+                        <div class="alert alert-warning mt-2">Broadcast recording hasn't been posted yet.</div>
+            {% endif %}
+                </div>
+            {% if service.Videos.Multiviewer.VideoGuid and service.Videos.Multiviewer.VideoGuid != '' %}
+                <div id="mvrec{{ index }}" class="tab-pane fade">
+                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                            <img class="img-responsive" src="{{ service.Videos.Multiviewer.Thumbnail }}">
+                            <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Multiviewer.VideoGuid }}');">Load Video</button>
+                        </div>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="mt-0">Info and Teams</h2>
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#info{{ index }}">Service</a></li>
+                <li><a data-toggle="tab" href="#worship{{ index }}">Worship</a></li>
+                <li><a data-toggle="tab" href="#production{{ index }}">Production</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="info{{ index }}" class="tab-pane fade in active">
+                    <div class="col-lg-6">
+                        <h4>Songs</h4>
+                        <ul>
+                            <li>{{ service.Songs | Join:'</li><li>' }}</li>
+                        </ul>
+                        <h4>Audio</h4>
+                        <ul>
+                            <li>{{ service.People.Audio }}</li>
+                        </ul>
+                        <h4>Director</h4>
+                        <ul>
+                            <li>{{ service.People.Director }}</li>
+                        </ul>
+                    </div>
+            {% if service.Notes and service.Notes != '' %}
+                    <div class="col-lg-6">
+                        <h4>Notes</h4>
+                        <p>{{ service.Notes }}</p>
+                    </div>
+            {% endif %}
+                </div>
+                <div id="worship{{ index }}" class="tab-pane fade">
+            {% if service.People.Worship != empty %}
+                {% for time in service.People.Worship %}
+                        <div class="col-lg-6">
+                            <h4>{{ time.Time }}</h4>
+                            <ul>
+                                <li>{{ time.People | Join:'</li><li>' }}</li>
+                            </ul>
+                        </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-warning mt-2">No attendance data for this service.</div>
+            {% endif %}
+                </div>
+                <div id="production{{ index }}" class="tab-pane fade">
+            {% if service.People.Production != empty %}
+                {% for time in service.People.Production %}
+                        <div class="col-lg-6">
+                            <h4>{{ time.Time }}</h4>
+                            <ul>
+                                <li>{{ time.People | Join:'</li><li>' }}</li>
+                            </ul>
+                        </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-warning mt-2">No attendance data for this service.</div>
+            {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{[ endpanel ]}
+        {% endfor %}
+    {% endif %}
+{% endunless %}
