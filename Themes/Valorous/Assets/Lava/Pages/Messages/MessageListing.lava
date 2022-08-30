@@ -1,6 +1,5 @@
 <div class="row d-flex flex-wrap">
 {% for message in Items %}
-    {% unless message.Status == 'Approved' %}{% continue %}{% endunless %}
     <div class=" col-md-4 col-sm-6 mb-4">
         <div class="card h-100" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
             <img src="{{ message | Attribute:'Video','DefaultThumbnailUrl' }}" class="card-img-top" alt="{{ message.Title }}">
