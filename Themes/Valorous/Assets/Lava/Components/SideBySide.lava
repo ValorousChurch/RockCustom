@@ -1,0 +1,45 @@
+{%- assign channelTitleSize  =  ContentChannel | Attribute:'TitleSize' | Default:'h1' -%}
+{%- assign channelContentAlignment  =  ContentChannel | Attribute:'ContentAlignment' -%}
+{%- assign channelForegroundColor  =  ContentChannel | Attribute:'ForegroundColor' -%}
+{%- assign channelBackgroundColor =  ContentChannel | Attribute:'BackgroundColor' -%}
+{%- assign contentItemStyle = '' -%}
+
+{% stylesheet id:'contentcomponent-vc-sidebyside' compile:'less' cacheduration:'1' %}
+.contentcomponent-vc-sidebyside {
+    .row + .row {
+        margin-top: 5em;
+    }
+    p {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+}
+{% endstylesheet %}
+
+<section class="contentComponent contentcomponent-vc-sidebyside">
+{%- for item in Items -%}
+    {%- if channelBackgroundColor != '' -%}
+        {%- capture contentItemStyle -%}{{ contentItemStyle }}background-color:{{ channelBackgroundColor }};{%- endcapture -%}
+    {%- endif -%}
+    {%- if channelForegroundColor != '' -%}
+        {%- capture contentItemStyle -%}{{ contentItemStyle }}color:{{ channelForegroundColor }};{%- endcapture -%}
+    {%- endif -%}
+    {%- assign imageGuid = item | Attribute:'Image','RawValue' -%}
+    <div class="row" style="margin-bottom:-25px">
+        <div class="col-md-6 {% if channelContentAlignment == 'Right' %}{% cycle 'firstcol': 'col-md-push-6', '' %}{% else %}{% cycle 'firstcol': '', 'col-md-push-6' %}{% endif %}" style="margin-bottom:25px">
+            <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ imageGuid }}" class="img-responsive">
+        </div>
+        <div class="col-md-6 {% if channelContentAlignment == 'Right' %}{% cycle 'secondcol': 'col-md-pull-6', '' %}{% else %}{% cycle 'secondcol': '', 'col-md-pull-6' %}{% endif %}" style="margin-bottom:25px">
+            <div class='content-item' {% if contentItemStyle != '' %}style='{{ contentItemStyle }}'{% endif %}>
+              <{{ channelTitleSize }}>{{ item.Title }}</{{ channelTitleSize }}>
+              {{ item.Content }}
+            </div>
+        </div>
+    </div>
+{%- endfor -%}
+</section>

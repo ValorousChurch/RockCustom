@@ -1,0 +1,192 @@
+<script src="/Scripts/howler.min.js" ></script>
+<script>
+    $(document).ready(function()
+    {
+        var video = document.getElementById('videoStream');
+        var $video = $(video);
+        var w = 0;
+        var h = 0;
+
+        //request access to the camera
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)
+        {
+
+            //make the camera request
+            navigator.mediaDevices.getUserMedia(
+            {
+                audio: false,
+                video:
+                {
+                    facingMode: { ideal: 'environment' },
+                    aspectRatio: 1,
+                    width: { min: 300, ideal: 800 },
+                    height: { min: 300, ideal: 800 },
+                    zoom: 2
+                }
+            })
+            //handle the response to the camera request
+            .then(function(stream)
+            {
+                //display the video stream
+                if ($('#camera').is(':hidden')) $('#camera').slideDown('fast');
+                video.srcObject = stream;
+
+                $('#cameraAppNote')
+                    .html('Please frame the shot so that only their head and shoulders are clearly visible');
+
+                //play the video and finish setup once it's playing
+                video.play();
+                $video.on('playing', function()
+                {
+                    //check the video width to make sure we're getting a valid video stream
+                    if (this.videoWidth === 0) console.error('videoWidth is zero. Camera not connected?');
+
+                    //get the provided video dimensions
+                    w = this.videoWidth;
+                    h = this.videoHeight;
+
+                    //make sure the area is square
+                    if (w != h)
+                    {
+                        //use the smaller of the two dimensions
+                        if (w > h) w = h;
+                        else h = w;
+                    }
+
+                    //output debug info
+                    console.log('Source: ' + this.videoWidth + 'x' + this.videoHeight);
+                    console.log('Output: ' + this.videoWidth + 'x' + this.videoHeight);
+
+                    //elements for capturing and uploading the photo
+                    var $fileInput;
+                    var $fileID;
+                    var oldID = 0;
+                    var canvas = $('#photoCanvas')[0];
+                    var context = canvas.getContext('2d');
+
+                    //set the canvas size to match the area we want to capture
+                    canvas.width = w;
+                    canvas.height = h;
+
+                    //get the file upload input
+                    $fileInput = $('input[type=file]');
+
+                    //initialize camera shutter sound
+                    var shutterSound = new Howl(
+                    {
+                        src: ['{{ '~~/Assets/Sounds/camera-shutter.mp3' | ResolveRockUrl }}'],
+                        volume: 0.4
+                    });
+
+                    //capture the photo
+                    $('#captureButton').on('click', function(e)
+                    {
+                        e.preventDefault();
+                        try
+                        {
+                            //simulate a camera shutter
+                            shutterSound.play();
+                            $video.fadeOut(20,function() { $video.fadeIn(20); });
+
+                            //apply the current video frame to the canvas
+                            context.drawImage(video, 0, 0, w, h);
+
+                            //convert the canvas to a file and upload it
+                            canvas.toBlob(function(blob)
+                            {
+                                //generate the file object
+                                var fileName = 'photo-' + (new Date().getTime() / 1000).toFixed() + '.jpg';
+                                var file = new File([blob], fileName, { type: blob.type, lastModified:new Date().getTime() });
+
+                                //use a DataTransfer object to create a FileList (hack)
+                                var container = new DataTransfer();
+                                container.items.add(file);
+
+                                //output debug info
+                                console.log('Type: ' + blob.type);
+                                console.log('Size: ' + file.size + ' bytes');
+                                console.log('File Count: ' + container.files.length);
+
+                                //make sure we have the current file input element
+                                //since the file input element seems to be re-added with each ajax request, the references to it need to be refreshed
+                                $fileInput = $('input[type=file]');
+
+                                //tell jQuery File Upload to start uploading the file (https://github.com/blueimp/jQuery-File-Upload)
+                                $fileInput.fileupload('add', { files: container.files });
+                            }, 'image/jpeg');
+                        }
+                        catch (ex)
+                        {
+                            console.log(ex.name + ": " + ex.message);
+                        }
+                        return false;
+                    });
+                });
+            })
+            .catch(function(ex)
+            {
+                //hide the camera and log the error message when the camera request fails
+                $('#camera').hide();
+                console.log(ex.name + ': ' + ex.message);
+            });
+        }
+        else
+        {
+            if (!navigator.mediaDevices) console.log('mediaDevices not supported');
+            if (!navigator.mediaDevices.getUserMedia) console.log('getUserMedia not supported');
+        }
+    });
+</script>
+<style>
+    .video-container
+    {
+        position: relative;
+        padding-top: 100%;
+        width: 100%; height: 0;
+        background: #000;
+    }
+    .video-wrap
+    {
+        position: absolute;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+    }
+    #videoStream
+    {
+        object-fit: cover;
+        width: 100%; height: 100%;
+    }
+    #captureButton
+    {
+        margin: 10px auto 20px auto;
+        padding: 0;
+        width: 2em;
+        height: 2em;
+        border-radius: 1em;
+        background: #3f7aa9;
+        box-shadow: 0 0 0 5px rgba(63, 122, 169,.5);
+        text-align: center;
+        line-height: 0;
+        font-size: 40px;
+        transition: all 0.1s ease-in;
+    }
+    #captureButton:focus, #captureButton:active { outline: none; }
+    #captureButton:focus { box-shadow: 0 0 0 6px rgba(63, 122, 169,.4); }
+    #captureButton:active
+    {
+        box-shadow: 0 0 0 50px transparent;
+        transition: all 0.05s ease-out;
+    }
+    canvas { max-width: 150px; }
+</style>
+<div id="camera" style="display:none">
+    <div class="video-container">
+        <div class="video-wrap">
+            <video id="videoStream" autoplay muted playsinline></video>
+        </div>
+    </div>
+    <div class="text-center">
+        <button id="captureButton" class="btn btn-primary"><i class="fa fa-camera"></i></button>
+    </div>
+    <canvas id="photoCanvas" class="hidden"></canvas>
+</div>

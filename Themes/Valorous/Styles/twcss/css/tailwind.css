@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* Restyle it to give back the dots & numbers for Rock Web Editors */
+    ol,ul {
+        list-style: initial;
+        list-style-type: initial;
+        margin-left: 1.4rem;
+    }
+    ol {
+        list-style-type: decimal;
+    }
+}
+
+@layer utilities {
+    @variants responsive {
+        .after\:bg-black:after {
+            top: 0;
+            left: 0;
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background-image: linear-gradient(145deg, rgba(0, 0, 0, 0.35) 100%, rgba(0, 0, 0, 0.35) 100%);
+            background-repeat: repeat-x;
+        }
+    }
+}

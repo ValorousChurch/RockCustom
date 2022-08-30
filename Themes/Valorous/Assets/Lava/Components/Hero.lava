@@ -1,0 +1,74 @@
+{%- assign channelTitleSize  =  ContentChannel | Attribute:'TitleSize' | Default:'h1' -%}
+{%- assign channelContentAlignment  =  ContentChannel | Attribute:'ContentAlignment' -%}
+{%- assign channelForegroundColor  =  ContentChannel | Attribute:'ForegroundColor' -%}
+{%- assign channelBackgroundColor =  ContentChannel | Attribute:'BackgroundColor' -%}
+{%- assign contentItemStyle = '' -%}
+
+{% javascript id:'contentcomponent-vc-hero' disableanonymousfunction:'true' %}
+$(function() {
+    $('.contentComponent.hero').first().addClass('first');
+});
+{% endjavascript %}
+
+{% stylesheet id:'contentcomponent-vc-hero' compile:'less' cacheduration:'1' %}
+.contentComponent.hero {
+    overflow: hidden;
+    padding: 100px 25px;
+    position: relative;
+
+    &:not(.first) {
+        margin-top: 3em;
+    }
+
+    .background {
+        background-size: cover;
+        background-position: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        z-index: 0;
+    }
+
+    .content {
+        max-width: 700px;
+        position: relative;
+        z-index: 1;
+        &.side {
+            padding: 0 35px;
+        }
+    }
+
+    p {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+}
+{% endstylesheet %}
+
+{%- if channelBackgroundColor != '' -%}
+    {%- capture contentItemStyle -%}{{ contentItemStyle }}background-color:{{ channelBackgroundColor }};{%- endcapture -%}
+{%- endif -%}
+{%- if channelForegroundColor != '' -%}
+    {%- capture contentItemStyle -%}{{ contentItemStyle }}color:{{ channelForegroundColor }};{%- endcapture -%}
+{%- endif -%}
+
+{%- for item in Items limit:1 -%}
+    {%- assign imageGuid = item | Attribute:'Image','RawValue' -%}
+<section class="contentComponent hero rounded-lg" style="{{ contentItemStyle }}">
+    {%- if imageGuid != '' -%}
+    <span class="background" style="background-image: url('/GetImage.ashx?Guid={{ imageGuid }}'); opacity: 0.3;"></span>
+    {%- endif -%}
+    <div class="content{% if channelContentAlignment == 'Center' %} mx-auto text-center{% else %} side{% endif %}">
+        <{{ channelTitleSize }}>{{ item.Title }}</{{ channelTitleSize }}>
+        {{ item.Content }}
+    </div>
+</section>
+{%- endfor -%}

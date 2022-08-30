@@ -1,0 +1,159 @@
+<style type="text/css">
+  #ne_action_counter_container { display: none; }
+  #ne_action_counter { overflow: auto; width: auto; height: 100%; display:inline-block; }
+  #ne_action_counter .description, #ne_action_counter .time li .label { font-size: 1em; }
+  #ne_action_counter .time { list-style: none; display: inline-block; margin: 0 auto; padding: 0px;}
+  #ne_action_counter .time li { float: left; padding: 0 5px 0 5px; text-align: center;}
+  #ne_action_counter .time li h4 {line-height: 1.2; vertical-align: middle; }
+  #ne_action_counter .time li:first-child { }
+  #ne_action_counter .time li:last-child { padding: 0 10px 0 10px; border-right: none; }
+  #ne_action_counter .time li span { font-size: 2.5em; color: white; font-weight: 700;}
+  #ne_co_cd .live { display: none; font-size:700; color: white; text-transform: uppercase; }
+  #ne_action_counter_loader,#ne_co_cd .live {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+  .ne-font { font-family: 'Open Sans','Helvetica Neue',Arial,sans-serif; text-transform: uppercase; margin: 0;}
+  @media (min-width: 992px) and (max-width: 1199px) {
+      .live-stream-container {
+          padding: 0px !important;
+      }
+      .action-image {
+          width: 40% !important;
+      }
+      .action-content {
+          clear: both;
+          padding-top: 10px !important;
+      }
+  }
+  @media (max-width: 991px) {
+      #ne_action_counter .time li span { font-size: 1.5em; color: white; font-weight: 700;}
+      #ne_action_counter .time li { float: left; padding: 0; text-align: center;}
+  }
+</style>
+
+<div id="ne_co_cd" style="min-height: 100px; position: relative;">
+    <div id="ne_action_counter_loader" class="tw-text-center ne-font">
+        <h4 style="font-weight: 600"><img src="/Themes/Compass/Assets/img/svg-loaders/three-dots.svg" width="100" alt="" style="padding-top:10px" title="Loading Next Service"></p>
+    </div>
+    <div class="live tw-text-center tw-mt-8">
+        <h1 class="tw-font-bold tw-uppercase tw-tracking-wider tw-text-3xl md:tw-text-6xl">Live Streaming Now</h1>
+        {% comment %} <a id="watchLive" class="btn btn-lg" href="/streaming">Watch Live</a> {% endcomment %}
+    </div>
+    <div id="ne_action_counter_container" class="alertBar container-fluid">
+        <div class="row">
+            <div class="col-md-12 tw-text-center">
+                <div id="ne_action_counter">
+                    <span class="live-stream-container" style="vertical-align: top;padding: 20px 0px;">
+                        <span class="live-stream coming-soon" style="display:block;">
+                            <h5 class="notlive ne-font" style="vertical-align:middle;font-weight: 600;">Next Church Service</h5>
+                        </span>
+                    </span>
+                    <ul class="time">
+                        <li><h4><span class="ne_days">00</span></h4> <span class="label ne-font" style="top: -10px;position: relative;">days</span></li>
+                        <li><h4><span class="ne_hours">00</span></h4> <span class="label ne-font" style="top: -10px;position: relative;">hours</span></li>
+                        <li><h4><span class="ne_minutes">00</span></h4> <span class="label ne-font" style="top: -10px;position: relative;">mins</span></li>
+                        <li><h4><span class="ne_seconds">00</span></h4> <span class="label ne-font" style="top: -10px;position: relative;">secs</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+      if ($('#ne_action_counter_container').length) {
+      var ne_days, ne_goLive, ne_hours, ne_intervalId, ne_minutes, ne_seconds, liveDomain;
+
+      var ne_goLive;
+      ne_goLive = function() {
+        if (liveDomain != undefined) {
+          $("#ne_co_cd").wrap('<a href="'+liveDomain+'" target="_blank"></a>');
+        } else {
+          $("#ne_co_cd").wrap('<a href="#church-domain-is-not-valid" target="_blank"></a>');
+        }
+        $("#ne_action_counter .time").hide();
+        $("#ne_action_counter .notlive").hide();
+        $("#ne_co_cd .live").show();
+        $('.streaming-now').show();
+      };
+
+      ne_loadCountdown = function(data){
+        var ne_seconds_till;
+			  var now = new Date();
+			  try {
+			      var startTimeString = data.data.currentOrganization.servicesConnection.services[0].scheduleTime;
+			      var startTime = new Date(startTimeString);
+			      var endTime = new Date(data.data.currentOrganization.servicesConnection.services[0].endTime);
+            liveDomain = data.domain;
+			  } catch {
+			      // If we don't get service times, just bail
+			      return;
+			  }
+			  // If we are in between the start and end times then it's LIVE!
+              if (startTime < now && now < endTime) {
+                return ne_goLive();
+              } else {
+                // Parse ISO 8601 date string
+                date = startTimeString.match(/^(\d{4})-0?(\d+)-0?(\d+)[T ]0?(\d+):0?(\d+):0?(\d+)Z$/)
+                dateString = date[2] + "/" + date[3] + "/" + date[1] + " " + date[4] + ":" + date[5] + ":" + date[6] + " +0000"
+                ne_seconds_till = ((new Date(dateString)) - (new Date())) / 1000;
+                ne_days = Math.floor(ne_seconds_till / 86400);
+                ne_hours = Math.floor((ne_seconds_till % 86400) / 3600);
+                ne_minutes = Math.floor((ne_seconds_till % 3600) / 60);
+                ne_seconds = Math.floor(ne_seconds_till % 60);
+                return ne_intervalId = setInterval(function() {
+                  if (--ne_seconds < 0) {
+                    ne_seconds = 59;
+                    if (--ne_minutes < 0) {
+                      ne_minutes = 59;
+                      if (--ne_hours < 0) {
+                        ne_hours = 23;
+                        if (--ne_days < 0) {
+                          ne_days = 0;
+                        }
+                      }
+                    }
+                  }
+                  $("#ne_action_counter .ne_days").html((ne_days.toString().length < 2) ? "0" + ne_days : ne_days);
+                  $("#ne_action_counter .ne_hours").html((ne_hours.toString().length < 2 ? "0" + ne_hours : ne_hours));
+                  $("#ne_action_counter .ne_minutes").html((ne_minutes.toString().length < 2 ? "0" + ne_minutes : ne_minutes));
+                  $("#ne_action_counter .ne_seconds").html((ne_seconds.toString().length < 2 ? "0" + ne_seconds : ne_seconds));
+                  if (ne_seconds === 0 && ne_minutes === 0 && ne_hours === 0 && ne_days === 0) {
+                    ne_goLive();
+                    return clearInterval(ne_intervalId);
+                  }
+                  $("#ne_action_counter_loader").fadeOut().next().delay(500);
+                  $("#ne_action_counter_container").fadeIn( 300 );
+                }, 1000);
+              }
+            }
+            ne_days = void 0;
+            ne_hours = void 0;
+            ne_minutes = void 0;
+            ne_seconds = void 0;
+            ne_intervalId = void 0;
+            ne_eventUrl = "/webhooks/Lava.ashx/livestreaming/services";
+            msie = /msie/.test(navigator.userAgent.toLowerCase())
+            if (msie && window.XDomainRequest) {
+                var xdr = new XDomainRequest();
+                xdr.open("get", ne_eventUrl);
+                xdr.onload = function() {
+                  ne_loadCountdown(jQuery.parseJSON(xdr.responseText))
+                };
+                xdr.send();
+            } else {
+              $.ajax({
+                url: ne_eventUrl,
+                dataType: "json",
+                crossDomain: true,
+                success: function(data) {
+                  ne_loadCountdown(data);
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                  return console.log(thrownError);
+                }
+              });
+          }
+        }
+
+</script>
+

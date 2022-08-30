@@ -1,0 +1,185 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="Rock.Web.UI.RockMasterPage" %>
+<%@ Import Namespace="System.Web.Optimization" %>
+<%@ Import Namespace="Rock" %>
+<%@ Import Namespace="Rock.Model" %>
+<%@ Import Namespace="Rock.Web.UI" %>
+<%@ Import Namespace="Rock.Web.Cache" %>
+<!DOCTYPE html>
+<!--
+  _______       _____           _   ____         _______ _             _____ _
+ |__   __|     / ____|         | | |  _ \       |__   __| |           / ____| |
+    | | ___   | |  __  ___   __| | | |_) | ___     | |  | |__   ___  | |  __| | ___  _ __ _   _
+    | |/ _ \  | | |_ |/ _ \ / _` | |  _ < / _ \    | |  | '_ \ / _ \ | | |_ | |/ _ \| '__| | | |
+    | | (_) | | |__| | (_) | (_| | | |_) |  __/    | |  | | | |  __/ | |__| | | (_) | |  | |_| |
+    |_|\___/   \_____|\___/ \__,_| |____/ \___|    |_|  |_| |_|\___|  \_____|_|\___/|_|   \__, |
+                                                                                           __/ |
+                                                                                          |___/
+-->
+<script runat="server">
+
+  // keep code below to call base class init method
+
+  /// <summary>
+  /// Raises the <see cref="E:System.Web.UI.Control.Init" /> event.
+  /// </summary>
+  /// <param name="e">An <see cref="T:System.EventArgs" /> object that contains the event data.</param>
+  protected override void OnInit( EventArgs e )
+  {
+    base.OnInit( e );
+    var page = PageCache.Get( ( ( RockPage ) Page ).PageId );
+    var transparentNavbar = page.GetAttributeValue( "TransparentNavbar" ).AsBoolean();
+
+    if ( transparentNavbar )
+    {
+        var script = @"$(document).ready(function() {
+            $('body').addClass('transparent-navbar');
+        });";
+        ScriptManager.RegisterStartupScript( this.Page, this.GetType(), "transparentNavbar", script, true );
+    }
+  }
+
+</script>
+
+<html class="no-js">
+<head runat="server">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+
+  <title></title>
+
+  <script src="<%# System.Web.Optimization.Scripts.Url("~/Scripts/Bundles/RockJQueryLatest" ) %>"></script>
+  <script src="<%# ResolveRockUrl("~/Scripts/modernizr.js" ) %>" ></script>
+
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <asp:ContentPlaceHolder ID="css" runat="server" />
+
+  <!-- Theme Included CSS Files -->
+  <link href="<%# ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
+  <link href="<%# ResolveRockUrl("~~/Styles/font-awesome.css", true) %>" rel="stylesheet">
+  <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
+  <link href="<%# ResolveRockUrl("~~/Assets/vendor/magnific-popup/magnific-popup.css", true) %>" rel="stylesheet">
+  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+
+  <!-- Theme Plugins -->
+  <!-- <script src="<%# ResolveRockUrl("~~/Assets/Vendor/bootstrap/js/bootstrap.min.js") %>"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  <script src="<%# ResolveRockUrl("~~/Assets/Vendor/scrollreveal/scrollreveal.min.js") %>"></script>
+  <script src="<%# ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
+
+</head>
+<body runat="server" id="body" class="compass-body">
+
+  <form id="form1" runat="server">
+
+    <Rock:Zone Name="Alert" runat="server" />
+
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top compass tw-shadow-md">
+      <div class="container-fluid no-gutter">
+        <Rock:Zone Name="NavLogo" runat="server" />
+        <Rock:Zone Name="Nav" runat="server" />
+      </div>
+    </nav>
+
+    <div id="body-wrap">
+      <!-- Page Header -->
+      <Rock:Lava runat="server">
+        {%- assign showIcon = CurrentPage.PageDisplayIcon -%}
+        {%- assign showDescription = CurrentPage.PageDisplayDescription -%}
+        {%- assign hideTitleText = CurrentPage | Attribute:'HidePageTitleText' | AsBoolean -%}
+        {%- assign titleOverride = CurrentPage | Attribute:'HeaderTitleOverride' -%}
+        {%- assign headerBGImage = CurrentPage | Attribute:'HeaderBGImage','Url' -%}
+        {%- assign headerBGPosition = CurrentPage | Attribute:'HeaderBGPosition','RawValue' -%}
+
+        {%- if CurrentPage.PageDisplayTitle -%}
+          <header class="page tw-bg-c-primary exclude-nav {% if headerBGImage and headerBGImage != '' %}has-image{% endif %}"
+            {%- if headerBGImage and headerBGImage != '' -%}
+              style="background:linear-gradient(0deg, rgba(0,0,0,.5) 10%, rgba(0,0,0,0) 35%, rgb(0,0,0,0) 70%, rgba(0,0,0,0.5) 95%),url('{{ headerBGImage }}');background-position: {{ headerBGPosition }};background-size:cover;"
+            {%- endif -%}
+          >
+            <div class="fluid-container">
+              <div class="row header-content">
+                <div class="col-lg-12 header-content-inner">
+                  <!-- Page Title -->
+                  {%- unless hideTitleText -%}
+                    <h1 class="section-heading">
+                      {%- if showIcon and CurrentPage.IconCssClass != '' -%}
+                        <div class="page-icon"><i class="{{ CurrentPage.IconCssClass }}"></i></div>
+                      {%- endif -%}
+                      {%- if titleOverride and titleOverride != '' -%}
+                        {{- titleOverride -}}
+                      {%- else -%}
+                        <span id="page-title">{{- CurrentPage.PageTitle -}}</span>
+                      {%- endif -%}
+                    </h1>
+                    {%- if showDescription and CurrentPage.Description != '' -%}
+                      <hr style="display:none;">
+                      <p>{{ CurrentPage.Description }}</p>
+                    {%- endif -%}
+                  {%- endunless -%}
+                </div>
+              </div>
+            </div>
+          </header>
+        {%- else -%}
+          <header class="exclude-nav"></header>
+        {%- endif -%}
+      </Rock:Lava>
+      <span id="rock-title" class="hidden"><Rock:PageTitle ID="PageTitle" runat="server" /></span>
+
+      <asp:ContentPlaceHolder ID="main" runat="server"></asp:ContentPlaceHolder>
+    </div>
+
+    <footer>
+      <Rock:Zone Name="Footer" runat="server" />
+    </footer>
+
+    <%-- controls for scriptmanager and update panel --%>
+    <asp:ScriptManager ID="sManager" runat="server"/>
+    <asp:UpdateProgress id="updateProgress" runat="server" DisplayAfter="800">
+        <ProgressTemplate>
+          <div class="updateprogress-status">
+            <div class="spinner">
+              <div class="rect1"></div>
+              <div class="rect2"></div>
+              <div class="rect3"></div>
+              <div class="rect4"></div>
+              <div class="rect5"></div>
+            </div>
+          </div>
+          <div class="updateprogress-bg modal-backdrop"></div>
+        </ProgressTemplate>
+    </asp:UpdateProgress>
+
+  </form>
+  <a href="#0" class="compass-top js-compass-top tw-bg-c-primary tw-rounded">Top</a>
+  <!-- Theme JavaScript -->
+  <script src="/Themes/Valorous/Scripts/compass.js"></script>
+  <script>
+    $(function(){
+      // Show debug screen
+      if(sessionStorage.getItem('debug') == 1) $('body').addClass('tw-debug-screens');
+
+      // Replace page title
+      var pageTitle = $( '#page-title' );
+      var rockTitle = $( '#rock-title' );
+      if ( pageTitle.length > 0 && rockTitle.length > 0 ) {
+        pageTitle.text( rockTitle.text() );
+      }
+    });
+  </script>
+</body>
+
+</html>

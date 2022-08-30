@@ -1,0 +1,122 @@
+{% stylesheet id:'9embers-accordion' compile:'less' cacheduration:'1' %}
+.accordion-9e .tab {
+// Tab Content
+    .tab-content {
+        overflow: hidden;
+        padding: 1.25rem;
+        -webkit-transition: max-height .35s;
+        -o-transition: max-height .35s;
+        transition: max-height .35s;
+    }
+
+// Label formatting
+    label {
+        padding-right: 3em !important;
+        // Icons
+        &::after {
+            display: block;
+            float: right;
+            font-size: 1em;
+            height: 1em;
+            line-height: 1;
+            position: relative;
+            right: 0;
+            text-align: center;
+            top: 0;
+            -webkit-transition: all .35s;
+            -o-transition: all .35s;
+            transition: all .35s;
+            width: 1em;
+        }
+    }
+
+    input[type=checkbox] {
+        & + label::after {
+            content: "+";
+            font-size: 2.25rem;
+            font-weight: bold;
+            right: -1em;
+        }
+        // When Open
+        &:checked + label::after {
+            color: var(--primary-hex);
+            transform: rotate(135deg);
+        }
+    }
+
+    input[type=radio] {
+        & + label::after {
+            border: solid black;
+            border-width: 0 2px 2px 0;
+            content:'';
+            display: inline-block;
+            font-size: 1.25rem;
+            font-weight: bold;
+            right: -1.5em;
+            padding: 2px;
+            transform: translateY(-5px) rotate(45deg); /* DOWN */
+        }
+        // When Open
+        &:checked + label::after {
+            transform: translateY(0px) rotate(-135deg); /* UP */
+        }
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+{% endstylesheet %}
+
+{% capture uniqueId %}accordion-{{ '' | UniqueIdentifier }}{% endcapture %}
+{% assign inputType = 'radio' %}
+{% if multi and multi == 'true' %}
+    {% assign inputType = 'checkbox' %}
+{% endif %}
+
+<div class="tw-shadow-md accordion-9e">
+{% for item in items %}
+    <div class="tab tw-w-full tw-overflow-hidden tw-border-t">
+        <input class="tw-absolute tw-opacity-0 " id="{{ uniqueId }}-item-{{ forloop.index }}" type="{{ inputType }}" name="{{ uniqueId }}">
+        <label class="tw-block tw-p-5 tw-leading-normal tw-cursor-pointer" for="{{ uniqueId }}-item-{{ forloop.index }}">{{ item.title }}</label>
+        <div class="tab-content tw-border-l-2 tw-bg-gray-100 tw-border-c-primary tw-leading-normal">
+            {{ item.content }}
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+<script>
+$(function(){
+    var selected;
+    $('.tab-content').slideUp(0);
+    $('[name="{{ uniqueId }}"]').on('click', function() {
+        var $this = $(this);
+        var $content = $this.siblings('.tab-content');
+{% if multi != 'true' %}
+        // Close the radio button when clicking it again
+        if (selected === this) {
+            this.checked = false;
+            selected = null;
+        } else {
+            selected = this;
+        }
+        $('.tab-content').not($this).slideUp(500);
+        setTimeout(function(){
+            // Scroll into view
+            var navHeight = $('#mainNav').outerHeight(true);
+            var thisTop = $this.offset().top
+            $('html, body').animate({
+                scrollTop: thisTop - navHeight
+            }, 500)
+        }.bind(this), 500);
+{% endif %}
+
+        if(this.checked == true) { // Closing
+            $content.slideDown(500);
+        } else { // Opening
+            $content.slideUp(500);
+        }
+    });
+});
+</script>

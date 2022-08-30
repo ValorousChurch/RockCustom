@@ -1,0 +1,295 @@
+{% comment %}
+*********************************** SHORTCODE NAME ***************************************
+* [9 Embers] Hero Slider
+{% endcomment %}
+
+
+{% comment %}
+*********************************** SHORTCODE TagType ************************************
+Block
+{% endcomment %}
+
+
+{% comment %}
+*********************************** SHORTCODE TAG NAME ***********************************
+heroslide
+{% endcomment %}
+
+
+{% comment %}
+*********************************** SHORTCODE DESCRIPTION ********************************
+Utlizes the SwiperJS library along with AnimateCSS to give a friendly user experience. This swiper is simply just hero images, with a title (optional), sub-title (optional), and some HTML content (optional).
+{% endcomment %}
+
+
+{% comment %}
+********************************* SHORTCODE DOCUMENTATION ********************************
+To add this slider, simply add the shorcode as follows - with optional parameters.
+
+-{-[- heroswiper -]-}-
+    [[ item
+        image:'https://i.picsum.photos/id/674/1200/500.jpg?hmac=XPqT0G4Ig8WMvIICqGOF0VXbQ2Gs154e1k8Wv6rnUH4'
+        title:'New Here?'
+        subtitle:'As the saying goes, a picture is worth a thousand words! Show your community who you are, and what you are all about!' ]]
+    [[ enditem ]]
+    [[ item
+        image:'https://i.picsum.photos/id/223/1200/500.jpg?hmac=ux38_WuCtDxnJ9UUutmyq6t8mXYxT-emr1LyBNuO824'
+        title:'Need another slide?'
+        darkoverlay:'false'
+        subtitle:'The more the better! Easily add more images, and find more ways for the community to be involved.' ]]
+    [[ enditem ]]
+-{-[- endheroswiper -]-}-
+
+Note: Due to the javascript requirements of this shortcode you will need to do a full page reload before changes to the shortcode appear on your page.
+{% endcomment %}
+
+{% comment %}
+********************************* JS DOCUMENTATION & REQUIREMENTS ********************************
+https://swiperjs.com/ - SLIDER
+https://tailwindcss.com/docs - UTILITY CLASSES (OUTSIDE OF SHORTCODE)
+https://animate.style/ - ANIMATES CONTENT
+{% endcomment %}
+
+{% comment %}
+************************ SHORTCODE PARAMETERS ********************
+heightclasses  - xs:h-screen-75 sm:h-screen-75 md:h-screen/2 lg:h-screen-75 xl:h-screen-75 min-h-500
+customcontent  - false
+{% endcomment %}
+
+{% comment %}
+************************ SHORTCODE MARKUP IS BELOW ********************
+{% endcomment %}
+
+{{- 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css' | AddCssLink -}}
+{{- 'https://unpkg.com/swiper/swiper-bundle.min.css' | AddCssLink -}}
+
+{%- assign heroSwiperId = uniqueid -%}
+
+<style>
+#swiper-{{ heroSwiperId }} .swiper-container {
+    text-align: center;
+    overflow: hidden;
+}
+#swiper-{{ heroSwiperId }} .swiper-slide {
+    overflow: auto;
+    color: white;
+    background-color: #f2f2f2;
+}
+#swiper-{{ heroSwiperId }} .swiper-slide:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    width: 40px;
+    height: 40px;
+    background-color: #ccc;
+    -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
+    animation: sk-rotateplane 1.2s infinite ease-in-out;
+}
+#swiper-{{ heroSwiperId }} .swiper-slide__inner {
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+#swiper-{{ heroSwiperId }} .swiper-slide__inner > div {
+    max-width: 80%;
+    overflow: auto;
+}
+
+#swiper-{{ heroSwiperId }} .swiper-lazy {
+    opacity: 0;
+    transition: opacity 700ms ease-in-out;
+}
+
+#swiper-{{ heroSwiperId }} .swiper-lazy-loaded {
+    opacity: 1 !important;
+}
+
+#swiper-{{ heroSwiperId }} .swiper-button-next {
+    right: 16px;
+}
+
+#swiper-{{ heroSwiperId }} .swiper-button-prev {
+    left: 16px;
+}
+
+@-webkit-keyframes sk-rotateplane {
+    0% {
+        -webkit-transform: perspective(120px);
+    }
+    50% {
+        -webkit-transform: perspective(120px) rotateY(180deg);
+    }
+    100% {
+        -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg);
+    }
+}
+@keyframes sk-rotateplane {
+    0% {
+        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    }
+    100% {
+        transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+        -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
+}
+#swiper-{{ heroSwiperId }} .swiper-progress-bar {
+  position: relative;
+  width: 100%;
+  display: block;
+  z-index: 1;
+  height: 5px;
+  margin-top: -5px;
+  z-index: 10;
+}
+#swiper-{{ heroSwiperId }} .swiper-progress-bar .slide_progress-bar {
+  position: absolute;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  width: auto;
+  clear: both;
+  opacity: 0;
+  left: 0;
+  right: 0;
+}
+#swiper-{{ heroSwiperId }} .swiper-progress-bar .slide_progress-bar:after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  height: 100%;
+  width: 0;
+  content: "";
+}
+#swiper-{{ heroSwiperId }} .swiper-progress-bar.active .slide_progress-bar {
+  opacity: 1;
+}
+#swiper-{{ heroSwiperId }} .swiper-progress-bar.animate .slide_progress-bar:after {
+  transition: width linear;
+  transition-delay: unset;
+  width: 100%;
+  transition-duration: 5s;
+}
+</style>
+
+<!-- Slider main container -->
+<div class="swiper-container {% if heightclasses == '' %}xs:tw-h-screen-75 sm:tw-h-screen-75 md:tw-h-screen/2 lg:tw-h-screen-75 xl:tw-h-screen-75 tw-min-h-300{% else %}{{ heightclasses }}{% endif %} relative" id="swiper-{{- heroSwiperId -}}">
+    <div class="swiper-wrapper">
+
+        {%- for item in items -%}
+            {%- assign slideImage = '' -%}
+            {%- if item.image != null -%}{%- assign slideImage = item.image -%}{%- else -%}{%- assign slideImage = 'https://picsum.photos/900/360' -%}{%- endif -%}
+            <!-- SLIDE  -->
+            <div class="swiper-slide">
+                <div data-background="{{- slideImage -}}" class="{% if item.imageposition == null %}tw-bg-center{% else %}tw-bg-{{- item.imageposition -}}{% endif %} slider_image swiper-slide__inner swiper-lazy {% if item.darkoverlay == null %}after:tw-bg-black{% endif %}">
+                    <div>
+                        <section class="swiper-lazy tw-text-white tw-body-font tw-h-full tw-w-full tw-absolute tw-z-10 tw-left-0 tw-top-0">
+                            <div class="container tw-mx-auto tw-flex tw-px-5 tw-py-24 tw-items-center tw-justify-center tw-flex-col tw-h-full">
+                                <div class="tw-text-center lg:tw-w-2/3 tw-w-full">
+                                    {% comment %} TITLE {% endcomment %}
+                                    {%- if item.title != null -%}
+                                    <h1 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.2s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="tw-title-font tw-mb-1 tw-font-bold tw-text-white">
+                                        {{- item.title -}}
+                                    </h1>
+                                    {%- endif -%}
+                                    {% comment %} SUBTITLE {% endcomment %}
+                                    {%- if item.subtitle != null -%}
+                                    <h3 data-swiper-animation="animate__fadeInDown" data-duration=".5s" data-delay="0.4s" data-swiper-out-animation="animate__fadeOut" data-out-duration=".2s" class="tw-text-normal tw-text-white tw-leading-normal tw-text-lg md:tw-text-3xl">
+                                        {{- item.subtitle -}}
+                                    </h3>
+                                    {%- endif -%}
+                                    {% comment %} ANYTHING ELSE {% endcomment %}
+                                    {{- item.content -}}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        {%- endfor -%}
+
+    </div>
+    {% comment %} <div class="swiper-pagination swiper-pagination-white mb-2"></div> {% endcomment %}
+    {% if arrows == 'true' %}
+    <div class="swiper-button-next swiper-button-white tw-mx-4"></div>
+    <div class="swiper-button-prev swiper-button-white tw-mx-4"></div>
+    {% endif %}
+    <!-- Progressbar -->
+    <div class="swiper-progress-bar">
+        <span class="slide_progress-bar"></span>
+    </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@cycjimmy/swiper-animation@4/dist/swiper-animation.umd.min.js"></script>
+
+<!-- Initialize Swiper -->
+<script>
+    var swiperAnimation = new SwiperAnimation();
+    var mySwiper = new Swiper("#swiper-{{- heroSwiperId -}}", {
+        watchSlidesProgress: true,
+        speed: 500,
+        loop: true,
+        lazy: true,
+        preloadImages: false,
+        autoplay: {
+            delay: 5000,
+            pauseOnMouseEnter: false,
+            disableOnInteraction: false
+        },
+        keyboard: {
+            enabled: true,
+            onlyInViewport: false,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        on: {
+            init: function () {
+                swiperAnimation.init(this).animate();
+                $(".swiper-progress-bar").removeClass("animate");
+                $(".swiper-progress-bar").removeClass("active");
+                $(".swiper-progress-bar").eq(0).addClass("animate");
+                $(".swiper-progress-bar").eq(0).addClass("active");
+            },
+            slideChange: function () {
+                swiperAnimation.init(this).animate();
+            },
+            slideChangeTransitionStart: function () {
+                $(".swiper-progress-bar").removeClass("animate");
+                $(".swiper-progress-bar").removeClass("active");
+                $(".swiper-progress-bar").eq(0).addClass("active");
+            },
+            slideChangeTransitionEnd: function () {
+                $(".swiper-progress-bar").eq(0).addClass("animate");
+            },
+            touchStart: function () {
+                $(".swiper-progress-bar").removeClass("animate");
+                $(".swiper-progress-bar").removeClass("active");
+                $(".swiper-progress-bar").eq(0).addClass("active");
+            },
+            touchEnd: function () {
+                $(".swiper-progress-bar").eq(0).addClass("animate");
+            }
+        }
+    });
+</script>

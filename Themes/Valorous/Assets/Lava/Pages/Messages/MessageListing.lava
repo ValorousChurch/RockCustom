@@ -1,0 +1,27 @@
+<div class="row d-flex flex-wrap">
+{% for message in Items %}
+    {% unless message.Status == 'Approved' %}{% continue %}{% endunless %}
+    <div class=" col-md-4 col-sm-6 mb-4">
+        <div class="card h-100" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
+            <img src="{{ message | Attribute:'Video','DefaultThumbnailUrl' }}" class="card-img-top" alt="{{ message.Title }}">
+            <div class="card-body">
+        {% assign titleParts = message.Title | Split:' - ' %}
+        {% assign titleSize = titleParts | Size %}
+                <h3 class="card-title">
+                    {{ titleParts[0] }}
+        {% if titleSize > 1 %}
+                    <small style="position:relative;top:-2px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
+        {% endif %}
+                </h3>
+                <h4 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h4>
+                <p class="card-text">{{ message.StartDateTime | Date:'MMMM d, yyyy' }}</p>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% comment %} Page Navigation {% endcomment %}
+{%- if Pagination.TotalPages > 1 -%}
+    <style>.pagination>.disabled>span{color:#ccc}</style>
+    {[ pager current:'{{ Pagination.CurrentPage }}' total:'{{ Pagination.TotalPages }}' class:'text-center' ]}
+{%- endif -%}

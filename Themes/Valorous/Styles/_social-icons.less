@@ -1,0 +1,79 @@
+@import "_theme-variables.less";
+
+.social {
+  text-align: center;
+  font-size: 2.8em;
+  color: @theme-foreground;
+  &.small {
+    font-size: 2em;
+  }
+  &.light {
+    color: white;
+  }
+  overflow: hidden;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  i {
+    margin: .3em;
+    cursor: pointer;
+    transition: all 300ms;
+    transform: translateZ(0);
+
+    &:hover {
+      margin-top: -1px;
+      -moz-transform: translate(0px, -5px);
+      -ms-transform: translate(0px, -5px);
+      -o-transform: translate(0px, -5px);
+      -webkit-transform: translate(0px, -5px);
+      transform: translate(0px, -5px)
+    }
+
+    &#rock:hover {
+      color: @rock;
+    }
+
+    &#facebook:hover {
+      color: @facebook;
+    }
+
+    &#youtube:hover {
+      color: @youtube;
+    }
+
+    &#instagram:hover {
+      color: @instagram;
+    }
+
+    &#twitter:hover {
+      color: @twitter;
+    }
+
+    &#github:hover {
+      color: @github;
+    }
+
+    &#linkedin:hover {
+      color: @linkedin;
+    }
+
+    &#code:hover {
+      color: @code;
+    }
+
+    &#stack:hover {
+      color: @stack;
+    }
+
+    &#plus:hover {
+      color: @plus;
+    }
+
+    &#mail:hover {
+      color: @mail;
+    }
+  }
+}

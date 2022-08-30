@@ -1,0 +1,138 @@
+{% assign speaker = Item | Attribute:'Speaker','Object' %}
+{% assign speakerPerson = speaker | Attribute:'Person','Object' %}
+{% assign speakerFb = speakerPerson | Attribute:'Facebook','RawValue' %}
+{% assign speakerIg= speakerPerson | Attribute:'Instagram','RawValue' %}
+{% assign videoId = Item | Attribute:'Video','Id' %}
+
+{% assign podcastLink = Item | Attribute:'PodcastLink','RawValue' %}
+{% assign videoDownload = Item | Attribute:'VideoDownload','RawValue' %}
+{% assign audioDownload = Item | Attribute:'AudioDownload','RawValue' %}
+
+{% assign messageNotes = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' %}
+{% assign messageNotesSize = messageNotes | Size %}
+{% if messageNotesSize > 0 %}
+    {% assign studyGuide = messageNotes[0] | Attribute:'PDF','Guid' %}
+    {% if studyGuide and studyGuide != '' %}
+        {% assign studyGuideLink = '/GetFile.ashx?guid=' | Append:studyGuide %}
+    {% endif %}
+{% endif %}
+{% capture resources %}
+[
+{% if studyGuideLink and studyGuideLink != '' %}
+    {
+        Title: "Study Guide",
+        Link: "{{ studyGuideLink }}",
+        Icon: "fa fa-file-pdf"
+    },
+{% endif %}
+{% if podcastLink and podcastLink != '' %}
+    {
+        Title: "Audio Podcast",
+        Link: "{{ podcastLink }}",
+        Icon: "fa fa-headphones"
+    },
+{% endif %}
+{% if videoDownload and videoDownload != '' %}
+    {
+        Title: "Video Download",
+        Link: "{{ videoDownload }}",
+        Icon: "fa fa-film"
+    },
+{% endif %}
+{% if audioDownload and audioDownload != '' %}
+    {
+        Title: "Audio Download",
+        Link: "{{ audioDownload }}",
+        Icon: "fa fa-volume-up"
+    },
+{% endif %}
+]
+{% endcapture %}
+{% assign resources = resources | FromJSON %}
+{% assign resourceSize = resources | Size %}
+
+<div class="bg-gray-900 text-white py-4 px-3 tw--mx-6 md:tw--mx-16"><!-- begin video area -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                {[ mediaplayer media:'{{ videoId }}' relatedentityid:'{{ Item.Id }}' relatedentitytypeid:'208' ]}{[ endmediaplayer ]}
+		        <h1 class="mt-1">{{ Item.Title }}</h1>
+		        <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
+	        </div>
+        </div>
+	</div>
+</div><!-- end video area -->
+
+<div class="container my-4">
+	<div class="row">
+		<div class="col-md-4"><!-- begin resources -->
+            <div class="panel panel-default">
+                <div class="panel-heading">Downloads &amp; Resources</div>
+                <div class="list-group">
+                {% if resourceSize > 0 %}
+                    {% for resource in resources %}
+                        <a href="{{ resource.Link }}" class="list-group-item" target="_blank"><i class="{{ resource.Icon }}"></i> {{ resource.Title }}</a>
+                    {% endfor %}
+                {% else %}
+                    <a class="list-group-item">No Resources Available</a>
+                {% endif %}
+                </div>
+            </div>
+		</div><!-- end resources -->
+        <div class="col-md-8 "><!-- begin speaker bio -->
+            <div class="col-xs-5 col-sm-4 col-sm-3 col-md-3 mb-2 photo-wrap">
+            {% assign imageGuid = speaker | Attribute:'Photo','Guid' %}
+            {% unless imageGuid and imageGuid != '' %}
+                {% assign imageGuid = speakerPerson.Photo.Guid %}
+            {% endunless %}
+                <img src="/getimage.ashx?Guid={{ imageGuid }}&amp;w=220&amp;h=220&amp;format=jpg&amp;quality=70&amp;mode=crop&amp;scale=both" class="img-responsive rounded shadow-md" alt="{{ speakerPerson.FullName }}" style="border:3px solid white">
+            </div>
+            <div class="details col-xs-12 col-sm-8 col-sm-9 col-md-9">
+                <h3 class="name-title mt-0">{{ speaker.Value }}</h4>
+                <div class="bio">
+                    <p class="mb-2">{{ speaker.Description | NewlineToBr }}</p>
+                </div>
+                <ul class="social-connect list-unstyled list-inline">
+                {% if speakerFb and speakerFb != '' %}
+                    <li class="facebook"><a class="btn-link" target="_blank" href="{{ speakerFb }}"><i class="fa fa-facebook"></i> Facebook</a></li>
+                {% endif %}
+                {% if speakerIg and speakerIg != '' %}
+                    <li class="instagram"><a class="btn-link" target="_blank" href="{{ speakerIg }}"><i class="fa fa-instagram"></i> Instagram</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </div><!-- end speaker bio -->
+    </div><!-- end row -->
+
+{% assign series = Item.ParentItems | Select:'ContentChannelItem' | Where:'ContentChannelId','4' | First %}
+{% if series and series != '' %}
+    {% assign seriesItems = series.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','5' | Where:'Status','Approved' | OrderBy:'StartDateTime' %}
+    {% assign seriesCount = seriesItems | Size %}
+    {% if seriesCount > 1 %}
+    <div class="row"><!-- begin series listing -->
+        <div class="col-md-12">
+            <h3>More from the series: {{ series.Title }}</h3>
+        </div>
+        {% for message in seriesItems %}
+        <div class=" col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
+                <img src="{{ message | Attribute:'Video','DefaultThumbnailUrl' }}" class="card-img-top" alt="{{ message.Title }}">
+                <div class="card-body">
+            {% assign titleParts = message.Title | Split:' - ' %}
+            {% assign titleSize = titleParts | Size %}
+                    <h4 class="card-title">
+                        {{ titleParts[0] }}
+            {% if titleSize > 1 %}
+                        <small style="position:relative;top:-2px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
+            {% endif %}
+                    </h4>
+                    <h5 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h5>
+                    <p class="card-text">{{ message.StartDateTime | Date:'MMMM d, yyyy' }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div><!-- end series listing -->
+    {% endif %}
+{% endif %}
+</div><!-- end container -->

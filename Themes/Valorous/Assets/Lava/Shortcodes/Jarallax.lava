@@ -1,0 +1,207 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.5/jarallax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.5/jarallax-video.min.js" ></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jarallax/1.12.5/jarallax.min.css" />
+
+{% assign id = uniqueid -%}
+{% assign bodyZindex = zindex | Plus:1 -%}
+{% assign speed = speed | AsInteger %}
+
+{% if speed > 0 -%}
+    {% assign speed = speed | DividedBy:100 -%}
+    {% assign speed = speed | Plus:1 -%}
+{% elseif speed == 0 -%}
+    {% assign speed = 1 -%}
+{% else -%}
+    {% assign speed = speed | DividedBy:50 -%}
+    {% assign speed = speed | Plus:1 -%}
+{% endif -%}
+
+{% if videourl != '' -%}
+    <div id="{{ id }}" class="jarallax {{addclass}}" data-img-size="{{ imgsize }}" data-jarallax-video="{{ videourl }}" data-type="{{ type }}" data-keep-img='true' data-speed="{{ speed | ToString | Replace:',', '.' }}" data-img-position="{{ position }}" data-z-index="{{ bodyZindex }}" data-video-start-time="{{ videostarttime }}" data-video-end-time="{{ videoendtime }}" >
+        {% if image != "" -%}
+            {% comment %}
+            <img class="jarallax-img" src="{{ image | Escape }}" alt="">
+            {% endcomment %}
+        {% endif -%}
+{% else -%}
+    <div id="{{ id }}" data-jarallax class="jarallax {{addclass}}" data-img-size="{{ imgsize }}" data-type="{{ type }}" data-speed="{{ speed | ToString | Replace:',', '.' }}" data-img-position="{{ position }}" data-object-position="{{ position }}" data-background-position="{{ position }}" data-zindex="{{ bodyZindex }}">
+    <img class="jarallax-img" src="{{ image | Escape }}" alt="">
+{% endif -%}
+
+    <script>
+    var BrowserDetect = {
+        init: function () {
+            this.browser = this.searchString(this.dataBrowser) || "Other";
+            this.version = this.searchVersion(navigator.userAgent) || this.searchVersion(navigator.appVersion) || "Unknown";
+        },
+        searchString: function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var dataString = data[i].string;
+                this.versionSearchString = data[i].subString;
+
+                if (dataString.indexOf(data[i].subString) !== -1) {
+                    return data[i].identity;
+                }
+            }
+        },
+        searchVersion: function (dataString) {
+            var index = dataString.indexOf(this.versionSearchString);
+            if (index === -1) {
+                return;
+            }
+
+            var rv = dataString.indexOf("rv:");
+            if (this.versionSearchString === "Trident" && rv !== -1) {
+                return parseFloat(dataString.substring(rv + 3));
+            } else {
+                return parseFloat(dataString.substring(index + this.versionSearchString.length + 1));
+            }
+        },
+
+        dataBrowser: [
+            {string: navigator.userAgent, subString: "Edge", identity: "MS Edge"},
+            {string: navigator.userAgent, subString: "MSIE", identity: "Explorer"},
+            {string: navigator.userAgent, subString: "Trident", identity: "Explorer"},
+            {string: navigator.userAgent, subString: "Firefox", identity: "Firefox"},
+            {string: navigator.userAgent, subString: "Opera", identity: "Opera"},
+            {string: navigator.userAgent, subString: "OPR", identity: "Opera"},
+
+            {string: navigator.userAgent, subString: "Chrome", identity: "Chrome"},
+            {string: navigator.userAgent, subString: "Safari", identity: "Safari"}
+        ]
+    };
+
+    BrowserDetect.init();
+    if (BrowserDetect.browser = "Explorer") {
+        $('body').css( "overflow-x", "hidden" );
+    }
+
+
+    {% if image != "" %}
+      var tmpCanInitParallax = jarallax.constructor.prototype.canInitParallax;
+          jarallax.constructor.prototype.canInitParallax = function(callback) {
+            // Intercept the set call for the video object and manually set the image
+            var imageHandler = {
+              set(target, prop, value) {
+                target[prop] = value;
+                if (prop == 'video') {
+                    value.videoImage = "{{image}}";
+                    value.userEventsList['started'][0] = function () {
+
+                        self.image.$default_item = self.image.$item;
+                        self.image.$item = self.$video;
+
+                        // set video width and height
+                        self.image.width = self.video.videoWidth || 1280;
+                        self.image.height = self.video.videoHeight || 720;
+                        self.options.imgWidth = self.image.width;
+                        self.options.imgHeight = self.image.height;
+                        self.coverImage();
+                        self.clipContainer();
+                        self.onScroll();
+
+                        // hide image
+                        if (self.image.$default_item) {
+                            self.css(self.image.$default_item, {
+                                'transition': 'opacity .25s ease-in-out',
+                                '-moz-transition': 'opacity .25s ease-in-out',
+                                '-webkit-transition': 'opacity .25s ease-in-out',
+                                'opacity': 1,
+                            });
+                            setTimeout(function () {
+                                self.image.$default_item.style.opacity = 0;
+                            }, 500);
+                        }
+                    };
+                }
+                return true;
+              }
+            };
+            // Use a proxy'ed JS object
+            var self = new Proxy(this, imageHandler);
+            self.defaultInitImgResult = true;
+            self.image.bgImage = 'url("{{image}}")';
+
+            // save default user styles
+            var curStyle = self.$item.getAttribute('style');
+            if (curStyle) {
+                self.$item.setAttribute('data-jarallax-original-styles', curStyle);
+            }
+
+            // set new background
+            self.css(self.$item, {
+                'background-image': self.image.bgImage,
+                'background-position': 'center',
+                'background-size': 'cover',
+                'transition': 'opacity .25s ease-in-out',
+                '-moz-transition': 'opacity .25s ease-in-out',
+                '-webkit-transition': 'opacity .25s ease-in-out',
+                'opacity': 1,
+            });
+
+            // Now actually call the method against the proxy object
+            return tmpCanInitParallax.apply(self);
+          }
+      {% endif %}
+
+
+
+      jarallax(document.querySelectorAll('#{{ id }}'), {
+	    disableParallax: function () {
+          return /iPad|iPhone|iPod|Android|Edge|MSIE|IE/.test(navigator.userAgent);
+        },
+        {% if disablemv == "true" %}
+        disableVideo: function () {
+          return /iPad|iPhone|iPod|Android|Edge|MSIE|IE/.test(navigator.userAgent);
+        }
+        {% endif %}
+      });
+    </script>
+
+        {% if blockContent != '' -%}
+            <div class="parallax-content tw-z-10 tw-absolute tw-w-full tw-h-full">
+                {{ blockContent }}
+            </div>
+        {% else -%}
+            {{ blockContent }}
+        {% endif -%}
+
+        {% if churchonlinecountdown == 'true' -%}
+        <div class="tw-bg-c-primary tw-pt-16 tw-pb-8 md:tw-pt-20 md:tw-pb-10 tw-opacity-80 tw-z-50 tw-absolute tw-bottom-0 tw-block tw-w-full tw-text-white">
+            <div class="streaming-now">
+                {% include '/Themes/Compass/Assets/Lava/Shortcodes/ChurchOnlineCountdown.lava' %}
+            </div>
+        </div>
+        {% endif -%}
+    </div>
+
+<style>
+#{{ id }} {
+    /* eventually going to change the height using media queries with mixins using sass, and then include only the classes I want for certain parallaxes */
+    min-height: {{ height }};
+    background: transparent;
+    position: relative;
+    z-index: 0;
+}
+
+#{{ id }} .jarallax-img {
+    position: absolute;
+    object-fit: {{ imgsize }};
+    object-position: {{ position }}; /* default value: image is centered*/
+    /* support for plugin https://github.com/bfred-it/object-fit-images */
+    font-family: 'object-fit: {{ imgsize }};';
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+#{{ id }} .parallax-content{
+    display: inline-block;
+    margin: {{ contentpadding }};
+    color: {{ contentcolor }};
+    text-align: {{ contentalign }};
+	width: 100%;
+}
+</style>
