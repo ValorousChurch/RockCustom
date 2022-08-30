@@ -20,13 +20,14 @@
                           <a class="tw-text-gray-700" href="https://instagram.com/valorous.church" target="_blank">
                             <i id="instagram" class="fa fa-instagram sr-icons"></i>
                           </a>
-                          <a class="tw-text-gray-700" href="mailto:hello@valorouschurch.com" target="_blank">
+                          <a class="tw-text-gray-700" href="/contact?Source=Public%20Site%20Footer">
                             <i id="mail" class="fa fa-envelope sr-icons"></i>
                           </a>
                           <a class="tw-text-gray-700" href="https://youtube.com/c/valorouschurch" target="_blank">
                             <i id="youtube" class="fa fa-youtube sr-icons"></i>
                           </a>
                         </div>
+                        <p class="tw-font-bold tw-mb-0 tw-mt-1">843.280.1270 | 701 Main St. NMB, SC 29582</p>
                     </div>
                 </div>
             </div>
