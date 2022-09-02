@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32630.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RockWeb", "..\..\Rock\RockWeb", "{22348267-9BDF-4B5E-BB6E-37B5FA770224}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RockWeb", "..\..\Rock\RockWeb\", "{E43B5D55-BED0-4E74-BF97-9327F9A9D656}"
 	ProjectSection(WebsiteProperties) = preProject
 		UseIISExpress = "true"
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
@@ -20,6 +20,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RockWeb", "..\..\Rock\RockW
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "6229"
 		SlnRelativePath = "..\..\Rock\RockWeb\"
 	EndProjectSection
 	ProjectSection(ProjectDependencies) = postProject
@@ -50,10 +51,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{E43B5D55-BED0-4E74-BF97-9327F9A9D656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E43B5D55-BED0-4E74-BF97-9327F9A9D656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E43B5D55-BED0-4E74-BF97-9327F9A9D656}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{70558235-6441-416C-B754-15E44264111D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70558235-6441-416C-B754-15E44264111D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70558235-6441-416C-B754-15E44264111D}.Release|Any CPU.ActiveCfg = Release|Any CPU
