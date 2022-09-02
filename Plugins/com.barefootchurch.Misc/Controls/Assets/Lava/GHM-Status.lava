@@ -1,0 +1,150 @@
+{{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
+{{ 'https://fonts.googleapis.com/css2?family=Montserrat' | AddCssLink }}
+
+<style>
+    #app {
+        background-color: #44af79;
+        font-family:'Montserrat', sans-serif;
+        height: 1080px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 1920px;
+    }
+    #checkin-list, #stats-today, #stats-overall {
+        background-color: rgba( 255, 255, 255, 0.65);
+        min-height: 432px
+    }
+    h1, h2, h3 {
+        text-align: center;
+    }
+    h1 {
+        color: white;
+        font-size: 5.5em;
+        font-weight: 900;
+    }
+    #stats h1 {
+        color: inherit;
+    }
+    h2 {
+        font-size: 3.5em;
+        font-weight: 600;
+    }
+    h3 {
+        font-size: 2.25em;
+        font-weight: 600;
+    }
+    ul {
+        list-style: none;
+    }
+    li {
+        padding: 0;
+        font-size: 3.25em;
+        text-align: center;
+    }
+</style>
+
+<div id="app">
+    <div class="mx-auto mt-3" style="height:139px;width:983px;background-image:url('https://barefootchurch.s3.amazonaws.com/Public/temp/gh-logo.png');background-repeat:no-repeat;"></div>
+    <div class="d-flex flex-row">
+        <div id="checkin-list" style="flex: 1 1 40%" class="m-4 p-4 rounded-lg">
+            <h2 class="mt-0 mb-3 pb-4 border-bottom">Checked In List</h2>
+            <ul>
+                <li v-for="family in waitingFamlies">
+                    <b>[[ family.ConnectionId ]]</b> - [[  family.LastName ]]
+                </li>
+            </ul>
+        </div>
+        <div id="stats" style="flex: 1 1 70%" class="m-4 ml-0">
+            <div id="stats-today" class="p-4 rounded-lg">
+                <h2 class="mt-0 mb-0 pb-4 border-bottom">Today's Stats</h2>
+                <div class="d-flex flex-row">
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-users"></span></h1>
+                        <h1>[[ shoppedFamilyCount ]]</h1>
+                        <h3>Families Served</h3>
+                    </div>
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-user"></span></h1>
+                        <h1>[[ shoppedChildCount ]]</h1>
+                        <h3>Children Served</h3>
+                    </div>
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-gift"></span></h1>
+                        <h1>[[ ( shoppedChildCount * 3 ).toLocaleString() ]]</h1>
+                        <h3>Gifts Given</h3>
+                    </div>
+                </div>
+            </div>
+            {% assign overallStats = 'ghm-overall-stats' |  PersistedDataset %}
+            <div id="stats-overall" class="mt-4 p-4 rounded-lg">
+                <h2 class="mt-0 mb-0 pb-4 border-bottom">Overall Stats</h2>
+                <div class="d-flex flex-row">
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-users"></span></h1>
+                        <h1>{{ overallStats.Famlies }}</h1>
+                        <h3>Families Registered</h3>
+                    </div>
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-user"></span></h1>
+                        <h1>{{ overallStats.Children }}</h1>
+                        <h3>Children Registerd</h3>
+                    </div>
+                    <div style="flex: 1" class="mt-4">
+                        <h1><span class="fa fa-gift"></span></h1>
+                        <h1>{{ overallStats.Gifts | Format:'#,##0' }}</h1>
+                        <h3>Gifts Collected</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+var app = new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+
+    data: {
+        famlies: [ ]
+    },
+
+    methods: {
+        loadData() {
+            $.getJSON( 'https://rock.barefootchurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
+        }
+    },
+
+    computed: {
+        waitingFamlies() {
+            return this.famlies
+                .filter( item => item.Status === 'waiting' )
+                .sort( ( a, b ) => {
+                    if( a.CheckedInTimeStatus == b.CheckedInTimeStatus ) {
+                        return a.CheckedInTime > b.CheckedInTime ? 1 : -1;
+                    }
+                    return a.CheckedInTimeStatus > b.CheckedInTimeStatus ? 1 : -1;
+                });
+        },
+        shoppedFamlies() {
+            return this.famlies.filter( item => item.Status === 'shopped' );
+        },
+        shoppedFamilyCount() {
+            return this.shoppedFamlies.length;
+        },
+        shoppedChildCount() {
+            return this.shoppedFamlies.reduce( ( total, obj ) => total + obj.Children.length, 0 );
+        }
+    },
+
+    mounted() {
+        var timeout = 30000;
+        var loadData = () => {
+            this.loadData();
+            setTimeout( loadData, timeout );
+        };
+        loadData();
+    }
+});
+</script>

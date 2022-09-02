@@ -1,0 +1,141 @@
+{{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
+
+{% attributequalifier where:'AttributeId==11417 && Key=="values"' limit:1 securityenabled:'false'%}
+    {% assign timeSlots = attributequalifier.Value | Split:',' %}
+{% endattributequalifier %}
+
+<div id="app">
+    <div class="row">
+        <div class="col-md-12">
+            {[ panel title:'Filters' icon:'fa fa-filter' ]}
+                <div class="form-group col-md-4">
+                    <label class="control-label">Last Name</label>
+                    <div class="control-wrapper">
+                        <input class="form-control" v-model="nameSearch">
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Time Slot</label>
+                    <div class="control-wrapper">
+                        <select class="form-control" v-model="timeSearch">
+                            <option value="*">All</option>
+                            {% for value in timeSlots %}
+                            <option value="{{ value }}">{{ value | Date:'h:mm tt' }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Status</label>
+                    <div class="control-wrapper">
+                        <select class="form-control" v-model="statusSearch">
+                            <option value="*">All</option>
+                            <option value="missing">Not Here</option>
+                            <option value="missingLate">Not Here - Late</option>
+                            <option value="waiting">Waiting</option>
+                            <option value="shopped">Shopped</option>
+                        </select>
+                    </div>
+                </div>
+            {[ endpanel ]}
+        </div>
+    </div>
+    <em class="text-right" style="display:block;position:relative;top:-12px">Showing [[ filteredSize]] of [[ size ]] Famlies.</em>
+    <div class="row d-flex flex-wrap">
+        <family-card inline-template v-for="family in filteredFamlies" :key="family.ConnectionId" :family="family">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header" :class="headerClasses">
+                    <h5 class="card-title text-center">[[ family.ParentName ]]</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Time Slot: <b>[[ family.TimeSlot12 ]]</b>
+                        <em>[[ family.TimeStatus ]]</em>
+                    </p>
+                    <ul class="list-group m-0">
+                        <li v-for="child in family.Children" class="list-group-item">[[ child.Name ]] - [[ child.Age ]]</li>
+                    </ul>
+                </div>
+                <div class="card-footer text-center d-flex">
+                    {% assign showInfo = 1014 | HasRightsTo:'View','Rock.Model.Page' %}
+                    {% assign connectionId = family | First | Property:'ConnectionId' %}
+                    {% if showInfo %}
+                    <a :href="`javascript:Rock.controls.modal.show($(this), '/page/1014?ConnectionRequestId=${ family.ConnectionId }&pb=&sb=Done&t=Connection%20Request')`" class="btn btn-warning mr-3" style="flex:1">Info</a>
+                    {% endif %}
+                    <a :href="`javascript:Rock.controls.modal.show($(this), '/page/1016?WorkflowTypeId=215&Action=check-in&ConnectionId=${ family.ConnectionId }&PrinterId={{ PageParameter.PrinterId }}&pb=&sb=Done&t=Check-In')`" class="btn btn-success mr-3" style="flex:1">Check In</a>
+                    <a :href="`javascript:Rock.controls.modal.show($(this), '/page/1016?WorkflowTypeId=215&Action=print-kids&ConnectionId=${ family.ConnectionId }&PrinterId={{ PageParameter.PrinterId }}&pb=&sb=Done&t=Check-In')`" class="btn btn-info" style="flex:1">Print Kids</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </family-card>
+    </div>
+</div>
+
+<script>
+Vue.component( 'family-card', {
+    props: ['family'],
+
+    computed: {
+        headerClasses() {
+            switch( this.family.Status ) {
+                case 'shopped': return 'bg-info text-white';
+                case 'waiting': return 'bg-success text-white';
+                case 'missingLate': return 'bg-warning text-white';
+            }
+            return '';
+        }
+    }
+});
+var app = new Vue({
+    el: '#app',
+    delimiters: ['[[', ']]'],
+
+    data: {
+        nameSearch: '',
+        timeSearch: '*',
+        statusSearch: '*',
+        famlies: [ ]
+    },
+
+    methods: {
+        loadData() {
+            $.getJSON( 'https://rock.barefootchurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
+        }
+    },
+
+    computed: {
+        filteredFamlies() {
+            return this.famlies.filter( item => {
+                var itemName = item.LastName.toLowerCase();
+                var nameSearch = this.nameSearch.toLowerCase();
+                var nameMatch = nameSearch === '' ? true : itemName.startsWith( nameSearch ) || item.ConnectionId == nameSearch;
+
+                var timeSearch = this.timeSearch;
+                var timeMatch = timeSearch === "*" ? true : item.TimeSlot == timeSearch;
+
+                var statusSearch = this.statusSearch;
+                var statusMatch = statusSearch === "*" ? true : item.Status.startsWith( statusSearch );
+
+                return nameMatch && timeMatch && statusMatch;
+            });
+        },
+        size() {
+            return this.famlies.length;
+        },
+        filteredSize() {
+            return this.filteredFamlies.length;
+        }
+    },
+
+    mounted() {
+        var timeout = 30000;
+        var loadData = () => {
+            this.loadData();
+            setTimeout( loadData, timeout );
+        };
+        loadData();
+    }
+});
+</script>
