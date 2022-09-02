@@ -40,7 +40,7 @@
       <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="DotLiquid">
-      <HintPath>..\RockWeb\Bin\DotLiquid.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\DotLiquid.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="itextsharp, Version=5.5.13.3, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
@@ -53,15 +53,23 @@
       <HintPath>..\packages\NReco.PdfGenerator.1.2.0\lib\net45\NReco.PdfGenerator.dll</HintPath>
     </Reference>
     <Reference Include="Rock">
-      <HintPath>..\RockWeb\bin\Rock.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Lava.Shared">
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.Lava.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\RockWeb\bin\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\RockWeb\bin\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\EntityFramework.SqlServer.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -89,8 +97,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\org.secc.PDF.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\BouncyCastle.Crypto.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\itextsharp.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\itextsharp.xmlworker.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\NReco.PdfGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

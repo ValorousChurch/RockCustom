@@ -1,4 +1,4 @@
-Rockit/
+Plugins/packages
 Plugins/*/.nuget/
 Plugins/*/packages/
 Plugins/*/bin/

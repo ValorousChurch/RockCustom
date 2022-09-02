@@ -33,11 +33,11 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\RockWeb\Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\RockWeb\Bin\RestSharp.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\RestSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -45,19 +45,27 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="DotLiquid">
-      <HintPath>..\RockWeb\Bin\DotLiquid.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\DotLiquid.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\RockWeb\Bin\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Quartz">
-      <HintPath>..\RockWeb\Bin\Quartz.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Quartz.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock">
-      <HintPath>..\RockWeb\Bin\Rock.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Lava.Shared">
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Lava.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -68,4 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\com.barefootchurch.MiscJobs.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

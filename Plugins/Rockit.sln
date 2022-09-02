@@ -1,0 +1,84 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32630.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RockWeb", "http://localhost:52476", "{22348267-9BDF-4B5E-BB6E-37B5FA770224}"
+	ProjectSection(WebsiteProperties) = preProject
+		UseIISExpress = "true"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_52476"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\Rockit-BC\Rockit\RockWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52476\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_52476"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\Rockit-BC\Rockit\RockWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_52476\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\..\..\Rockit-BC\Rockit\RockWeb\"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{A188D803-CB34-4D28-A035-60A23F350906} = {A188D803-CB34-4D28-A035-60A23F350906}
+		{C29F6616-7878-42D1-A7C5-DDAF08F203A7} = {C29F6616-7878-42D1-A7C5-DDAF08F203A7}
+		{70558235-6441-416C-B754-15E44264111D} = {70558235-6441-416C-B754-15E44264111D}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7A95143-C918-41B8-B605-2D61543A649E}"
+	ProjectSection(SolutionItems) = preProject
+		Rockit.sln.vsspell = Rockit.sln.vsspell
+		Settings.StyleCop = Settings.StyleCop
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.MergeTemplateTypes", "com.barefootchurch.MergeTemplateTypes\com.barefootchurch.MergeTemplateTypes.csproj", "{70558235-6441-416C-B754-15E44264111D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.MiscJobs", "com.barefootchurch.MiscJobs\com.barefootchurch.MiscJobs.csproj", "{A188D803-CB34-4D28-A035-60A23F350906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "org.secc.Imaging", "org.secc.Imaging\org.secc.Imaging.csproj", "{C29F6616-7878-42D1-A7C5-DDAF08F203A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.GroupMe", "com.barefootchurch.GroupMe\com.barefootchurch.GroupMe.csproj", "{5CF58291-9F80-4473-8333-0CF8A9917868}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "org.secc.PDF", "org.secc.PDF\org.secc.PDF.csproj", "{87D417B5-72E9-4B80-875B-3AAE79859C2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{22348267-9BDF-4B5E-BB6E-37B5FA770224}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{70558235-6441-416C-B754-15E44264111D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70558235-6441-416C-B754-15E44264111D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70558235-6441-416C-B754-15E44264111D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70558235-6441-416C-B754-15E44264111D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A188D803-CB34-4D28-A035-60A23F350906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A188D803-CB34-4D28-A035-60A23F350906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A188D803-CB34-4D28-A035-60A23F350906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A188D803-CB34-4D28-A035-60A23F350906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CF58291-9F80-4473-8333-0CF8A9917868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CF58291-9F80-4473-8333-0CF8A9917868}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CF58291-9F80-4473-8333-0CF8A9917868}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CF58291-9F80-4473-8333-0CF8A9917868}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {52E560F5-E6C1-4DEC-AEB7-18CB56FFB985}
+	EndGlobalSection
+EndGlobal

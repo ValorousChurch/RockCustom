@@ -31,15 +31,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Rock">
-      <HintPath>..\RockWeb\bin\Rock.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.4.2.8\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
     <Reference Include="NReco.ImageGenerator, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.ImageGenerator.1.2.0\lib\net45\NReco.ImageGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="Rock">
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.Common.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -64,7 +68,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\org.secc.Imaging.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\ImageResizer.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\NReco.ImageGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>

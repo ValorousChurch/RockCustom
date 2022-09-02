@@ -42,19 +42,23 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="DotLiquid">
-      <HintPath>..\RockWeb\Bin\DotLiquid.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\DotLiquid.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\RockWeb\Bin\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock">
-      <HintPath>..\RockWeb\Bin\Rock.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock.Migrations">
-      <HintPath>..\RockWeb\Bin\Rock.Migrations.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Migrations.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -68,4 +72,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\com.barefootchurch.MergeTemplateTypes.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\CsvHelper.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\Debug\System.ValueTuple.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -34,15 +34,15 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\RockWeb\Bin\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RestSharp">
-      <HintPath>..\RockWeb\bin\RestSharp.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\RestSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RestSharp.Newtonsoft.Json">
-      <HintPath>..\RockWeb\Bin\RestSharp.Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\Bin\RestSharp.Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -52,19 +52,23 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="DotLiquid">
-      <HintPath>..\RockWeb\bin\DotLiquid.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\DotLiquid.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="EntityFramework">
-      <HintPath>..\RockWeb\bin\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock">
-      <HintPath>..\RockWeb\bin\Rock.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.Common.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock.Migrations">
-      <HintPath>..\RockWeb\bin\Rock.Migrations.dll</HintPath>
+      <HintPath>..\..\..\Rock\RockWeb\bin\Rock.Migrations.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -81,4 +85,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\com.barefootchurch.GroupMe.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
