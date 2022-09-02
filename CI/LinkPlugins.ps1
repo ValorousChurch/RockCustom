@@ -1,0 +1,1 @@
+gci ..\Plugins\*\* -Filter "rockplugin.json" | % { .\SetupLinks\SetupLinks.exe $_.FullName "..\..\Rock\RockWeb" }

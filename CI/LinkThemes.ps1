@@ -1,0 +1,1 @@
+gci ..\Themes -Directory | % { New-Item -Force -ItemType SymbolicLink -Path "..\..\Rock\RockWeb\Themes\$($_.Name)" -Target $_.FullName }
