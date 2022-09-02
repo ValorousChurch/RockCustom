@@ -1,0 +1,470 @@
+{{ "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" | AddCssLink }}
+{{ "https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" | AddCssLink }}
+{{ "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" | AddCssLink }}
+{{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
+{{ "https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js" | AddScriptLink }}
+<style>
+.v-current-time {
+  height: 2px;
+  background-color: #ea4335;
+  position: absolute;
+  left: -1px;
+  right: 0;
+  pointer-events: none;
+}
+.v-current-time.first::before {
+    content: '';
+    position: absolute;
+    background-color: #ea4335;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-top: -5px;
+    margin-left: -6.5px;
+}
+p {
+  font-size: 1.2em;
+}
+</style>
+{%- capture events -%}
+{%- cache key:'staff-calendar-events' duration:'900' -%}
+[
+{% comment %} Staff Life - Anniversaries {%endcomment %}
+  {%- assign anniversaryItems = 'staffanniversaries' | PersistedDataset -%}
+  {%- for item in anniversaryItems -%}
+    {%- if item.Age <= 0 %}{% continue %}{% endif -%}
+    {
+      eventType: 'staff',
+      color: 'pink',
+      name: "{{ item.NickName }}'s {{ item.Age }}-Year Anniversary",
+      description: "{{ item.NickName }} has been married for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎂",
+      start: '{{ item.Date | Date:'yyyy-MM-dd' }}',
+      timed: false,
+    },
+  {%- endfor -%}
+
+{% comment %} Staff Life - Birthdays {%endcomment %}
+  {%- assign birthdayItems = 'staffbirthdays' | PersistedDataset -%}
+  {%- for item in birthdayItems -%}
+    {%- if item.Age <= 0 %}{% continue %}{% endif -%}
+    {
+      "eventType": "staff",
+      "color": "pink",
+      "name": "{{ item.NickName }}'s {{ item.Age | ToString | NumberToOrdinal }} Birthday",
+      "description": "Happy birthday {{ item.NickName }}! 🎈",
+      "start": "{{ item.Date | Date:'yyyy-MM-dd' }}",
+      "timed": false,
+    },
+  {%- endfor -%}
+
+{% comment %} Staff Life - Workiversaries {%endcomment %}
+  {%- assign workiversaryItems = 'staffworkiversaries' | PersistedDataset -%}
+  {%- for item in workiversaryItems -%}
+    {%- if item.Age <= 0 %}{% continue %}{% endif -%}
+    {
+      "eventType": "staff",
+      "color": "pink",
+      "name": "{{ item.NickName }}'s {{ item.Age }}-Year Workiversary",
+      "description": "{{ item.NickName }} has been on staff for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎉",
+      "start": "{{ item.Date  | Date:'yyyy-MM-dd' }}",
+      "timed": false,
+    },
+  {%- endfor -%}
+
+{% comment %} On Call Pastors {%endcomment %}
+  {%- contentchannelitem where:'ContentChannelId == 72' securityenabled:'false' lazyloadenabled:'false' sort:'StartDateTime, Priority Desc' -%}
+    {%- for item in contentchannelitemItems %}
+      {
+        "eventType": "oncall",
+        "color": "brown",
+        "name": "{{ item | Attribute:'Person','RawValue' | PersonByAliasGuid }} On Call",
+        "description": "This event has no description.",
+        "editLink": "/web/content/ff5fa5f7-b701-4f83-94d2-054f2a569808/9dbe2923-68fc-4b3e-827c-7b7e0f47cc17",
+        "start": "{{ item.StartDateTime | Date:'yyyy-MM-dd' }}",
+        "end": "{{ item.ExpireDateTime | Date:'yyyy-MM-dd' }}",
+        "timed": false,
+      },
+    {%- endfor -%}
+  {%- endcontentchannelitem -%}
+
+{% comment %} Time Off - PTO Plugin {%endcomment %}
+  {%- assign loadpastdate = 'Now' | Date | DateAdd:-6,'M' -%}
+  {%- assign loadfuturedate = 'Now' | Date | DateAdd:6,'M' -%}
+  {%- ptorequest securityenabled:'false' where:'PtoRequestApprovalState == "1" && RequestDate < "{{ loadfuturedate }}" && RequestDate >= "{{ loadpastdate }}"' lazyloadenabled:'false' select:'new( PtoAllocation.PersonAlias.Person.NickName AS Name, Guid, RequestDate )' -%}
+  {%- for request in ptorequestItems -%}
+    {
+      "eventType": "pto",
+      "color": "grey",
+      "name": "{{ request.Name }} Out of Office",
+      "description": "This event has no description.",
+      "editLink": "/WorkflowEntry/144?PTORequest={{ request.Guid }}",
+      "start": "{{ request.RequestDate | Date:'yyyy-MM-dd' }}",
+      "timed": false,
+    },
+  {%- endfor -%}
+  {%- endptorequest -%}
+
+{% comment %} Time Off - Day Swap Content Chanel {%endcomment %}
+  {%- contentchannelitem where:'ContentChannelId == 55' securityenabled:'false' lazyloadenabled:'false' -%}
+  {%- for item in contentchannelitemItems -%}
+    {
+      "eventType": "pto",
+      "color": "grey",
+      "name": {{ item.Title | ToJSON }},
+      "description": {{ item.Content | ToJSON }},
+      "editLink": "/page/342?ContentItemId={{ item.Id }}",
+      "start": "{{ item.StartDateTime | Date:'yyyy-MM-dd' }}",
+      "timed": false,
+    },
+  {%- endfor -%}
+{%- endcontentchannelitem -%}
+
+{% comment %} Room Reservations - General {%endcomment %}
+  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',1 -%}
+  {%- for item in reservationItems -%}
+    {
+      "eventType": "reservationGeneral",
+      "color": "teal",
+      "name": {{ item.Name | ToJSON }},
+      "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
+      "link": "/ReservationDetail?ReservationId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
+{% comment %} Room Reservations - Life Groups {%endcomment %}
+  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',2 -%}
+  {%- for item in reservationItems -%}
+    {
+      "eventType": "reservationGroups",
+      "color": "green",
+      "name": {{ item.Name | ToJSON }},
+      "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
+      "link": "/ReservationDetail?ReservationId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
+{% comment %} Other Events - Fron the internal calendar {%endcomment %}
+  {%- assign eventItems = 'internaleventscalendar' | PersistedDataset -%}
+  {%- for item in eventItems -%}
+    {
+      "eventType": "other",
+      "color": "blue",
+      "name": {{ item.Name | ToJSON }},
+      "description": {{ item.Description | Default:'This event has no description.' | ToJSON }},
+      "link": {{ item.Link | ToJSON }},
+      "editLink": "/page/402?EventItemOccurrenceId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
+{% comment %} Other Events - From the content channel {%endcomment %}
+  {%- contentchannelitem where:'ContentChannelId == 53' securityenabled:'false' lazyloadenabled:'false' -%}
+    {%- for item in contentchannelitemItems -%}
+      {
+        "eventType": "other",
+        "color": "blue",
+        "name": {{ item.Title | ToJSON }},
+        "description": {{ item.Content | Default:'This event has no description.' | ToJSON }},
+        "link": {{ item | Attribute:'Link','RawValue' | ToJSON }},
+        "editLink": "/page/342?ContentItemId={{ item.Id }}",
+        "start": "{{ item.StartDateTime | Date:'yyyy-MM-dd' }}",
+        "end": "{{ item.ExpireDateTime | Date:'yyyy-MM-dd' }}",
+        "timed": false,
+      },
+    {%- endfor -%}
+  {%- endcontentchannelitem -%}
+
+  {% comment %} Blackout Dates - From the content channel {%endcomment %}
+  {%- contentchannelitem where:'ContentChannelId == 59' securityenabled:'false' lazyloadenabled:'false' -%}
+    {%- for item in contentchannelitemItems -%}
+      {
+        "eventType": "blackout",
+        "color": "black",
+        "name": "Vacation Blackout",
+        "description": {{ item.Title | ToJSON }},
+        "editLink": "/page/342?ContentItemId={{ item.Id }}",
+        "start": "{{ item.StartDateTime | Date:'yyyy-MM-dd' }}",
+        "end": "{{ item.ExpireDateTime | Date:'yyyy-MM-dd' }}",
+        "timed": false,
+      },
+    {%- endfor -%}
+  {%- endcontentchannelitem -%}
+]
+{%- endcache -%}
+{%- endcapture -%}
+{% comment %} Debug {% endcomment %}
+{% comment %} <div class="hidden"><pre>{{ events }}</pre></div> {% endcomment %}
+
+<div id="app">
+  <v-app id="inspire">
+    <v-row>
+      <v-col>
+        <v-sheet height="64">
+          <v-toolbar flat :bottom="true">
+            <v-btn
+              outlined
+              class="mr-4"
+              color="grey darken-2"
+              @click="setToday"
+            >
+              Today
+            </v-btn>
+
+            <v-spacer></v-spacer>
+
+            <v-btn fab text small color="grey darken-2" @click="prev">
+              <v-icon small>mdi-chevron-left</v-icon>
+            </v-btn>
+            <v-toolbar-title v-if="$refs.calendar">
+              {$ $refs.calendar.title $}
+            </v-toolbar-title>
+            <v-toolbar-title v-else> {$ calendar $} </v-toolbar-title>
+            <v-btn fab text small color="grey darken-2" @click="next">
+              <v-icon small>mdi-chevron-right</v-icon>
+            </v-btn>
+
+            <v-spacer></v-spacer>
+
+            <v-menu bottom right>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  outlined
+                  color="grey darken-2"
+                  v-bind="attrs"
+                  v-on="on"
+                  class="mr-4"
+                >
+                  <span>{$ typeToLabel[type] $}</span>
+                  <v-icon right>mdi-menu-down</v-icon>
+                </v-btn>
+              </template>
+              <v-list>
+                <v-list-item
+                  v-for="(type, i) of calendartypes"
+                  @click="updateType(type.value)"
+                  :key="i"
+                >
+                  <v-list-item-title>{$ type.text $}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar>
+        </v-sheet>
+        <v-sheet height="64">
+          <v-toolbar flat :bottom="true">
+            <v-select
+              class="personList"
+              :menu-props="{ top: false, offsetY: true }"
+              v-model="selectedEventTypes"
+              :items="eventTypes"
+              item-text="text"
+              item-value="value"
+              :deletable-chips="true"
+              placeholder="Filter Event Types"
+              multiple
+              chips
+              clearable
+            >
+            </v-select>
+          </v-toolbar>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row class="fill-height" style="margin: 0;">
+      <v-col>
+        <v-sheet class="fill-height">
+          <v-calendar
+            ref="calendar"
+            v-model="focus"
+            :events="filteredEvents"
+            weekdays="0,1,2,3,4,5,6"
+            :type="type"
+            :show-month-on-first="true"
+            :short-weekdays="false"
+            first-time="07:00"
+            interval-count="14"
+            color="secondary"
+            now="{{ 'Now' | Date: 'yyyy-MM-dd HH:mm:ss' }}"
+            @click:event="showEvent"
+            @click:more="viewDay"
+            @click:date="viewDay"
+          >
+          </v-calendar>
+
+          <v-menu
+            v-model="selectedOpen"
+            class="mr-4"
+            :close-on-content-click="false"
+            :activator="selectedElement"
+            offset-y
+          >
+            <v-card color="grey lighten-4" min-width="350px" flat>
+              <v-toolbar :color="selectedEvent.color" dark>
+                <v-toolbar-title>{$ selectedEvent.name $}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon>
+                  <v-icon @click="selectedOpen = false">mdi-close</v-icon>
+                </v-btn>
+              </v-toolbar>
+              <v-card-text>
+                <p>
+                  <span v-html="selectedEvent.description"></span>
+                </p>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn
+                  text
+                  :color="selectedEvent.color"
+                  v-if="selectedEvent.link"
+                  @click="openLink(selectedEvent.link)"
+                >
+                  Details
+                </v-btn>
+                <v-spacer></v-spacer>
+{% if CurrentPersonCanEdit%}
+                <v-btn
+                  text
+                  :color="selectedEvent.color"
+                  v-if="selectedEvent.editLink"
+                  @click="openLink(selectedEvent.editLink)"
+                >
+                  Edit
+                </v-btn>
+{% endif %}
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-app>
+</div>
+
+<script>
+  //Saves the events object built above to a javascript variable used in the data object in the vue app.  The FromJSON ToJSON removes any extra line breaks which is not completely necessary but was helpful in development.
+  var events = {{ events }}; {% comment %} | FromJSON | ToJSON }}; {%endcomment %}
+
+  new Vue({
+  	el: '#app',
+  	delimiters: ['{$', '$}'],
+  	vuetify: new Vuetify({
+      theme: {
+        options: {
+          customProperties: true
+        },
+      },
+    }),
+    data: () => ({
+  		focus: '',
+  		type: 'week',
+  		typeToLabel: {
+  			month: 'Month',
+  			week: 'Week',
+  			day: 'Day',
+  		},
+  		startMenu: false,
+  		calendar: "{{ 'Now' | Date:'MMMM yyyy' }}",
+  		selectedEvent: {},
+  		selectedElement: null,
+  		selectedOpen: false,
+      selectedEventTypes: [],
+  		events: events,
+  		start:'',
+  		calendartypes: [
+  			{ value:'month', text:'Month' },
+  			{ value:'week',  text:'Week' },
+  			{ value:'day',   text:'Day' },
+      ],
+      eventTypes: [
+        { value: 'oncall',             text: 'On-Call Pastors' },
+        { value: 'reservationGeneral', text: 'Room Reservations - General' },
+        { value: 'reservationGroups',  text: 'Room Reservations - Life Groups' },
+        { value: 'staff',              text: 'Staff Life Events' },
+        { value: 'pto',                text: 'Time Off' },
+        { value: 'blackout',           text: 'Vacation Blackouts' },
+        { value: 'other',              text: 'Other Events' },
+      ],
+  	}),
+  	created()
+    {
+  	  let type = localStorage.getItem( 'calendarTypePreference' );
+  	  if( type )
+      {
+  		  this.type = JSON.parse( type )
+  	  }
+  	},
+  	mounted()
+    {
+      this.$refs.calendar.checkChange()
+      },
+  	computed: {
+  		filteredEvents()
+      {
+  			var filteredArray = this.events;
+  			var filter = this.selectedEventTypes;
+
+  			if( filter.length > 0 )
+        {
+  				filteredArray = filteredArray.filter( event => filter.includes( event.eventType ) == true )
+  			}
+
+  			return filteredArray;
+  		},
+  	},
+  	methods: {
+      openLink( url )
+      {
+        window.open( url, '_blank' )
+      },
+  		//Sets the calendar type and saves it to local storage to persist value when the refreshes.
+  		updateType( type )
+      {
+  		  this.type = type
+  		  localStorage.setItem( "calendarTypePreference", JSON.stringify( type ) )
+  		},
+  		viewDay( { date } )
+      {
+  			this.focus = date;
+  			this.type = 'day';
+  		},
+  		setToday()
+      {
+        this.focus = ''
+      },
+  		prev()
+      {
+        this.$refs.calendar.prev()
+      },
+  		next()
+      {
+        this.$refs.calendar.next()
+      },
+  		showEvent( { nativeEvent, event } )
+      {
+  			const open = () => {
+  				this.selectedEvent = event;
+  				this.selectedElement = nativeEvent.target;
+  				setTimeout( () => this.selectedOpen = true, 10 );
+  			}
+  			if ( this.selectedOpen )
+        {
+  				this.selectedOpen = false
+  				setTimeout( open, 10 );
+  			}
+        else
+        {
+  				open()
+  			}
+  			nativeEvent.stopPropagation()
+  		},
+  	},
+  })
+</script>
