@@ -1,4 +1,4 @@
 Styles/*.css
+!Styles/reset.css
 .DS_Store
 Styles/twcss/node_modules/**
-Styles/twcss/src/tailwind-full.css
