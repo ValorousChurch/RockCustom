@@ -86,6 +86,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\com.barefootchurch.GroupMe.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\com.barefootchurch.GroupMe.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>

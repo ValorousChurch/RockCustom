@@ -68,8 +68,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\org.secc.Imaging.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\ImageResizer.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\NReco.ImageGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\org.secc.Imaging.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\ImageResizer.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\NReco.ImageGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>

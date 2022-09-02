@@ -73,8 +73,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\com.barefootchurch.MergeTemplateTypes.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\CsvHelper.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\System.ValueTuple.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\com.barefootchurch.MergeTemplateTypes.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\CsvHelper.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\System.ValueTuple.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>

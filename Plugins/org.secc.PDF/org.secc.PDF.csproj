@@ -97,17 +97,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\Debug\org.secc.PDF.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\BouncyCastle.Crypto.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\itextsharp.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\itextsharp.xmlworker.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\Debug\NReco.PdfGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\org.secc.PDF.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\BouncyCastle.Crypto.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\itextsharp.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\itextsharp.xmlworker.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
+xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\NReco.PdfGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
