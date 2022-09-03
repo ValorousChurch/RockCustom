@@ -11,8 +11,10 @@ Write-Output "Running script as: $env:userdomain\$env:username"
 
 # move files back from bkup (IIS will auto-restart because we are moving web.config)
 If (Test-Path "$bkupfolder"){
-	Write-Host "Moving files back from bkup directory"
-	Move-Item -Path "$bkupfolder\*" -Destination "$webroot" -Force
+	Write-Host "Moving files from bkup directory"
+	Copy-Item -Path "$bkupfolder\*" -Destination "$webroot" -Recurse -Force
+	Write-Host "Removing bkup directory"
+	Remove-Item "$bkupfolder\*"
 }
 
 # remove the app offline flag
