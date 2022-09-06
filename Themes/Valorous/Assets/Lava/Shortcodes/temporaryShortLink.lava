@@ -1,0 +1,33 @@
+//- *********************************** NAME ***************************************
+Temporary Short Link
+
+//- *********************************** TagType ************************************
+inline
+
+//- *********************************** TAG NAME ***********************************
+TemporaryShortLink
+
+//- *********************************** DESCRIPTION ********************************
+Creates a short link that will automatically self destruct after a set amount of days.
+
+//- *********************************** DOCUMENTATION ******************************
+<p>Basic: {[ <b>TemporaryShortLink</b> <b>url</b>:'The long URL'&nbsp;]}</p>
+<p>Advanced: {[ <b>TemporaryShortLink</b> <b>url</b>:'The long URL' <b>expire</b>:'number of days the link is good for' <b>length</b>:'length of the random piece' <b>site</b>:'site to use' ]}<br>Expire defaults to 30, and Length defaults to 5.</p>
+<p>This requires a workflow type to destroy the link. Make sure that the `workflowtype` in the shortcode is set to the correct id.</p>
+
+//- *********************************** MARKUP *************************************
+
+{%- assign tokenLength = length | AsInteger -%}
+{%- assign siteId = site | AsInteger -%}
+{%- assign link = url | CreateShortLink:'',siteId,true,tokenLength -%}
+{%- workflowactivate workflowtype:'94' workflowName:'{{ url | Url:'LocalPath' }}' LinkToken:'{{ link | AsString | Right:tokenLength }}' ExpireDays:'{{ expire }}' %}{% endworkflowactivate -%}
+{{- link -}}
+
+//- *********************************** PARAMETERS *********************************
+url    - 
+expire - 30
+length - 5
+site   - 0
+
+//- *********************************** ENABLED COMMANDS ***************************
+WorkflowActivate

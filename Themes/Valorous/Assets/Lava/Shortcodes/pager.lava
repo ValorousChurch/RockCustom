@@ -1,0 +1,209 @@
+//- *********************************** NAME ***************************************
+Pager
+
+//- *********************************** TagType ************************************
+Inline
+
+//- *********************************** TAG NAME ***********************************
+pager
+
+//- *********************************** DESCRIPTION ********************************
+Generates a list of sequential links for navigating to multiple pages of content.
+
+//- *********************************** DOCUMENTATION ******************************
+
+<p>Based on this recipe: https://community.rockrms.com/recipes/242/content-pagination-shortcode</p>
+
+<p><strong>Usage:</strong></p>
+<pre>{[ pager current:'1' total:'1' rooturl:'/podcasts/sermons' buttoncount:'5' size:'medium' class:'top' usequery:'false' ]}</pre>
+<ul>
+    <li><strong>rooturl</strong> (string, optional) – The root URL to link to (excluding any page number information). If left blank, the root URL will be pulled from the current page URL.</li>
+    <li><strong>fragment</strong> (string, optional, default:<code>blank</code>) – The fragment or anchor name that should be appended to the final URL</li>
+    <li><strong>current</strong> (integer, optional, default:<code>1</code>) – The current page number</li>
+    <li><strong>total</strong> (integer, optional, default:<code>1</code>) – The total number of pages</li>
+    <li><strong>buttoncount</strong> (integer, optional, default:<code style="background-color: rgb(255, 255, 255);">5</code>) – The total number of page number buttons to display. The button closest to the middle of the range will be the current page and will be inactive.</li>
+    <li><strong>size</strong> (string, optional, default:<code>medium</code>) – The physical size to the pager at. Valid options are <code>small</code>, <code>medium</code> and <code>large</code>.</li>
+    <li><strong>class</strong> (string, optional, default:<code>blank</code>) – CSS class to add to the outer-most <code>nav</code> element of the pager</li>
+    <li><strong>usequery</strong> (boolean, optional, default:<code>false</code>) – Should the current page number be added to the querystring instead of the page route? If set to <code>true</code>, the current page number will be added to the <code>page</code> querystring parameter. If set to <code>false</code>, the following segments will be appended to the page's URL route: <code>/page/{PageNum}</code></li>
+</ul>
+
+//- *********************************** MARKUP *************************************
+
+{%- assign current = current | Default:'0' | AsInteger -%}
+{%- assign total = total | Default:'0' | AsInteger -%}
+{%- assign buttoncount = buttoncount | Default:'5' | AsInteger -%}
+{%- if total > 1 -%}
+    {%- assign PLACEHOLDER = '[[PAGENUM]]' -%}
+    {% comment %} calculate the page number range for the buttons {% endcomment %}
+    {%- if total > buttoncount -%}
+        {% comment %} there are more pages than buttons {% endcomment %}
+        {%- assign remaining = total | Minus:current -%}
+        {%- assign beforeCount = buttoncount | Minus:1 | DividedBy:2 | Floor -%}
+        {%- assign afterCount = buttoncount | Minus:beforeCount | Minus:1 -%}
+        {%- if remaining <= afterCount -%}
+            {% comment %} there are fewer remaining pages than half the button count {% endcomment %}
+            {%- assign first = total | Plus:1 | Minus:buttoncount -%}
+            {%- assign beforeCount = current | Minus:first -%}
+            {%- assign afterCount = buttoncount | Minus:beforeCount | Minus:1 -%}
+            {%- assign last = total -%}
+        {%- else -%}
+            {% comment %} there are more remaining pages than half the button count {% endcomment %}
+            {%- assign first = current | Minus:beforeCount -%}
+            {%- if first < 1 %}{% assign first = 1 %}{% endif -%}
+            {%- assign last = first | Plus:buttoncount | Minus:1 -%}
+            {%- if last > total %}{% assign last = total %}{% endif -%}
+        {%- endif -%}
+    {%- else -%}
+        {% comment %} there enough buttons for every page {% endcomment %}
+        {%- assign beforeCount = current | Minus:1 -%}
+        {%- assign first = 1 -%}
+        {%- assign last = total -%}
+    {%- endif -%}
+    {% comment %} determine the pager size CSS class {% endcomment %}
+    {%- case size -%}
+        {%- when 'small' %}{% assign sizeClass = ' pagination-sm' -%}
+        {%- when 'large' %}{% assign sizeClass = ' pagination-lg' -%}
+        {%- else %}{% assign sizeClass = '' -%}
+    {%- endcase -%}
+    {%- assign queryParams = 'Global' | Page:'QueryString' -%}
+    {%- assign queryString = '' -%}
+    {%- comment %} build a new querystring {% endcomment -%}
+    {%- if queryParams != empty -%}
+        {%- assign firstItem = true -%}
+        {%- for queryParam in queryParams -%}
+            {%- assign kvParam = queryParam | PropertyToKeyValue -%}
+            {%- comment %} exclude any page number related parameters {% endcomment -%}
+            {%- if kvParam.Key != 'p' and  kvParam.Key != 'PageId' and kvParam.Key != 'Page' -%}
+                {%- capture queryString %}{% if firstItem == false %}{{ queryString }}&{% endif %}{{ kvParam.Key }}={{ kvParam.Value }}{% endcapture -%}
+                {%- assign firstItem = false -%}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+    {% comment %} build the page number parameter portion of the URL template {% endcomment %}
+    {%- assign useQuery = usequery | Default:'false' | AsBoolean -%}
+    {%- if useQuery == true -%}
+        {%- if queryString != '' or rooturl contains '?' -%}
+            {%- assign pageNumTemplate = '&Page=' | Append:PLACEHOLDER -%}
+        {%- else -%}
+            {%- assign pageNumTemplate = '?Page=' | Append:PLACEHOLDER -%}
+        {%- endif -%}
+    {%- else -%}
+        {%- assign pageNumTemplate = '/page/' | Append:PLACEHOLDER -%}
+    {%- endif -%}
+    {% comment %} set up the fragment if one was provided {% endcomment %}
+    {%- assign fragment = fragment | Default:'' -%}
+    {%- if fragment != '' %}{% assign fragment = fragment | Prepend:'#' %}{% endif -%}
+    {% comment %} build the URL template {% endcomment %}
+    {%- assign urlTemplate = '' -%}
+    {%- assign rooturl = rooturl | Default:'' | Append:'|' | Replace:'/|' | Replace:'|' -%}
+    {%- if rooturl == '' -%}
+        {%- comment %} rooturl is empty so generate one from the current page URL {% endcomment -%}
+        {%- assign pageURL = 'Global' | Page:'Url' -%}
+        {%- assign rootPath = pageURL | Url:'localpath' -%}
+        {%- if useQuery == true -%}
+            {%- assign rootpath = rootPath | Append:'|' | Replace:'/|' | Replace:'|' -%}
+            {%- capture urlTemplate %}{{ rootpath }}{% if queryString != '' %}?{{ queryString }}{% endif %}{{ pageNumTemplate }}{{ fragment }}{% endcapture -%}
+            {%- capture firstPageURL %}{{ rootpath }}{% if queryString != '' %}?{{ queryString }}{% endif %}{{ fragment }}{% endcapture -%}
+        {%- else -%}
+            {%- comment %} remove page number segments from route if necessary {% endcomment -%}
+            {%- capture segments %}/page/{{ current }}{% endcapture -%}
+            {%- assign rootPath = rootPath | Replace:segments,'' -%}
+            {%- comment %} get rid of any trailing slash {% endcomment -%}
+            {%- assign rootpath = rootPath | Append:'|' | Replace:'/|' | Replace:'|' -%}
+            {%- capture urlTemplate %}{{ rootpath }}{{ pageNumTemplate }}{% if queryString != '' %}?{{ queryString }}{% endif %}{{ fragment }}{% endcapture -%}
+            {%- capture firstPageURL %}{{ rootpath }}{% if queryString != '' %}?{{ queryString }}{% endif %}{{ fragment }}{% endcapture -%}
+        {%- endif -%}
+    {%- else -%}
+        {%- comment %} generate the root URL {% endcomment -%}
+        {%- capture urlTemplate %}{{ rooturl }}{{ pageNumTemplate }}{{ fragment }}{% endcapture -%}
+        {%- capture firstPageURL %}{{ rooturl }}{{ fragment }}{% endcapture -%}
+    {%- endif -%}
+    {%- stylesheet id:'Pager' compile:'less' -%}
+        .grid-paging 
+        {
+            .grid-pager ul { margin: 0 6px 0 0; }
+            .pagination>.active>span 
+            {
+                min-width: 23px;
+                padding: 5px 12px;
+                margin: 0 8px 0 0;
+            }
+            .pagination>.disabled>span:hover { cursor: default; }
+        }
+    {%- endstylesheet -%}
+<nav aria-label="Page navigation" {%- if class != '' %} class="{{ class }}"{% endif %}>
+    <ul class="pagination{{ sizeClass }}">
+    {% comment %} first page button {% endcomment %}
+    {%- if first > 1 -%}
+        <li class="first">
+            <a href="{{ firstPageURL }}" aria-label="First Page" title="Return to the first page">
+                <i class="fa fa-fast-backward"></i>
+            </a>
+        </li>
+    {%- endif -%}
+    {% comment %} previous page button {% endcomment %}
+    {%- if current > 1 -%}
+        {%- if current > 2 -%}
+            {%- assign num = current | Minus:1 -%}
+            {%- capture url -%}{{ urlTemplate | Replace:PLACEHOLDER, num }}{% endcapture -%}
+        {%- else -%}
+            {%- assign url = firstPageURL -%}
+        {%- endif -%}
+        <li class="prev">
+            <a href="{{ url }}" aria-label="Previous Page" title="Go to the previous page: {{ current | Minus:1 }}">
+                <i class="fa fa-step-backward"></i>
+            </a>
+        </li>
+    {%- endif -%}
+    {%- if first > 1 -%}
+        <li class="ellipsis disabled"><span><i class="fa fa-ellipsis-h"></i></span></li>
+    {%- endif -%}
+    {% comment %} individual page buttons {% endcomment %}
+    {%- for i in (first..last) -%}
+        {%- if i == current -%}
+        <li class="active" title="Current page: {{ i }}"><span>{{ i }}</span></li>
+        {%- else -%}
+            {%- if i > 1 -%}
+                {%- capture url -%}{{ urlTemplate | Replace:PLACEHOLDER, i }}{% endcapture -%}
+            {%- else -%}
+                {%- assign url = firstPageURL -%}
+            {%- endif -%}
+        <li class="page"><a href="{{ url }}" aria-label="Page {{ i }}" title="Go to page {{ i }}">{{ i }}</a></li>
+        {%- endif -%}
+    {%- endfor -%}
+    {%- if last < total -%}
+        <li class="ellipsis disabled"><span><i class="fa fa-ellipsis-h"></i></span></li>
+    {%- endif -%}
+    {% comment %} next page button {% endcomment %}
+    {%- if current < total -%}
+        {%- assign num = current | Plus:1 -%}
+        <li class="next">
+            <a href="{{ urlTemplate | Replace:PLACEHOLDER, num }}" aria-label="Next Page" title="Go to the next page: {{ current | Plus:1 }}">
+                <i class="fa fa-step-forward"></i>
+            </a>
+        </li>
+    {%- endif -%}
+    {% comment %} last page button {% endcomment %}
+    {%- if last < total -%}
+        <li class="last">
+            <a href="{{ urlTemplate | Replace:PLACEHOLDER, total }}" aria-label="Last Page" title="Go to the last page: {{ total }}">
+                <i class="fa fa-fast-forward"></i>
+            </a>
+        </li>
+    {%- endif -%}
+    </ul>
+</nav>
+{%- endif -%}
+
+//- *********************************** PARAMETERS *********************************
+rooturl     - 
+fragment    - 
+current     - 0
+total       - 0
+buttoncount - 5
+size        - medium
+class       - 
+usequery    - false
+
+//- *********************************** ENABLED COMMANDS ***************************
+None

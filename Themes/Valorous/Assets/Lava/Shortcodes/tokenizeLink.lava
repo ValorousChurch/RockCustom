@@ -1,0 +1,65 @@
+//- *********************************** NAME ***************************************
+Tokenize Link
+
+//- *********************************** TagType ************************************
+inline
+
+//- *********************************** TAG NAME ***********************************
+tokenizeLink
+
+//- *********************************** DESCRIPTION ********************************
+Takes a URL and created a tokenized version that will log the given Person in.
+
+//- *********************************** DOCUMENTATION ******************************
+<p>So you have a link that you want to send in an email that will log the person in. You know that the PersonTokenCreate exists and it has parameters and you still need to format the rest of the link to create the full working link. This shortcode will let you pass a link, and a series of optional parameters, to generate the full link.</p>
+<p>To use this shortcode {[ tokenizelink url:'' ]}. You can include the base url and it will be parameterized for you. The number of days active and number of uses has a default value of 7 and 3 respectively. You can pass these values into the shortcode to change them.</p>
+<ul>
+    <li>days(An Integer) - the number of days the link should be active.</li>
+    <li>uses(An Integer) - the number of times the url can be used before becoming inactive.</li>
+    <li>page(An Id) - Specific page Id that the link should work for. Anything outside of this page will appear that the user is not logged in.</li>
+    <li>shorten(true/false) - Do you want the output to be a shortlink or not</li>
+</ul>
+
+//- *********************************** MARKUP *************************************
+
+{%- assign days = days | Times:24 | Times:60 -%}
+{%- assign uses = uses | AsInteger -%}
+
+{%- assign endcheck = url | Right:1 -%}
+
+{%- if endcheck == '/' -%}
+    {%- assign url = url | ReplaceLast:'/', '' -%}
+{%- endif -%}
+
+{%- assign params = url | Split:'?' | Size -%}
+{%- if params > 1 -%}
+    {%- assign url = url | Append:'&rckipid=' -%}
+{%- else -%}
+    {%- assign url = url | Append:'?rckipid=' -%}
+{%- endif -%}
+
+{%- if page and page != empty -%}
+
+    {%- assign page = page | AsInteger -%}
+    {%- assign Token = Person | PersonTokenCreate:days,uses,page  -%}
+{%- else -%}
+    {%- assign Token = Person | PersonTokenCreate:days,uses -%}
+{%- endif -%}
+
+{%- assign url =  url | Append:Token -%}
+
+{%- if shorten == 'true' -%}
+    {{ url | CreateShortLink}}
+{%- else -%}
+    {{ url }}
+{%- endif -%}
+
+//- *********************************** PARAMETERS *********************************
+url     - 
+days    - 7
+uses    - 3
+page    - 
+shorten - false
+
+//- *********************************** ENABLED COMMANDS ***************************
+None

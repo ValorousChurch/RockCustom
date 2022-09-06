@@ -1,0 +1,120 @@
+//- *********************************** NAME ***************************************
+Login Prompt
+
+//- *********************************** TagType ************************************
+Inline
+
+//- *********************************** TAG NAME ***********************************
+loginPrompt
+
+//- *********************************** DESCRIPTION ********************************
+Prompts the user to log in by showing an alert panel, and optionally a popup alert.
+
+//- *********************************** DOCUMENTATION ******************************
+
+<p>
+    <b>Example:</b>
+    <code>{[ loginPrompt popup:'true' why:'to access your saved payment methods, pre-fill your information, and make the giving process quicker' ]}</code>
+</p>
+<p>
+    <b>Example2</b>:
+    <code>{[ loginPrompt popup:'true' why:'to access your saved payment methods, pre-fill your information, and make the giving process quicker' person:CurrentPerson url:'{{ 'Global' | Page:'Url' }}']}</code>
+</p><hr>
+<b>Parameters:</b>
+<table class="table table-bordered">
+    <tbody><tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Required?</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td>popup</td>
+        <td>Would you like to have the login popup?</td>
+        <td>no</td>
+        <td>false</td>
+    </tr>
+    <tr>
+        <td>alert</td>
+        <td>Would you like to show the alert panel?</td>
+        <td>no</td>
+        <td>true</td>
+    </tr>
+    <tr>
+        <td>why</td>
+        <td>Why should they log in? Will be appended to the end of the login prompt.</td>
+        <td>no</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>person</td>
+        <td>Override the person. Expects a full person oblect.</td>
+        <td>no</td>
+        <td>CurrentPerson</td>
+    </tr>
+    <tr>
+        <td>url</td>
+        <td>Override the url to redirect to after login.</td>
+        <td>no</td>
+        <td>Current Page's Url</td>
+    </tr>
+</tbody></table><p></p>
+
+//- *********************************** MARKUP *************************************
+
+//- Unless overriden, grab the url and currentperson from the page.
+{% unless url and url != '' %}
+    {% assign url = 'Global' | Page:'Url' %}
+{% endunless %}
+{% unless person and person != '' %}
+    {% assign person = CurrentPerson %}
+{% endunless %}
+
+{% assign personId = person.Id | Default:'0' %}
+{% assign noLogin = url | Url:'queryparameter','NoLogin' %}
+
+{% unless noLogin == 1 or personId > 0 %}
+    {% assign loginUrl = '/login' %}
+    {%- if url and url != '' -%}
+        {% assign path = url | Url:'pathandquery' | EscapeDataString %}
+        {% assign loginUrl = loginUrl | Append:'?returnurl=' | Append:path %}
+    {%- endif -%}
+    {% if alert and alert == 'true' %}
+        <div class="alert alert-warning">
+            <p>If you have a {{ 'Global' | Attribute:'OrganizationName' }} account, you can <a href="{{ loginUrl }}">login here</a>{% if why and why != '' %} {{ why }}{% endif %}.</p>
+        </div>
+    {% endif %}
+    {% if popup and popup == 'true' %}
+        <script>
+            $(function(){
+                bootbox.dialog({
+                    message: "<h3>Would you like to login?</h3><p>If you have a {{ 'Global' | Attribute:'OrganizationName' }} account, you can login{% if why and why != '' %} {{ why }}{% endif %}.</p>",
+                    buttons: {
+                        ok: {
+                            label: 'Login Now',
+                            className: 'btn-primary',
+                            callback: function() {
+                                window.location.href = '{{ loginUrl }}';
+                            }
+                        },
+                        cancel: {
+                            label: 'Don\'t Login',
+                            className: 'btn-default',
+                            callback: function() { } // Do Nothing
+                        }
+                    }
+                })
+            });
+        </script>
+    {% endif %}
+{% endunless %}
+
+//- *********************************** PARAMETERS *********************************
+popup  - false
+alert  - true
+why    - 
+url    - 
+person - 
+
+//- *********************************** ENABLED COMMANDS ***************************
+None
