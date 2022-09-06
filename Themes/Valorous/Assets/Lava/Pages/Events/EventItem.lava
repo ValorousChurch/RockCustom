@@ -110,11 +110,20 @@
                 <p class="pr-4 mb-0">{{ summary }}</p>
 {% endif %}
             </div>
-            <div class="detail-img col-md-7 mt-4 mt-md-0">
-{% if Event.Photo.Guid and Event.Photo.Guid != '' %}
-                <img src="/GetImage.ashx?Guid={{ Event.Photo.Guid }}&width=1080&height=608&mode=crop" class="img-responsive rounded">
+            <div class="detail-img col-xs-12 col-md-7 mt-4 mt-md-0">
+{% assign eventPhotos = EventItemOccurrence | Attribute:'EventPhotos','Object' | Property:'AttributeMatrixItems' %}
+{% if eventPhotos and eventPhotos != empty %}
+    {[ imagecarousel ]}
+        {% for item in eventPhotos %}
+                    <img src="/GetImage.ashx?guid={{ item | Attribute:'Photo','Guid' }}&width=1080&height=608&mode=crop" class="img-responsive rounded" />
+        {% endfor %}
+    {[ endimagecarousel]}
 {% else %}
-                <img src="https://files.valorous.church/public/valorouschurch/misc/Placeholder.jpg" class="img-responsive rounded">
+    {% if Event.Photo.Guid and Event.Photo.Guid != '' %}
+                    <img src="/GetImage.ashx?Guid={{ Event.Photo.Guid }}&width=1080&height=608&mode=crop" class="img-responsive rounded">
+    {% else %}
+                    <img src="https://files.valorous.church/public/valorouschurch/misc/Placeholder.jpg" class="img-responsive rounded">
+    {% endif %}
 {% endif %}
             </div>
         </div><!-- /row -->
