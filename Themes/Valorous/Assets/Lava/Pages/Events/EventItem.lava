@@ -107,7 +107,7 @@
 {% assign summary = Event.Summary | Trim %}
 {% if summary and summary != '' %}
                 <hr class="o-50 my-3">
-                <p class="pr-4">{{ summary }}</p>
+                <p class="pr-4 mb-0">{{ summary }}</p>
 {% endif %}
             </div>
             <div class="detail-img col-md-7 mt-4 mt-md-0">
