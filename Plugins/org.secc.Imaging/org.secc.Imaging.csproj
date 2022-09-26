@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageResizer.4.2.8\lib\net45\ImageResizer.dll</HintPath>
+      <HintPath>..\..\..\Rock\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
     <Reference Include="NReco.ImageGenerator, Version=1.2.0.0, Culture=neutral, PublicKeyToken=0ef6c878974c90ac, processorArchitecture=MSIL">
       <HintPath>..\packages\NReco.ImageGenerator.1.2.0\lib\net45\NReco.ImageGenerator.dll</HintPath>
@@ -69,7 +69,6 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\org.secc.Imaging.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
-xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\ImageResizer.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"
 xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\NReco.ImageGenerator.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
   </PropertyGroup>
 </Project>
