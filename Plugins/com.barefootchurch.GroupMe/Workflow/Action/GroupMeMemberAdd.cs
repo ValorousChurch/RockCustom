@@ -142,7 +142,7 @@ namespace com.barefootchurch.GroupMe.Workflow.Action
             {
                 errorMessages.Add( "GroupMe Access Token Global Attribute is missing or blank" );
             }
-            else if ( person.IsNull() )
+            else if ( person == null )
             {
                 errorMessages.Add( "The Person is required" );
             }
@@ -164,7 +164,7 @@ namespace com.barefootchurch.GroupMe.Workflow.Action
                 .Where( a => a.NumberTypeValue.Guid == mobilePhoneType )
                 .FirstOrDefault();
 
-            if ( mobileNumber.IsNull() )
+            if ( mobileNumber == null )
             {
                 errorMessages.Add( "The Person does not have a mobile number." );
                 return false;
@@ -173,7 +173,7 @@ namespace com.barefootchurch.GroupMe.Workflow.Action
             var groupMeAPI = new GroupMeAPI( accessToken );
             var group = groupMeAPI.GetGroup( groupId.Value );
 
-            if ( group.IsNull() || group.Name.IsNullOrWhiteSpace() )
+            if ( group == null || group.Name.IsNullOrWhiteSpace() )
             {
                 errorMessages.Add( "GroupMe API Error." );
                 return false;

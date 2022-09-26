@@ -143,7 +143,7 @@ namespace com.barefootchurch.GroupMe.Workflow.Action
             var groupMeAPI = new GroupMeAPI( accessToken );
             var group = groupMeAPI.GetGroup( groupId.Value );
 
-            if ( group.IsNull() || group.Name.IsNullOrWhiteSpace() )
+            if ( group == null || group.Name.IsNullOrWhiteSpace() )
             {
                 errorMessages.Add( "GroupMe API Error." );
                 return false;
@@ -151,7 +151,7 @@ namespace com.barefootchurch.GroupMe.Workflow.Action
 
             var member = group.Members.AsQueryable().Where( m => m.Id.AsIntegerOrNull() == memberId ).FirstOrDefault();
 
-            if ( member.IsNull() )
+            if ( member == null )
             {
                 errorMessages.Add( "The provided memberId was not found in the group." );
                 return false;
