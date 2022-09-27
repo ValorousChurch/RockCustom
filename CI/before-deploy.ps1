@@ -29,3 +29,5 @@ If (Test-Path "$webroot\app_offline-template.htm"){
 	Write-Host "Loading the app offline template"
 	Copy-Item "$webroot\app_offline-template.htm" "$webroot\app_offline.htm" -force
 }
+
+Write-Output "Pre-deploy script complete"

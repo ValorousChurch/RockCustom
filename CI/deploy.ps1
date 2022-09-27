@@ -30,3 +30,6 @@ If (Test-Path "$webroot\deploy.ps1"){
 If (Test-Path "$webroot\before-deploy.ps1"){
 	Remove-Item "$webroot\before-deploy.ps1"
 }
+
+
+Write-Output "Post-deploy script complete"
