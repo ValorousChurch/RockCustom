@@ -14,7 +14,7 @@ If (Test-Path "$bkupfolder"){
 	Write-Host "Moving files from bkup directory"
 	Copy-Item -Path "$bkupfolder\*" -Destination "$webroot" -Recurse -Force
 	Write-Host "Removing bkup directory"
-	Remove-Item "$bkupfolder\*"
+	Remove-Item "$bkupfolder\*" -Recurse -Force
 }
 
 # remove the app offline flag
