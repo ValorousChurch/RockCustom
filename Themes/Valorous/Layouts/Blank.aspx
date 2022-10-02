@@ -10,6 +10,7 @@
 
   <!-- Theme Included CSS Files -->
   <link href="<%# ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
+  <link href="<%# ResolveRockUrl("~~/Styles/font-awesome.css", true) %>" rel="stylesheet">
   <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
   <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
 
