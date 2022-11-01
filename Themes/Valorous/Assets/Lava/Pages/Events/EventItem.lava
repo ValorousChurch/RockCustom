@@ -111,7 +111,7 @@
 {% endif %}
             </div>
             <div class="detail-img col-xs-12 col-md-7 mt-4 mt-md-0">
-{% assign eventPhotos = EventItemOccurrence | Attribute:'EventPhotos','Object' | Property:'AttributeMatrixItems' %}
+{% assign eventPhotos = EventItemOccurrence | Attribute:'EventPhotos','Object' | Property:'AttributeMatrixItems' | Sort:'Order' %}
 {% if eventPhotos and eventPhotos != empty %}
     {[ imagecarousel ]}
         {% for item in eventPhotos %}
