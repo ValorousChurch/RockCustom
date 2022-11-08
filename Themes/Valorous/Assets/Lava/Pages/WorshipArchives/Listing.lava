@@ -90,7 +90,11 @@ function loadVideo(el,guid) {
 
             <div class="tab-content">
                 <div id="info{{ index }}" class="tab-pane fade in active">
+            {% if service.Notes and service.Notes != '' %}
                     <div class="col-lg-6">
+            {% else %}
+                    <div class="col-lg-12">
+            {% endif %}
                         <h4>Songs</h4>
                         <ul>
                             <li>{{ service.Songs | Join:'</li><li>' }}</li>
@@ -99,10 +103,12 @@ function loadVideo(el,guid) {
                         <ul>
                             <li>{{ service.People.Audio }}</li>
                         </ul>
+            {% if service.People.Director and service.People.Director != '' %}
                         <h4>Director</h4>
                         <ul>
                             <li>{{ service.People.Director }}</li>
                         </ul>
+            {% endif %}
                     </div>
             {% if service.Notes and service.Notes != '' %}
                     <div class="col-lg-6">
