@@ -990,6 +990,7 @@ namespace RockWeb.Plugins.com_barefootchurch
                 }
 
                 prayerRequest.IsPublic = false;
+                prayerRequest.IsApproved = true;
 
                 PrayerRequestService prayerRequestService = new PrayerRequestService( rockContext );
                 prayerRequestService.Add( prayerRequest );
