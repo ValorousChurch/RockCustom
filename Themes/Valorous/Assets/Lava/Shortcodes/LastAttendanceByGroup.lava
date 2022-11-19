@@ -1,0 +1,79 @@
+//- *********************************** NAME ***************************************
+Last Attendance By Group
+
+//- *********************************** TagType ************************************
+inline
+
+//- *********************************** TAG NAME ***********************************
+lastattendancebygroup
+
+//- *********************************** DESCRIPTION ********************************
+Look up all groups a specified person is in along with their last attendance date in said groups. Can be filtered by either group type, or group type purpose.
+
+//- *********************************** DOCUMENTATION ******************************
+<p>Example usage: </p>
+<pre>{[ lastattendancebygroup personid:'515' grouptypeid:'58' ]}</pre>
+<pre>{[ lastattendancebygroup personid:'515' grouptypepurposeid:'184' ]}</pre>
+<p>Example results:</p>
+<pre>[
+  {
+    "Name": "Creative Volunteers",
+    "DateTime": null
+  },
+  {
+    "Name": "Production",
+    "DateTime": "2022-11-13T00:00:00"
+  }
+]
+</pre>
+
+//- *********************************** MARKUP *************************************
+{%- assign GroupTypeId = grouptypeid | Default:'0' | AsInteger -%}
+{%- assign GroupTypePurposeId = grouptypepurposeid | Default:'0' | AsInteger -%}
+{%- assign PersonId = personid | Default:CurrentPerson.Id | AsInteger -%}
+
+{%- sql -%}
+SELECT
+    g.[Name]
+    ,att_sub.[DateTime]
+FROM
+    [GroupMember] gm
+    JOIN [Group] g ON g.[Id] = gm.[GroupId]
+{% if GroupTypePurposeId != 0 %}
+    JOIN [GroupType] gt ON gt.[Id] = g.[GroupTypeId]
+{% endif %}
+    CROSS APPLY (
+        SELECT
+            MAX( ao.[OccurrenceDate] ) 'DateTime'
+        FROM
+            [AttendanceOccurrence] ao
+            JOIN [Attendance] a ON a.[OccurrenceId] = ao.[Id]
+            JOIN [PersonAlias] pa ON a.[PersonAliasId] = pa.[Id]
+        WHERE
+            ao.[GroupId] = g.[Id]
+            AND pa.[PersonId] = {{ PersonId }}
+            AND a.[DidAttend] = 1
+    ) AS att_sub
+WHERE
+    g.[IsActive] = 1
+    AND gm.[PersonId] = {{ PersonId }}
+    AND gm.[IsArchived] = 0
+{% if GroupTypeId != 0 %}
+    AND g.[GroupTypeId] = {{ GroupTypeId }}
+{% endif %}
+{% if GroupTypePurposeId != 0 %}
+    AND gt.[GroupTypePurposeValueId] = {{ GroupTypePurposeId }}
+{% endif %}
+ORDER BY
+    g.[Name]
+
+{%- endsql -%}
+{{- results | ToJSON -}}
+
+//- *********************************** PARAMETERS *********************************
+grouptypeid        -
+grouptypepurposeid -
+personid           -
+
+//- *********************************** ENABLED COMMANDS ***************************
+Sql
