@@ -227,10 +227,10 @@
                     <div class="col-xs-4">
     {% if childcare %}
                         <i class="fa fa-child text-blue-400"></i><br>
-                        Childcare Avialable
+                        Childcare Available
     {% else %}
                         <i class="fa fa-child text-gray-300"></i><br>
-                        Childcare Not&nbsp;Avialable
+                        Childcare Not&nbsp;Available
     {% endif %}
                     </div><!-- /childcare -->
                 </div><!-- /icons -->
