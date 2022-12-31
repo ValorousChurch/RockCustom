@@ -45,13 +45,13 @@
 </style>
 
 <div id="app">
-    <div class="mx-auto mt-3" style="height:139px;width:983px;background-image:url('https://barefootchurch.s3.amazonaws.com/Public/temp/gh-logo.png');background-repeat:no-repeat;"></div>
+    <div class="mx-auto mt-3" style="height:139px;width:983px;background-image:url('https://files.valorous.church/public/valorouschurch/temp/Giving-Hope.svg');background-repeat:no-repeat;"></div>
     <div class="d-flex flex-row">
         <div id="checkin-list" style="flex: 1 1 40%" class="m-4 p-4 rounded-lg">
             <h2 class="mt-0 mb-3 pb-4 border-bottom">Checked In List</h2>
             <ul>
                 <li v-for="family in waitingFamlies">
-                    <b>[[ family.ConnectionId ]]</b> - [[  family.LastName ]]
+                    <b>[[ family.ConnectionId ]]</b> - [[ family.LastName ]]
                 </li>
             </ul>
         </div>
@@ -112,7 +112,7 @@ var app = new Vue({
 
     methods: {
         loadData() {
-            $.getJSON( 'https://rock.barefootchurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
+            $.getJSON( 'https://rock.valorouschurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
         }
     },
 

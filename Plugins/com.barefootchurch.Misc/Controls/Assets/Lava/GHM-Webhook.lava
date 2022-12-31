@@ -1,0 +1,125 @@
+{%- sql -%}
+DECLARE @FamilyStatus int = 45; -- Approved
+DECLARE @OpportunityId int = 65;
+DECLARE @Attr_timeslot int = 11417;
+DECLARE @Attr_checkedInTime int = 11775;
+DECLARE @Attr_shoppedTime int = 11774;
+DECLARE @Attr_childDisqualified int = 11423;
+
+SELECT
+    p_parent.[Id] 'ParentId'
+    ,p_child.[Id] 'ChildId'
+    ,cr.[Id] 'ConnectionId'
+    ,av_checkedInTime.[ValueAsDateTime] 'CheckedInTime'
+    ,av_shoppedTime.[ValueAsDateTime] 'ShoppedTime'
+    ,av_timeslot.[Value] 'TimeSlot'
+    ,CONCAT_WS( ' ', p_parent.[NickName], p_parent.[LastName] ) 'ParentName'
+    ,CONCAT_WS( ' ', p_child.[NickName], p_child.[LastName] ) 'ChildName'
+    ,DATEDIFF( d, p_child.[BirthDate], GETDATE() ) / 365 'Age'
+FROM
+    [ConnectionRequest] cr
+    JOIN [Registration] r ON cr.[ForeignId] = r.[Id]
+    JOIN [ConnectionStatus] cs ON cr.[ConnectionStatusId] = cs.[Id]
+    LEFT JOIN [AttributeValue] av_timeslot
+        ON cr.[Id] = av_timeslot.[EntityId]
+        AND av_timeslot.[AttributeId] = @Attr_timeslot
+        AND av_timeslot.[Value] <> ''
+    LEFT JOIN [AttributeValue] av_checkedInTime
+        ON cr.[Id] = av_checkedInTime.[EntityId]
+        AND av_checkedInTime.[AttributeId] = @Attr_checkedInTime
+        AND av_checkedInTime.[Value] <> ''
+    LEFT JOIN [AttributeValue] av_shoppedTime
+        ON cr.[Id] = av_shoppedTime.[EntityId]
+        AND av_shoppedTime.[AttributeId] = @Attr_shoppedTime
+        AND av_shoppedTime.[Value] <> ''
+
+    /* Parent Info*/
+    JOIN [PersonAlias] pa_parent ON cr.[PersonAliasId] = pa_parent.[Id]
+    JOIN [Person] p_parent ON pa_parent.[PersonId] = p_parent.[Id]
+
+    /* Child Info */
+    JOIN [RegistrationRegistrant] rr ON r.[Id] = rr.[RegistrationId]
+    JOIN [PersonAlias] pa_child ON rr.[PersonAliasId] = pa_child.[Id]
+    JOIN [Person] p_child ON pa_child.[PersonId] = p_child.[Id]
+    LEFT JOIN [AttributeValue] av_childDisqualified
+        ON rr.[Id] = av_childDisqualified.[EntityId]
+        AND av_childDisqualified.[AttributeId] = @Attr_childDisqualified
+WHERE
+    cr.[ConnectionOpportunityId] = @OpportunityId
+    AND cr.[ConnectionStatusId] = @FamilyStatus
+    AND COALESCE( av_childDisqualified.[ValueAsBoolean], 0 ) = 0 --Not Disqualified
+ORDER BY
+    p_parent.[LastName]
+    ,p_parent.[Nickname]
+    ,p_child.[LastName]
+    ,p_child.[NickName]
+{%- endsql -%}
+{%- assign famlies = results | GroupBy:'ParentId' -%}
+{%- capture json -%}
+[
+    {% for item in famlies %}
+        {% assign family = item | PropertyToKeyValue | Property:'Value' %}
+
+        {% assign connectionId = family[0].ConnectionId %}
+        {% assign parentName = family[0].ParentName %}
+
+        {% assign checkedInTime = family[0].CheckedInTime %}
+        {% assign shoppedTime = family[0].ShoppedTime %}
+
+        {% assign timeSlot = family[0].TimeSlot | Date:'2000-01-01THH:mm:00' %}
+        {% assign timeDiff = 'Now' | Date:'2000-01-01THH:mm:00' | DateDiff:timeSlot,'m' %}
+        {% if timeDiff > 15 %}
+            {% assign timeStatus = 'Early' %}
+            {% capture timeStatusText %}({{ 'Now' | Date:'2000-01-01THH:mm:00' | HumanizeTimeSpan:timeSlot,2 }} early){% endcapture %}
+        {% elseif timeDiff < -45 %}
+            {% assign timeStatus = 'Late' %}
+            {% capture timeStatusText %}({{ 'Now' | Date:'2000-01-01THH:mm:00' | DateAdd:-30,'m' | HumanizeTimeSpan:timeSlot,2 }} late){% endcapture %}
+        {% else %}
+            {% assign timeStatus = 'On Time' %}
+            {% assign timeStatusText = '(On Time)' %}
+        {% endif %}
+
+        {% assign status = 'missing' %}
+        {% if shoppedTime != null %}
+            {% assign status = 'shopped' %}
+        {% elseif checkedInTime != null %}
+            {% assign status = 'waiting' %}
+        {% elseif timeStatus == 'Late' %}
+            {% assign status = 'missingLate' %}
+        {% endif %}
+
+        {% if checkedInTime %}
+            {% assign timeDiff = checkedInTime | Date:'2000-01-01THH:mm:00' | DateDiff:timeSlot,'m' %}
+            {% if timeDiff > 5 %}
+                {% assign checkedInTimeStatus = '2' %} //- Early
+            {% elseif timeDiff < -35 %}
+                {% assign checkedInTimeStatus = '1' %} //- Late
+            {% else %}
+                {% assign checkedInTimeStatus = '0' %} //- OnTime
+            {% endif %}
+        {% endif %}
+
+        {
+            "ConnectionId" : {{ connectionId | ToJSON }},
+            "ParentName" : {{ parentName | ToJSON }},
+            "Status" : {{ status | ToJSON }},
+            "TimeSlot" : {{ timeSlot | Date:'HH:mm' | ToJSON }},
+            "TimeSlot12" : {{ timeSlot | Date:'hh:mm tt' | ToJSON }},
+            "TimeStatus" : {{ timeStatusText | ToJSON }},
+            "CheckedInTime" : {{ checkedInTime | ToJSON }},
+            "CheckedInTimeStatus" : {{ checkedInTimeStatus | ToJSON }},
+            "ShoppedTime" : {{ shoppedTime | ToJSON }},
+            "LastName" : {{ parentName | Split:' ' | Index:1 | ToJSON }},
+            "Children" : [
+                {% for child in family %}
+                    {
+                        "Name" : {{ child.ChildName | ToJSON }},
+                        "Age" : "{{ child.Age }} {{ 'year' | PluralizeForQuantity:child.Age }} old"
+                    },
+                {% endfor %}
+            ]
+        },
+    {% endfor %}
+]
+{%- endcapture -%}
+{{ json | FromJSON | ToJSON }}

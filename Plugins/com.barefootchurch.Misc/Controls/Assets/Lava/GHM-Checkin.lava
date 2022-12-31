@@ -101,7 +101,7 @@ var app = new Vue({
 
     methods: {
         loadData() {
-            $.getJSON( 'https://rock.barefootchurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
+            $.getJSON( 'https://rock.valorouschurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
         }
     },
 
