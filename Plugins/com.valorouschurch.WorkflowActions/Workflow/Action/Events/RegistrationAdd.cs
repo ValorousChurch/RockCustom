@@ -29,14 +29,42 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
     [Export( typeof( ActionComponent ) )]
     [ExportMetadata( "ComponentName", "Registration Add" )]
 
-    [WorkflowTextOrAttribute( "Registration Instance ID", "Attribute Value", "Registration instance that the registration should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationInstanceId",
-        new string[] { "Rock.Field.Types.IntegerFieldType" } )]
-    [WorkflowAttribute( "Registrar", "Workflow attribute that contains the person to add as the registrar.", true, "", "", 3, null,
-        new string[] { "Rock.Field.Types.PersonFieldType" } )]
-    [WorkflowAttribute( "Result Attribute", "An optional attribute to set to the registration id that is created.", false, "", "", 4 )]
+    [WorkflowTextOrAttribute( "Registration Instance ID",
+        "Attribute Value",
+        Description ="Registration instance that the registration should be added to. <span class='tip tip-lava'></span>",
+        IsRequired = true,
+        DefaultValue = "",
+        Category = "",
+        Order = 1,
+        Key = AttributeKey.RegistrationInstanceId,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.IntegerFieldType" } )]
+
+    [WorkflowAttribute( "Registrar",
+        Description = "Workflow attribute that contains the person to add as the registrar.",
+        IsRequired = true,
+        DefaultValue = "",
+        Category = "",
+        Order = 2,
+        Key = AttributeKey.Registrar,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.PersonFieldType" } )]
+
+    [WorkflowAttribute( "Result Attribute",
+        Description = "An optional attribute to set to the registration id that is created.",
+        IsRequired = false,
+        DefaultValue = "",
+        Category = "",
+        Order = 3,
+        Key = AttributeKey.ResultAttribute )]
 
     public class RegistrationAdd : ActionComponent
     {
+        private static class AttributeKey
+        {
+            public const string RegistrationInstanceId = "RegistrationInstanceId";
+            public const string Registrar = "Registrar";
+            public const string ResultAttribute = "ResultAttribute";
+        }
+
         /// <summary>
         /// Executes the specified workflow.
         /// </summary>
@@ -50,7 +78,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
             errorMessages = new List<string>();
 
             // get the registration instance
-            RegistrationInstance instance = new RegistrationInstanceService( rockContext ).Get( GetAttributeValue( action, "RegistrationInstanceId", true ).AsInteger() );
+            RegistrationInstance instance = new RegistrationInstanceService( rockContext ).Get( GetAttributeValue( action, AttributeKey.RegistrationInstanceId, true ).AsInteger() );
             if ( instance == null )
             {
                 errorMessages.Add( "The Registration Instance could not be determined or found!" );
@@ -58,7 +86,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
 
             // determine the person that will be added to the registration instance
             Person person = null;
-            var personAliasGuid = GetAttributeValue( action, "Registrar", true ).AsGuidOrNull();
+            var personAliasGuid = GetAttributeValue( action, AttributeKey.Registrar, true ).AsGuidOrNull();
             if ( personAliasGuid.HasValue )
             {
                 person = new PersonAliasService( rockContext ).Queryable()
@@ -91,7 +119,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
                 if ( registration.Id > 0 )
                 {
                     string resultValue = registration.Id.ToString();
-                    var attribute = SetWorkflowAttributeValue( action, "ResultAttribute", resultValue );
+                    var attribute = SetWorkflowAttributeValue( action, AttributeKey.ResultAttribute, resultValue );
                     if ( attribute != null )
                     {
                         action.AddLogEntry( string.Format( "Set '{0}' attribute to '{1}'.", attribute.Name, resultValue ) );

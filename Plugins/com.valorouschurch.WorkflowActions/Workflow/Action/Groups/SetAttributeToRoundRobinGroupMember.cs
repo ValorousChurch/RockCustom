@@ -26,16 +26,52 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
     [Export( typeof( ActionComponent ) )]
     [ExportMetadata( "ComponentName", "Set Attribute To Round Robin Group Member" )]
 
-    [GroupField( "Group", "Specific group for selecting a person from.", false, "", order: 0, key: "GroupExplicit" )]
-    [WorkflowAttribute( "Group Attribute", "Workflow Attribute that contains the group for selecting a person from.", false, order: 0, key: "Group", fieldTypeClassNames: new string[] { "Rock.Field.Types.GroupFieldType" } )]
+    [GroupField( "Group",
+        Description = "Specific group for selecting a person from.",
+        IsRequired = false,
+        DefaultValue ="",
+        Order = 1,
+        Key = AttributeKey.GroupExplicit )]
 
-    [EnumsField( "Group Member Status", "Group member must be one of these status to match.", typeof( GroupMemberStatus ), true, "1,2", order: 1 )]
+    [WorkflowAttribute( "Group Attribute",
+        Description ="Workflow Attribute that contains the group for selecting a person from.",
+        IsRequired = false,
+        Order = 2,
+        Key = AttributeKey.GroupAttribute,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.GroupFieldType" } )]
 
-    [GroupRoleField( "", "Filter by Group Type Role", "The role the person must have in the group to be considered as valid membership. By default all Group Members are considered.", false, order: 2, key: "GroupRole" )]
+    [EnumsField( "Group Member Status",
+        Description ="Group member must be one of these status to match.",
+        EnumSourceType = typeof( GroupMemberStatus ),
+        IsRequired = true,
+        DefaultValue = "1,2",
+        Order = 3 )]
 
-    [WorkflowAttribute( "Attribute", "The attribute to set with the Person picked from the group.", true, order: 3, fieldTypeClassNames: new string[] { "Rock.Field.Types.PersonFieldType", "Rock.Field.Types.TextFieldType" } )]
+    // GroupRoleField doesn't support the new format for attributes...
+    [GroupRoleField( name: "Filter by Group Type Role",
+        groupTypeGuid: "",
+        description: "The role the person must have in the group to be considered as valid membership. By default all Group Members are considered.",
+        required: false,
+        order: 4,
+        key: "GroupRole" )]
+
+    [WorkflowAttribute( "Attribute",
+        Description = "The attribute to set with the Person picked from the group.",
+        IsRequired = true,
+        Order = 5,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.PersonFieldType", "Rock.Field.Types.TextFieldType" } )]
+
     public class SetAttributeToRoundRobinGroupMember : ActionComponent
     {
+        private class AttributeKey
+        {
+            public const string GroupExplicit = "GroupExplicit";
+            public const string GroupAttribute = "GroupAttribute";
+            public const string GroupMemberStatus = "GroupMemberStatus";
+            public const string GroupRole = "GroupRole";
+            public const string Attribute = "Attribute";
+        }
+
         private readonly object _lockObject = new object();
 
         /// <summary>
@@ -53,10 +89,10 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
             Person person = null;
 
             // Get the selected group from the configuration options.
-            var groupGuid = GetAttributeValue( action, "GroupExplicit" ).AsGuidOrNull();
+            var groupGuid = GetAttributeValue( action, AttributeKey.GroupExplicit ).AsGuidOrNull();
             if ( !groupGuid.HasValue )
             {
-                var guidGroupAttribute = GetAttributeValue( action, "Group" ).AsGuidOrNull();
+                var guidGroupAttribute = GetAttributeValue( action, AttributeKey.GroupAttribute ).AsGuidOrNull();
                 if ( guidGroupAttribute.HasValue )
                 {
                     var attributeGroup = AttributeCache.Get( guidGroupAttribute.Value, rockContext );
@@ -91,7 +127,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
             if ( !errorMessages.Any() )
             {
                 // Set value of the selected attribute.
-                Guid selectAttributeGuid = GetAttributeValue( action, "Attribute" ).AsGuid();
+                Guid selectAttributeGuid = GetAttributeValue( action, AttributeKey.Attribute ).AsGuid();
                 if ( !selectAttributeGuid.IsEmpty() )
                 {
                     var selectedPersonAttribute = AttributeCache.Get( selectAttributeGuid, rockContext );
@@ -171,7 +207,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
 
                 // Get the list of group members to pick from.
                 var groupMemberService = new GroupMemberService( rockContext );
-                var statuses = this.GetAttributeValue( action, "GroupMemberStatus" )
+                var statuses = this.GetAttributeValue( action, AttributeKey.GroupMemberStatus )
                     .SplitDelimitedValues()
                     .Select( s => ( GroupMemberStatus ) Enum.Parse( typeof( GroupMemberStatus ), s ) )
                     .ToList();
@@ -183,9 +219,9 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
                     .ToList();
 
                 // Filter by the group role.
-                if ( !string.IsNullOrWhiteSpace( GetAttributeValue( action, "GroupRole" ) ) )
+                if ( !string.IsNullOrWhiteSpace( GetAttributeValue( action, AttributeKey.GroupRole ) ) )
                 {
-                    var groupRole = new GroupTypeRoleService( rockContext ).Get( GetAttributeValue( action, "GroupRole" ).AsGuid() );
+                    var groupRole = new GroupTypeRoleService( rockContext ).Get( GetAttributeValue( action, AttributeKey.GroupRole ).AsGuid() );
 
                     groupMembers = groupMembers.Where( m => m.GroupRoleId == groupRole.Id ).ToList();
                 }

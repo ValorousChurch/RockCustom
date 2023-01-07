@@ -29,13 +29,34 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
     [Export( typeof( ActionComponent ) )]
     [ExportMetadata( "ComponentName", "Registrant Add" )]
 
-    [WorkflowTextOrAttribute( "Registration ID", "Attribute Value", "Text or workflow attribute that contains the Id of the registration that registrant(s) should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationId",
-        new string[] { "Rock.Field.Types.IntegerFieldType" } )]
-    [WorkflowTextOrAttribute( "Registrant(s)", "Attribute Value", "Text or workflow attribute that contains the person that should be added as a registrant. If using a text value, the values must be a comma-delimited list of person ids to add as registrants. <span class='tip tip-lava'></span>", true, "", "", 3, "Registrants",
-        new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.PersonFieldType" } )]
+    [WorkflowTextOrAttribute( "Registration ID",
+        "Attribute Value",
+        Description = "Text or workflow attribute that contains the Id of the registration that registrant(s) should be added to. <span class='tip tip-lava'></span>",
+        IsRequired = true,
+        DefaultValue = "",
+        Category = "",
+        Order = 1,
+        Key = AttributeKey.RegistrationId,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.IntegerFieldType" } )]
+
+    [WorkflowTextOrAttribute( "Registrant(s)",
+        "Attribute Value",
+        Description = "Text or workflow attribute that contains the person that should be added as a registrant. If using a text value, the values must be a comma-delimited list of person ids to add as registrants. <span class='tip tip-lava'></span>",
+        IsRequired = true,
+        DefaultValue = "",
+        Category = "",
+        Order = 2,
+        Key = AttributeKey.Registrants,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.PersonFieldType" } )]
 
     public class RegistrantAdd : ActionComponent
     {
+        private class AttributeKey
+        {
+            public const string RegistrationId = "RegistrationId";
+            public const string Registrants = "Registrants";
+        }
+
         /// <summary>
         /// Executes the specified workflow.
         /// </summary>
@@ -49,7 +70,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
             errorMessages = new List<string>();
 
             // get the registration instance
-            Registration registration = new RegistrationService( rockContext ).Get( GetAttributeValue( action, "RegistrationId", true ).AsInteger() );
+            Registration registration = new RegistrationService( rockContext ).Get( GetAttributeValue( action, AttributeKey.RegistrationId, true ).AsInteger() );
             if ( registration == null )
             {
                 errorMessages.Add( "The Registration could not be determined or found!" );
@@ -57,7 +78,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
 
             // determine the person/p that will be added to the registration instance
             List<Person> people = new List<Person>();
-            string registrantsAttributeValue = GetAttributeValue( action, "Registrants", true );
+            string registrantsAttributeValue = GetAttributeValue( action, AttributeKey.Registrants, true );
             var personAliasGuid = registrantsAttributeValue.AsGuidOrNull();
             if ( personAliasGuid.HasValue )
             {
