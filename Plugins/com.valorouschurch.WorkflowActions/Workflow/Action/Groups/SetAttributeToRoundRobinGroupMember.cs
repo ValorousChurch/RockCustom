@@ -165,43 +165,38 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
             // the next person in the round robin and overwriting each others changes.
             lock ( _lockObject )
             {
-                var attrKey = action.ActionType.Guid.ToString();
-
+                var attrKey = action.ActionTypeCache.Guid.ToString();
                 // Load attributes if we need to.
-                if ( action.Activity.Workflow.WorkflowType.Attributes == null )
+                if ( action.Activity.Workflow.Attributes == null )
                 {
-                    action.Activity.Workflow.WorkflowType.LoadAttributes();
+                    action.Activity.Workflow.LoadAttributes();
                 }
 
                 // Check if we already have an attribute.
-                if ( !action.Activity.Workflow.WorkflowType.Attributes.ContainsKey( attrKey ) )
+                if ( !action.Activity.Workflow.Attributes.ContainsKey( attrKey ) )
                 {
-                    var attribute = new Rock.Model.Attribute
+                    var newAttribute = new Rock.Model.Attribute
                     {
-                        EntityTypeId = action.Activity.Workflow.WorkflowType.TypeId,
-                        Name = string.Format( "Last Round Robin Person ({0})", action.ActionType.Name ),
+                        EntityTypeId = action.Activity.Workflow.TypeId,
+                        EntityTypeQualifierColumn = "WorkflowTypeId",
+                        EntityTypeQualifierValue = action.Activity.Workflow.WorkflowTypeId.ToString(),
+                        Name = string.Format( "Last Round Robin Person ({0})", action.ActionTypeCache.Name ),
                         Key = attrKey,
                         FieldTypeId = FieldTypeCache.Get( Rock.SystemGuid.FieldType.TEXT.AsGuid() ).Id
                     };
 
                     using ( var newRockContext = new RockContext() )
                     {
-                        new AttributeService( newRockContext ).Add( attribute );
+                        new AttributeService( newRockContext ).Add( newAttribute );
                         newRockContext.SaveChanges();
-                        EntityTypeAttributesCache.Clear();
+                        EntityTypeAttributesCache.FlushItem( action.Activity.Workflow.TypeId );
                     }
 
-                    action.Activity.Workflow.WorkflowType.Attributes.Add( attrKey, AttributeCache.Get( attribute ) );
-                    var attributeValue = new AttributeValueCache
-                    {
-                        AttributeId = attribute.Id,
-                        Value = string.Empty
-                    };
-                    action.Activity.Workflow.WorkflowType.AttributeValues.Add( attrKey, attributeValue );
+                    action.Activity.Workflow.Attributes.Add( attrKey, AttributeCache.Get( newAttribute ) );
                 }
 
                 // Get the last person selected.
-                var lastPersonId = action.Activity.Workflow.WorkflowType.GetAttributeValue( attrKey ).AsIntegerOrNull();
+                var lastPersonId = action.Activity.Workflow.GetAttributeValue( attrKey ).AsIntegerOrNull();
 
                 var rockContext = new RockContext();
 
@@ -255,8 +250,10 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
                 }
 
                 // Update the attribute value.
-                action.Activity.Workflow.WorkflowType.SetAttributeValue( attrKey, person != null ? person.Id.ToString() : string.Empty );
-                action.Activity.Workflow.WorkflowType.SaveAttributeValues( rockContext );
+                var attributeService = new AttributeService( rockContext );
+                var attribute = attributeService.Get( action.Activity.Workflow.TypeId, "WorkflowTypeId", action.Activity.Workflow.WorkflowTypeId.ToString(), attrKey );
+                attribute.DefaultValue = person.Id.ToString();
+                rockContext.SaveChanges();
             }
 
             return person;
