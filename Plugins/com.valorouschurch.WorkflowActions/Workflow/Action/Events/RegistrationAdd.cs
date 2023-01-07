@@ -8,7 +8,6 @@ Original Source:
   - https://github.com/PillarsForRock/CustomWorkflowActions/blob/15c164b16c8ae778679a41a6e41b00189f0c3b4f/rocks.pillars.WorkflowActions/Workflow/Action/Events/RegistrationAdd.cs
 */
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -25,16 +24,16 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
     /// <summary>
     /// Sets an attribute's value to the selected person 
     /// </summary>
-    [ActionCategory("Valorous > Events")]
-    [Description("Adds a registration and registrar to a specific event instance, and returns the registration id.")]
-    [Export(typeof(ActionComponent))]
-    [ExportMetadata("ComponentName", "Registration Add")]
+    [ActionCategory( "Valorous > Events" )]
+    [Description( "Adds a registration and registrar to a specific event instance, and returns the registration id." )]
+    [Export( typeof( ActionComponent ) )]
+    [ExportMetadata( "ComponentName", "Registration Add" )]
 
-    [WorkflowTextOrAttribute("Registration Instance ID", "Attribute Value", "Registration instance that the registration should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationInstanceId",
-        new string[] { "Rock.Field.Types.IntegerFieldType" })]
-    [WorkflowAttribute("Registrar", "Workflow attribute that contains the person to add as the registrar.", true, "", "", 3, null,
-        new string[] { "Rock.Field.Types.PersonFieldType" })]
-    [WorkflowAttribute("Result Attribute", "An optional attribute to set to the registration id that is created.", false, "", "", 4)]
+    [WorkflowTextOrAttribute( "Registration Instance ID", "Attribute Value", "Registration instance that the registration should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationInstanceId",
+        new string[] { "Rock.Field.Types.IntegerFieldType" } )]
+    [WorkflowAttribute( "Registrar", "Workflow attribute that contains the person to add as the registrar.", true, "", "", 3, null,
+        new string[] { "Rock.Field.Types.PersonFieldType" } )]
+    [WorkflowAttribute( "Result Attribute", "An optional attribute to set to the registration id that is created.", false, "", "", 4 )]
 
     public class RegistrationAdd : ActionComponent
     {
@@ -46,39 +45,40 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
         /// <param name="entity">The entity.</param>
         /// <param name="errorMessages">The error messages.</param>
         /// <returns></returns>
-        public override bool Execute(RockContext rockContext, WorkflowAction action, Object entity, out List<string> errorMessages)
+        public override bool Execute( RockContext rockContext, WorkflowAction action, object entity, out List<string> errorMessages )
         {
             errorMessages = new List<string>();
 
             // get the registration instance
-            RegistrationInstance instance = new RegistrationInstanceService(rockContext).Get(GetAttributeValue(action, "RegistrationInstanceId", true).AsInteger());
-            if (instance == null)
+            RegistrationInstance instance = new RegistrationInstanceService( rockContext ).Get( GetAttributeValue( action, "RegistrationInstanceId", true ).AsInteger() );
+            if ( instance == null )
             {
-                errorMessages.Add("The Registration Instance could not be determined or found!");
+                errorMessages.Add( "The Registration Instance could not be determined or found!" );
             }
 
             // determine the person that will be added to the registration instance
             Person person = null;
-            var personAliasGuid = GetAttributeValue(action, "Registrar", true).AsGuidOrNull();
-            if (personAliasGuid.HasValue)
+            var personAliasGuid = GetAttributeValue( action, "Registrar", true ).AsGuidOrNull();
+            if ( personAliasGuid.HasValue )
             {
-                person = new PersonAliasService(rockContext).Queryable()
-                    .Where(a => a.Guid.Equals(personAliasGuid.Value))
-                    .Select(a => a.Person)
+                person = new PersonAliasService( rockContext ).Queryable()
+                    .Where( a => a.Guid.Equals( personAliasGuid.Value ) )
+                    .Select( a => a.Person )
                     .FirstOrDefault();
             }
-            if (person == null || !person.PrimaryAliasId.HasValue)
+
+            if ( person == null || !person.PrimaryAliasId.HasValue )
             {
-                errorMessages.Add("The Person for the Registrar value could not be determined or found!");
+                errorMessages.Add( "The Person for the Registrar value could not be determined or found!" );
             }
 
             // Add registration
-            if (!errorMessages.Any())
+            if ( !errorMessages.Any() )
             {
-                var registrationService = new RegistrationService(rockContext);
+                var registrationService = new RegistrationService( rockContext );
 
                 var registration = new Registration();
-                registrationService.Add(registration);
+                registrationService.Add( registration );
                 registration.RegistrationInstanceId = instance.Id;
                 registration.PersonAliasId = person.PrimaryAliasId.Value;
                 registration.FirstName = person.NickName;
@@ -88,21 +88,20 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
 
                 rockContext.SaveChanges();
 
-                if (registration.Id > 0)
+                if ( registration.Id > 0 )
                 {
                     string resultValue = registration.Id.ToString();
-                    var attribute = SetWorkflowAttributeValue(action, "ResultAttribute", resultValue);
-                    if (attribute != null)
+                    var attribute = SetWorkflowAttributeValue( action, "ResultAttribute", resultValue );
+                    if ( attribute != null )
                     {
-                        action.AddLogEntry(string.Format("Set '{0}' attribute to '{1}'.", attribute.Name, resultValue));
+                        action.AddLogEntry( string.Format( "Set '{0}' attribute to '{1}'.", attribute.Name, resultValue ) );
                     }
                 }
             }
 
-            errorMessages.ForEach(m => action.AddLogEntry(m, true));
+            errorMessages.ForEach( m => action.AddLogEntry( m, true ) );
 
             return !errorMessages.Any();
         }
-
     }
 }

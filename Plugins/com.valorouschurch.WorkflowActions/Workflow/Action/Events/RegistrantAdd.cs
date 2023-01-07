@@ -8,7 +8,6 @@ Original Source:
   - https://github.com/PillarsForRock/CustomWorkflowActions/blob/15c164b16c8ae778679a41a6e41b00189f0c3b4f/rocks.pillars.WorkflowActions/Workflow/Action/Events/RegistrantAdd.cs
 */
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -23,17 +22,17 @@ using Rock.Workflow;
 namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
 {
     /// <summary>
-    /// Sets an attribute's value to the selected person 
+    /// Adds a registrant to an existing registration. 
     /// </summary>
-    [ActionCategory("Valorous > Events")]
-    [Description("Adds a registrant to an existing registration.")]
-    [Export(typeof(ActionComponent))]
-    [ExportMetadata("ComponentName", "Registrant Add")]
+    [ActionCategory( "Valorous > Events" )]
+    [Description( "Adds a registrant to an existing registration." )]
+    [Export( typeof( ActionComponent ) )]
+    [ExportMetadata( "ComponentName", "Registrant Add" )]
 
-    [WorkflowTextOrAttribute("Registration ID", "Attribute Value", "Text or workflow attribute that contains the Id of the registration that registrant(s) should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationId",
-        new string[] { "Rock.Field.Types.IntegerFieldType" })]
-    [WorkflowTextOrAttribute("Registrant(s)", "Attribute Value", "Text or workflow attribute that contains the person that should be added as a registrant. If using a text value, the values must be a comma-delimited list of person ids to add as registrants. <span class='tip tip-lava'></span>", true, "", "", 3, "Registrants",
-        new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.PersonFieldType" })]
+    [WorkflowTextOrAttribute( "Registration ID", "Attribute Value", "Text or workflow attribute that contains the Id of the registration that registrant(s) should be added to. <span class='tip tip-lava'></span>", true, "", "", 2, "RegistrationId",
+        new string[] { "Rock.Field.Types.IntegerFieldType" } )]
+    [WorkflowTextOrAttribute( "Registrant(s)", "Attribute Value", "Text or workflow attribute that contains the person that should be added as a registrant. If using a text value, the values must be a comma-delimited list of person ids to add as registrants. <span class='tip tip-lava'></span>", true, "", "", 3, "Registrants",
+        new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.PersonFieldType" } )]
 
     public class RegistrantAdd : ActionComponent
     {
@@ -45,69 +44,70 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
         /// <param name="entity">The entity.</param>
         /// <param name="errorMessages">The error messages.</param>
         /// <returns></returns>
-        public override bool Execute(RockContext rockContext, WorkflowAction action, Object entity, out List<string> errorMessages)
+        public override bool Execute( RockContext rockContext, WorkflowAction action, object entity, out List<string> errorMessages )
         {
             errorMessages = new List<string>();
 
             // get the registration instance
-            Registration registration = new RegistrationService(rockContext).Get(GetAttributeValue(action, "RegistrationId", true).AsInteger());
-            if (registration == null)
+            Registration registration = new RegistrationService( rockContext ).Get( GetAttributeValue( action, "RegistrationId", true ).AsInteger() );
+            if ( registration == null )
             {
-                errorMessages.Add("The Registration could not be determined or found!");
+                errorMessages.Add( "The Registration could not be determined or found!" );
             }
 
             // determine the person/p that will be added to the registration instance
             List<Person> people = new List<Person>();
-            string registrantsAttributeValue = GetAttributeValue(action, "Registrants", true);
+            string registrantsAttributeValue = GetAttributeValue( action, "Registrants", true );
             var personAliasGuid = registrantsAttributeValue.AsGuidOrNull();
-            if (personAliasGuid.HasValue)
+            if ( personAliasGuid.HasValue )
             {
-                var person = new PersonAliasService(rockContext).Queryable()
-                    .Where(a => a.Guid.Equals(personAliasGuid.Value))
-                    .Select(a => a.Person)
+                var person = new PersonAliasService( rockContext ).Queryable()
+                    .Where( a => a.Guid.Equals( personAliasGuid.Value ) )
+                    .Select( a => a.Person )
                     .FirstOrDefault();
-                if (person != null)
+                if ( person != null )
                 {
-                    people.Add(person);
+                    people.Add( person );
                 }
             }
-            if (!people.Any())
+
+            if ( !people.Any() )
             {
                 var personIdList = registrantsAttributeValue.SplitDelimitedValues().AsIntegerList();
-                if (personIdList.Any())
+                if ( personIdList.Any() )
                 {
-                    people = new PersonService(rockContext).Queryable()
-                        .Where(p => personIdList.Contains(p.Id))
+                    people = new PersonService( rockContext ).Queryable()
+                        .Where( p => personIdList.Contains( p.Id ) )
                         .ToList();
                 }
             }
-            if (!people.Any())
+
+            if ( !people.Any() )
             {
-                errorMessages.Add("The Registrant(s) could not be determined or found!");
+                errorMessages.Add( "The Registrant(s) could not be determined or found!" );
             }
 
             // Add registrant(s)
-            if (!errorMessages.Any())
+            if ( !errorMessages.Any() )
             {
-                var registrantService = new RegistrationRegistrantService(rockContext);
-                foreach (var person in people)
+                var registrantService = new RegistrationRegistrantService( rockContext );
+                foreach ( var person in people )
                 {
-                    if (person.PrimaryAliasId.HasValue)
+                    if ( person.PrimaryAliasId.HasValue )
                     {
                         var registrant = new RegistrationRegistrant();
                         registrant.RegistrationId = registration.Id;
                         registrant.PersonAliasId = person.PrimaryAliasId.Value;
-                        registrantService.Add(registrant);
+                        registrantService.Add( registrant );
                     }
                 }
 
                 rockContext.SaveChanges();
             }
 
-            errorMessages.ForEach(m => action.AddLogEntry(m, true));
+            errorMessages.ForEach( m => action.AddLogEntry( m, true ) );
 
             return true;
         }
-
     }
 }
