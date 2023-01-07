@@ -10,13 +10,15 @@
     }
 {% endstylesheet %}
 
+{% assign description = Event.Description | Trim | RunLava %}
+
 <!-- Social Metadata -->
 {{ 'summary_large_image' | AddMetaTagToHead:'property','twitter:card' }}
 {{ Event.Name | AddMetaTagToHead:'property','twitter:title' }}
-{{ Event.Description | AddMetaTagToHead:'property','twitter:description' }}
+{{ description | AddMetaTagToHead:'property','twitter:description' }}
 
 {{ Event.Name | AddMetaTagToHead:'property','og:title' }}
-{{ Event.Description | AddMetaTagToHead:'property','og:description' }}
+{{ description | AddMetaTagToHead:'property','og:description' }}
 
 {% assign facebookPhoto = Event | Attribute:'core_calendar_FacebookPhoto','Object' %}
 {% if facebookPhoto %}
@@ -135,11 +137,10 @@
             <section class="p-0">
                 <h4 class="m-0"><i class="fa fa-info-circle fa-sm text-primary"></i> Additional Information</h4>
                 <hr class="mt-3 mb-4">
-{% assign description = Event.Description | Trim %}
 {% if description and description != '' %}
                 <p class="mb-3"><strong>Description</strong></p>
                 <div class="text-left">
-                    {{ Event.Description }}
+                    {{ description }}
                 </div>
 {% endif %}
 {% assign notes = EventItemOccurrence.Note | Trim %}
