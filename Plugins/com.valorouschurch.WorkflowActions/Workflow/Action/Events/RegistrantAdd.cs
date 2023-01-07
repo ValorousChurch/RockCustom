@@ -20,12 +20,12 @@ using Rock.Data;
 using Rock.Model;
 using Rock.Workflow;
 
-namespace rocks.pillars.WorkflowActions.Workflow.Action.Events
+namespace com.valorouschurch.WorkflowActions.Workflow.Action.Events
 {
     /// <summary>
     /// Sets an attribute's value to the selected person 
     /// </summary>
-    [ActionCategory("Pillars: Events")]
+    [ActionCategory("Valorous > Events")]
     [Description("Adds a registrant to an existing registration.")]
     [Export(typeof(ActionComponent))]
     [ExportMetadata("ComponentName", "Registrant Add")]

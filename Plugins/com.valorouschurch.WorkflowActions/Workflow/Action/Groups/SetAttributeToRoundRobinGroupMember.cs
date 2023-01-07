@@ -16,12 +16,12 @@ using Rock.Model;
 using Rock.Web.Cache;
 using Rock.Workflow;
 
-namespace com.shepherdchurch.WorkflowActions
+namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
 {
     /// <summary>
     /// Runs Lava and sets an attribute's value to the result.
     /// </summary>
-    [ActionCategory("Shepherd Church")]
+    [ActionCategory("Valorous > Groups")]
     [Description("Sets an attribute to the Person of a group using a round-robin selection style.")]
     [Export(typeof(ActionComponent))]
     [ExportMetadata("ComponentName", "Set Attribute To Round Robin Group Member")]
