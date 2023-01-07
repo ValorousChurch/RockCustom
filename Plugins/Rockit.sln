@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.GroupMe"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "org.secc.PDF", "org.secc.PDF\org.secc.PDF.csproj", "{87D417B5-72E9-4B80-875B-3AAE79859C2A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.valorouschurch.WorkflowActions", "com.valorouschurch.WorkflowActions\com.valorouschurch.WorkflowActions.csproj", "{37FF15A8-6298-4ECB-BC69-00FF83CE5432}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37FF15A8-6298-4ECB-BC69-00FF83CE5432}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37FF15A8-6298-4ECB-BC69-00FF83CE5432}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37FF15A8-6298-4ECB-BC69-00FF83CE5432}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37FF15A8-6298-4ECB-BC69-00FF83CE5432}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
