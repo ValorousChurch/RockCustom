@@ -3,7 +3,7 @@
 //
 // Licensed under the  Southeast Christian Church License (the "License");
 // you may not use this file except in compliance with the License.
-// A copy of the License shoud be included with this file.
+// A copy of the License should be included with this file.
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,13 +18,14 @@ Original Source:
   - https://github.com/secc/RockPlugins/blob/5376bd105925e304766a3b9eefa0f9fbbaeff4a7/Plugins/org.secc.Workflow/WorkflowControl/ActivateWorkflowWithLava.cs
 */
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+
 using Rock;
 using Rock.Attribute;
 using Rock.Data;
+using Rock.Lava;
 using Rock.Model;
 using Rock.Web.Cache;
 using Rock.Workflow;
@@ -32,7 +33,7 @@ using Rock.Workflow;
 namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
 {
     /// <summary>
-    /// Activates all the actions for the current action's activity.
+    /// Activates a new workflow with the provided attribute values.
     /// </summary>
     [ActionCategory( "Valorous > Workflow Control" )]
     [Description( "Activates a new workflow with the provided attribute values." )]
@@ -54,7 +55,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
         /// <param name="entity">The entity.</param>
         /// <param name="errorMessages">The error messages.</param>
         /// <returns></returns>
-        public override bool Execute( RockContext rockContext, WorkflowAction action, Object entity, out List<string> errorMessages )
+        public override bool Execute( RockContext rockContext, WorkflowAction action, object entity, out List<string> errorMessages )
         {
             errorMessages = new List<string>();
             var workflowTypeGuid = GetAttributeValue( action, "WorkflowType" ).AsGuidOrNull();
@@ -109,10 +110,11 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
             foreach ( var keyPair in sourceKeyMap )
             {
                 string value = keyPair.Value;
-                if ( value.HasMergeFields() )
+                if ( LavaHelper.IsLavaTemplate( value ) )
                 {
                     value = keyPair.Value.ResolveMergeFields( mergeFields );
                 }
+
                 // Does the source key exist as an attribute in the source workflow?
                 if ( action.Activity.Workflow.Attributes.ContainsKey( keyPair.Key ) )
                 {
@@ -126,7 +128,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
                         errorMessages.Add( string.Format( "'{0}' is not an attribute key in the activated workflow: '{1}'", value, workflow.Name ) );
                     }
                 }
-                else if ( keyPair.Key.HasMergeFields() )
+                else if ( LavaHelper.IsLavaTemplate( keyPair.Key ) )
                 {
                     if ( workflow.Attributes.ContainsKey( value ) )
                     {
@@ -144,7 +146,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
             }
 
             List<string> workflowErrorMessages = new List<string>();
-            new Rock.Model.WorkflowService( rockContext ).Process( workflow, out workflowErrorMessages );
+            new WorkflowService( rockContext ).Process( workflow, out workflowErrorMessages );
             errorMessages.AddRange( workflowErrorMessages );
 
             return true;
