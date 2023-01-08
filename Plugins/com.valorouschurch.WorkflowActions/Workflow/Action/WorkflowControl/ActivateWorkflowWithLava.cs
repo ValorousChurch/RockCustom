@@ -29,12 +29,12 @@ using Rock.Model;
 using Rock.Web.Cache;
 using Rock.Workflow;
 
-namespace org.secc.Workflow.WorkflowControl
+namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
 {
     /// <summary>
     /// Activates all the actions for the current action's activity.
     /// </summary>
-    [ActionCategory( "SECC > Workflow Control" )]
+    [ActionCategory( "Valorous > Workflow Control" )]
     [Description( "Activates a new workflow with the provided attribute values." )]
     [Export( typeof( ActionComponent ) )]
     [ExportMetadata( "ComponentName", "Activate Workflow with Lava" )]
