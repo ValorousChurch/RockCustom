@@ -40,13 +40,51 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
     [Export( typeof( ActionComponent ) )]
     [ExportMetadata( "ComponentName", "Activate Workflow with Lava" )]
 
-    [TextField( "Workflow Name", "The name of your new workflow", true, order: 1 )]
-    [WorkflowTypeField( "Workflow Type", "The workflow type to activate.  To set the Workflow Type from an Attribute, leave this blank and set Workflow Type from Attribute.", false, false, order: 2 )]
-    [WorkflowAttribute( "Workflow Type from Attribute", "The workflow type to activate. Either this or Workflow Type must be set.", false, fieldTypeClassNames: new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.WorkflowTypeFieldType" }, order: 3 )]
-    [KeyValueListField( "Workflow Attribute Key", "Used to match the current workflow's attribute keys to the keys of the new workflow. The new workflow will inherit the attribute values of the keys provided. <span class='tip tip-lava'></span>", false, keyPrompt: "Source Attribute or Lava", valuePrompt: "Target Attribute", order: 4 )]
-    [WorkflowAttribute( "Workflow Attribute", "The attribute to hold the new activated workflow. ", false, "", "", 5, null, new string[] { "Rock.Field.Types.WorkflowFieldType" } )]
+    [TextField( "Workflow Name",
+        Description = "The name of your new workflow",
+        IsRequired = true,
+        Key = AttributeKey.WorkflowName,
+        Order = 1 )]
+
+    [WorkflowTypeField( "Workflow Type",
+        Description = "The workflow type to activate.  To set the Workflow Type from an Attribute, leave this blank and set Workflow Type from Attribute.",
+        IsRequired = false,
+        Key = AttributeKey.WorkflowType,
+        AllowMultiple = false,
+        Order = 2 )]
+
+    [WorkflowAttribute( "Workflow Type from Attribute",
+        Description = "The workflow type to activate. Either this or Workflow Type must be set.",
+        IsRequired = false,
+        Key = AttributeKey.WorkflowTypeFromAttribute,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.TextFieldType", "Rock.Field.Types.WorkflowTypeFieldType" },
+        Order = 3 )]
+
+    [KeyValueListField( "Workflow Attribute Key",
+        Description = "Used to match the current workflow's attribute keys to the keys of the new workflow. The new workflow will inherit the attribute values of the keys provided. <span class='tip tip-lava'></span>",
+        IsRequired = false,
+        Key = AttributeKey.WorkflowAttributeKey,
+        KeyPrompt = "Source Attribute or Lava",
+        ValuePrompt = "Target Attribute",
+        Order = 4 )]
+
+    [WorkflowAttribute( "Workflow Attribute",
+        "The attribute to hold the new activated workflow.",
+        IsRequired = false,
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.WorkflowFieldType" },
+        Order = 5 )]
+
     public class ActivateWorkflowWithLava : ActionComponent
     {
+        private class AttributeKey
+        {
+            public const string WorkflowName = "WorkflowName";
+            public const string WorkflowType = "WorkflowType";
+            public const string WorkflowTypeFromAttribute = "WorkflowTypefromAttribute";
+            public const string WorkflowAttributeKey = "WorkflowAttributeKey";
+            public const string WorkflowAttribute = "WorkflowAttribute";
+        }
+
         /// <summary>
         /// Executes the specified workflow.
         /// </summary>
@@ -58,9 +96,9 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
         public override bool Execute( RockContext rockContext, WorkflowAction action, object entity, out List<string> errorMessages )
         {
             errorMessages = new List<string>();
-            var workflowTypeGuid = GetAttributeValue( action, "WorkflowType" ).AsGuidOrNull();
-            var workflowTypeFromAttributeGuid = GetAttributeValue( action, "WorkflowTypefromAttribute", true ).AsGuidOrNull();
-            var workflowName = GetAttributeValue( action, "WorkflowName" );
+            var workflowTypeGuid = GetAttributeValue( action, AttributeKey.WorkflowType ).AsGuidOrNull();
+            var workflowTypeFromAttributeGuid = GetAttributeValue( action, AttributeKey.WorkflowTypeFromAttribute, true ).AsGuidOrNull();
+            var workflowName = GetAttributeValue( action, AttributeKey.WorkflowName );
 
             WorkflowTypeCache workflowType = null;
 
@@ -92,7 +130,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
             }
 
             Dictionary<string, string> sourceKeyMap = null;
-            var workflowAttributeKeys = GetAttributeValue( action, "WorkflowAttributeKey" );
+            var workflowAttributeKeys = GetAttributeValue( action, AttributeKey.WorkflowAttributeKey );
             if ( !string.IsNullOrWhiteSpace( workflowAttributeKeys ) )
             {
                 // TODO Find a way upstream to stop an additional being appended to the value
@@ -103,7 +141,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
 
             var workflow = Rock.Model.Workflow.Activate( workflowType, workflowName );
             workflow.LoadAttributes( rockContext );
-            var newWorkFlowAttr = SetWorkflowAttributeValue( action, "WorkflowAttribute", workflow.Guid );
+            var newWorkFlowAttr = SetWorkflowAttributeValue( action, AttributeKey.WorkflowAttribute, workflow.Guid );
             var mergeFields = GetMergeFields( action );
             mergeFields["Entity"] = entity;
 
