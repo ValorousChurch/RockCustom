@@ -973,12 +973,21 @@ namespace RockWeb.Plugins.com_barefootchurch
         {
             if ( person != null && !tbPrayerRequests.Text.IsNullOrWhiteSpace() )
             {
-                PrayerRequest prayerRequest = new PrayerRequest();
-                prayerRequest.RequestedByPersonAliasId = person.PrimaryAliasId;
-                prayerRequest.FirstName = person.NickName;
-                prayerRequest.LastName = person.LastName;
-                prayerRequest.Text = tbPrayerRequests.Text;
-                prayerRequest.Email = person.Email;
+                PrayerRequest prayerRequest = new PrayerRequest
+                {
+                    RequestedByPersonAliasId = person.PrimaryAliasId,
+                    FirstName = person.NickName,
+                    LastName = person.LastName,
+                    Text = tbPrayerRequests.Text,
+                    Email = person.Email,
+
+                    CampusId = cpCampus.SelectedCampusId,
+                    EnteredDateTime = RockDateTime.Now,
+                    ExpirationDate = RockDateTime.Now.AddDays( 14 ),
+                    IsActive = true,
+                    IsApproved = true,
+                    IsPublic = false
+                };
 
                 Category category;
                 Guid defaultCategoryGuid = GetAttributeValue( "PrayerCategory" ).AsGuid();
@@ -986,15 +995,10 @@ namespace RockWeb.Plugins.com_barefootchurch
                 {
                     category = new CategoryService( rockContext ).Get( defaultCategoryGuid );
                     prayerRequest.CategoryId = category.Id;
-                    prayerRequest.Category = category;
                 }
-
-                prayerRequest.IsPublic = false;
-                prayerRequest.IsApproved = true;
 
                 PrayerRequestService prayerRequestService = new PrayerRequestService( rockContext );
                 prayerRequestService.Add( prayerRequest );
-                prayerRequest.EnteredDateTime = RockDateTime.Now;
                 rockContext.SaveChanges();
             }
         }
