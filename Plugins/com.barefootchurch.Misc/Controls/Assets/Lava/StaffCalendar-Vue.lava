@@ -149,6 +149,21 @@ p {
     },
   {%- endfor -%}
 
+{% comment %} Room Reservations - Daily School {%endcomment %}
+  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',3 -%}
+  {%- for item in reservationItems -%}
+    {
+      "eventType": "reservationSchool",
+      "color": "orange",
+      "name": {{ item.Name | ToJSON }},
+      "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
+      "link": "/ReservationDetail?ReservationId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
 {% comment %} Other Events - Fron the internal calendar {%endcomment %}
   {%- assign eventItems = 'internaleventscalendar' | PersistedDataset -%}
   {%- for item in eventItems -%}
@@ -387,6 +402,7 @@ p {
         { value: 'oncall',             text: 'On-Call Pastors' },
         { value: 'reservationGeneral', text: 'Room Reservations - General' },
         { value: 'reservationGroups',  text: 'Room Reservations - Life Groups' },
+        { value: 'reservationSchool',  text: 'Room Reservations - Daily School' },
         { value: 'staff',              text: 'Staff Life Events' },
         { value: 'pto',                text: 'Time Off' },
         { value: 'blackout',           text: 'Vacation Blackouts' },
