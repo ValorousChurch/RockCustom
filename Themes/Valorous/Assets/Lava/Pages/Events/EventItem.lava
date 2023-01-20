@@ -214,6 +214,12 @@
 {% if registrationEndOverride and registrationEndOverride != '' and registrationEndOverride <= now %}
         {% assign registration = 'Closed' %}
 {% endif %}
+{% if registration == 'Open' %}
+    {% capture full %}{[ IsEventItemOccurrenceRegistrationFull EventItemOccurrenceId:'{{ EventItemOccurrence.Id }}' ]}{% endcapture %}
+    {% if full == 'True' %}
+        {% assign registration = 'Full'%}
+    {% endif %}
+{% endif %}
 
 
 <aside class="sidebar-event col-xs-12 col-md-4 p-0">
@@ -229,6 +235,10 @@
 {% when 'Closed' %}
                                     <i class="fa fa-calendar-alt text-red-500"></i><br>
                                     Registration Closed
+{% when 'Full' %}
+                                    <i class="fa fa-calendar-alt text-red-500"></i><br>
+                                    Registration Full
+
 {% else %}
                                     <i class="fa fa-calendar-alt text-gray-400"></i><br>
                                     Registration Not&nbsp;Required

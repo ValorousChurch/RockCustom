@@ -1,0 +1,68 @@
+//- *********************************** NAME ***************************************
+Is Event Item Occurrence Registration Full?
+
+//- *********************************** TagType ************************************
+Inline
+
+//- *********************************** TAG NAME ***********************************
+IsEventItemOccurrenceRegistrationFull
+
+//- *********************************** DESCRIPTION ********************************
+Checks if all registrations for a given EventItemOccurrence are full.
+
+//- *********************************** DOCUMENTATION ******************************
+
+<p>
+    <b>Example:</b><br>
+    <code>
+      {% capture result %}{[ IsEventItemOccurrenceRegistrationFull EventItemOccurrenceId:'65' ]}{% endcapture %}<br>
+      {% if result = 'True' %}It's full...{% else %}There's still room.{% endif %}
+    </code>
+</p>
+<hr>
+<b>Parameters:</b>
+<table class="table table-bordered">
+    <tbody><tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Required?</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td>EventItemOccurrenceId</td>
+        <td>The EventItemOccurrence to check</td>
+        <td>yes</td>
+        <td>0</td>
+    </tr>
+</tbody></table>
+
+//- *********************************** MARKUP *************************************
+
+{%- sql -%}
+    DECLARE @EventItemOccurrenceId int = {{ eventitemoccurrenceid | AsInteger | Default:'0' }};
+    DECLARE @Full bit = 1;
+    IF EXISTS (
+        SELECT
+            ri.[Id]
+        FROM
+            [EventItemOccurrenceGroupMap] gm
+            JOIN [RegistrationInstance] ri ON ri.[Id] = gm.[RegistrationInstanceId]
+            LEFT JOIN [Registration] r ON r.[RegistrationInstanceId] = ri.[Id]
+        WHERE
+            gm.[EventItemOccurrenceId] = @EventItemOccurrenceId
+        GROUP BY
+            ri.[Id]
+        HAVING
+            MAX( ri.[MaxAttendees] ) IS NULL
+            OR COUNT( r.[Id] ) < MAX( ri.[MaxAttendees] )
+    )
+        SELECT @Full = 0;
+    SELECT @Full 'Full';
+{%- endsql -%}
+{{- results[0].Full | Default:'False' -}}
+
+//- *********************************** PARAMETERS *********************************
+eventitemoccurrenceid - 0
+
+//- *********************************** ENABLED COMMANDS ***************************
+SQL
