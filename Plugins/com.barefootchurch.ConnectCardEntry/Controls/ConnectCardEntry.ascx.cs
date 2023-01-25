@@ -983,6 +983,7 @@ namespace RockWeb.Plugins.com_barefootchurch
 
                     CampusId = cpCampus.SelectedCampusId,
                     EnteredDateTime = RockDateTime.Now,
+                    ApprovedOnDateTime = RockDateTime.Now,
                     ExpirationDate = RockDateTime.Now.AddDays( 14 ),
                     IsActive = true,
                     IsApproved = true,
