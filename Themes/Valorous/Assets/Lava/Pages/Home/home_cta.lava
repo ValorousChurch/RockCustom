@@ -1,13 +1,70 @@
-<section class="tw-text-gray-600 tw-body-font tw-bg-c-primary tw-py-24">
-    <div class="container tw-px-5 tw-mx-auto tw-flex tw-flex-wrap">
-        <h2 class="tw-text-white tw-title-font tw-mb-2 xl:tw-pr-3 xl:tw-w-2/5 tw-mt-0 tw-mb-2">
-            Need Prayer? No matter what you're facing, we'd love to pray with you!
-        </h2>
-        <div class="xl:tw-w-3/5 xl:tw-pl-6">
-            <p class="tw-leading-relaxed tw-text-white">There are times when life is overwhelming, when all we have is questions. In those moments, hope can feel far away. The great thing about prayer is that it shifts our perspective toward the One who stands ready to listen.</p>
-            <div class="md:tw-flex xl:tw-mt-4 tw-mt-6">
-                <a class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out btn btn-primary" href="/prayer">Submit a Request</a>
-            </div>
-        </div>
+<!-- Get Involved -->
+<section class="tw-text-gray-600 tw-body-font tw-py-0">
+  <div class="container tw-px-5 tw-py-24 tw-mx-auto">
+    <div class="tw-text-center tw-mb-20">
+      <h1 class="tw-text-gray-900 tw-mb-4 tw-mt-0 tw-font-bold">Get Involved</h1>
+      <p class="xl:tw-w-2/4 lg:tw-w-3/4 tw-mx-auto tw-text-gray-500s">When you choose to connect with a local church beyond only attending on Sundays, you?re choosing to become a part of something bigger than yourself and cultivate lifelong relationships.</p>
+      <div class="tw-flex tw-mt-6 tw-justify-center">
+        <div class="tw-w-16 tw-h-1 tw-rounded-full tw-bg-c-primary tw-bg-opacity-50 tw-inline-flex"></div>
+      </div>
     </div>
+    <div class="tw-flex tw-flex-wrap sm:tw-m-4 tw-mx-4 tw-mb-10 tw-mt-4 md:tw-space-y-0">
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+        <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
+          <i class="fa fa-users tw-text-3xl"></i>
+        </div>
+        <div class="tw-flex-grow">
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Life Groups</h2>
+          <p class="tw-leading-relaxed">Life Groups are at the heartbeat of our church ? they are our commitment to create a healthy sense of community and family. Life Groups are the best way to meet new people and forge genuine relationships with others.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/connect/group-finder">Join A Group
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+        <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
+          <i class="fa fa-hand-holding-heart tw-text-3xl"></i>
+        </div>
+        <div class="tw-flex-grow">
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Giving</h2>
+          <p class="tw-leading-relaxed">Your continued generosity is impacting lives locally, nationally, and around the world with the hope of Jesus. We have a variety of ways you can support this vision financially. Thank you for investing into the lives of others.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/give">Online Giving
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="tw-p-4 tw-w-full md:tw-w-1/3 lg:tw-w-1/3 xl:tw-w-1/3 tw-flex tw-flex-col tw-text-center tw-items-center">
+        <div class="tw-w-28 tw-h-28 tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-c-primary-300 tw-text-c-primary tw-mb-5 tw-flex-shrink-0">
+          <i class="fa fa-church tw-text-3xl"></i>
+        </div>
+        <div class="tw-flex-grow">
+          <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Serving</h2>
+          <p class="tw-leading-relaxed">Each of us has been gifted uniquely by God to fulfill a significant purpose placed inside of us when we were created (Ephesians 2:10). We call this your God Potential, and encourage you to grow by serving the local church.</p>
+          <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/connect/volunteer">Get Involved
+            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Prayer -->
+<section class="tw-text-gray-600 tw-body-font tw-bg-c-primary tw-py-24">
+  <div class="container tw-px-5 tw-mx-auto tw-flex tw-flex-wrap">
+    <h2 class="tw-text-white tw-title-font tw-mb-2 xl:tw-pr-3 xl:tw-w-2/5 tw-mt-0 tw-mb-2">
+      Need Prayer? No matter what you're facing, we'd love to pray with you!
+    </h2>
+    <div class="xl:tw-w-3/5 xl:tw-pl-6">
+      <p class="tw-leading-relaxed tw-text-white">There are times when life is overwhelming, when all we have is questions. In those moments, hope can feel far away. The great thing about prayer is that it shifts our perspective toward the One who stands ready to listen.</p>
+      <div class="md:tw-flex xl:tw-mt-4 tw-mt-6">
+        <a class="md:tw-flex tw-text-gray-900 tw-bg-white tw-border-0 tw-py-4 tw-px-16 focus:tw-outline-none hover:tw-bg-gray-200 tw-text-uppercase tw-font-bold tw-transition tw-duration-200 tw-ease-in-out btn btn-primary" href="/prayer">Submit a Request</a>
+      </div>
+    </div>
+  </div>
 </section>
