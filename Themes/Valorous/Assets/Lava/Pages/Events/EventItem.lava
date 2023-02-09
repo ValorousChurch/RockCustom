@@ -117,14 +117,14 @@
 {% if eventPhotos and eventPhotos != empty %}
     {[ imagecarousel ]}
         {% for item in eventPhotos %}
-                    <img src="/GetImage.ashx?guid={{ item | Attribute:'Photo','Guid' }}&width=1080&height=608&mode=crop" class="img-responsive rounded" />
+                <img src="/GetImage.ashx?guid={{ item | Attribute:'Photo','Guid' }}&width=1080&height=608&mode=crop" class="img-responsive rounded" />
         {% endfor %}
     {[ endimagecarousel]}
 {% else %}
     {% if Event.Photo.Guid and Event.Photo.Guid != '' %}
-                    <img src="/GetImage.ashx?Guid={{ Event.Photo.Guid }}&width=1080&height=608&mode=crop" class="img-responsive rounded">
+                <img src="/GetImage.ashx?Guid={{ Event.Photo.Guid }}&width=1080&height=608&mode=crop" class="img-responsive rounded">
     {% else %}
-                    <img src="https://files.valorous.church/public/valorouschurch/misc/Placeholder.jpg" class="img-responsive rounded">
+                <img src="https://files.valorous.church/public/valorouschurch/misc/Placeholder.jpg" class="img-responsive rounded">
     {% endif %}
 {% endif %}
             </div>
@@ -168,38 +168,38 @@
                     {% assign registrationMessage = '' %}
 
                     {% if daysTillEndDate and daysTillEndDate < 0 %}
-                            {% assign registration = 'Closed' %}
-                            {% if eventItemOccurrenceLinkagesCount == 1 %}
-                                {% capture registrationMessage %}<p>Registration closed on {{ eventItemOccurrenceLinkage.RegistrationInstance.EndDateTime | Date:'dddd, MMMM d, yyyy' }}</p>{% endcapture %}
-                            {% else %}
-                                {% capture registrationMessage %}<p>Registration for {{ eventItemOccurrenceLinkage.PublicName }} closed on {{ eventItemOccurrenceLinkage.RegistrationInstance.EndDateTime | Date:'dddd, MMMM d, yyyy' }}</p>{% endcapture %}
-                            {% endif %}
+                        {% assign registration = 'Closed' %}
+                        {% if eventItemOccurrenceLinkagesCount == 1 %}
+                            {% capture registrationMessage %}<p>Registration closed on {{ eventItemOccurrenceLinkage.RegistrationInstance.EndDateTime | Date:'dddd, MMMM d, yyyy' }}</p>{% endcapture %}
+                        {% else %}
+                            {% capture registrationMessage %}<p>Registration for {{ eventItemOccurrenceLinkage.PublicName }} closed on {{ eventItemOccurrenceLinkage.RegistrationInstance.EndDateTime | Date:'dddd, MMMM d, yyyy' }}</p>{% endcapture %}
+                        {% endif %}
                     {% endif %}
 
                     {% if registration == 'Open' %}
-                            {% assign statusLabel = RegistrationStatusLabels[eventItemOccurrenceLinkage.RegistrationInstanceId] %}
-                            {% if eventItemOccurrenceLinkagesCount == 1 %}
-                                {% assign registrationButtonText = statusLabel %}
-                            {% else %}
-                                {% assign registrationButtonText = statusLabel | Append:' for ' | Append:eventItemOccurrenceLinkage.PublicName %}
-                            {% endif %}
+                        {% assign statusLabel = RegistrationStatusLabels[eventItemOccurrenceLinkage.RegistrationInstanceId] %}
+                        {% if eventItemOccurrenceLinkagesCount == 1 %}
+                            {% assign registrationButtonText = statusLabel %}
+                        {% else %}
+                            {% assign registrationButtonText = statusLabel | Append:' for ' | Append:eventItemOccurrenceLinkage.PublicName %}
+                        {% endif %}
 
-                            {% if statusLabel == 'Full' %}
-                                    {% if eventItemOccurrenceLinkagesCount == 1 %}
-                                        {% assign registrationButtonText = 'Registration Full' %}
-                                    {% else %}
-                                        {% assign registrationButtonText = eventItemOccurrenceLinkage.PublicName | Append:' (Registration Full) ' %}
-                                    {% endif %}
-                                    <div class='label label-default text-center margin-t-md' style='display: block; padding: 8px; font-size: 16px;'>{{ registrationButtonText }}</div>
-                            {% else %}
-                                    {% if eventItemOccurrenceLinkage.UrlSlug != '' %}
-                                            <a href='{{ RegistrationPage }}/{{eventItemOccurrenceLinkage.UrlSlug}}' class='btn btn-primary btn-block margin-t-md rounded'>{{ registrationButtonText }}</a>
-                                    {% else %}
-                                            <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ eventItemOccurrenceLinkage.RegistrationInstanceId }}&EventOccurrenceID={{ eventItemOccurrenceLinkage.EventItemOccurrenceId }}" class="btn btn-primary btn-block margin-t-md rounded">{{ registrationButtonText }}</a>
-                                    {% endif %}
-                            {% endif %}
+                        {% if statusLabel == 'Full' %}
+                                {% if eventItemOccurrenceLinkagesCount == 1 %}
+                                    {% assign registrationButtonText = 'Registration Full' %}
+                                {% else %}
+                                    {% assign registrationButtonText = eventItemOccurrenceLinkage.PublicName | Append:' (Registration Full) ' %}
+                                {% endif %}
+        <div class='label label-default text-center margin-t-md' style='display: block; padding: 8px; font-size: 16px;'>{{ registrationButtonText }}</div>
+                        {% else %}
+                                {% if eventItemOccurrenceLinkage.UrlSlug != '' %}
+        <a href='{{ RegistrationPage }}/{{eventItemOccurrenceLinkage.UrlSlug}}' class='btn btn-primary btn-block margin-t-md rounded'>{{ registrationButtonText }}</a>
+                                {% else %}
+        <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ eventItemOccurrenceLinkage.RegistrationInstanceId }}&EventOccurrenceID={{ eventItemOccurrenceLinkage.EventItemOccurrenceId }}" class="btn btn-primary btn-block margin-t-md rounded">{{ registrationButtonText }}</a>
+                                {% endif %}
+                        {% endif %}
                     {% else %}
-                        <p>{{ registrationMessage }}</p>
+        <p>{{ registrationMessage }}</p>
                     {% endif %}
                 {% endif %}
         {% endfor %}
@@ -212,7 +212,7 @@
 {% assign registrationEndOverride = EventItemOccurrence | Attribute:'RegistrationCloseOverride' | Date:'yyyy-MM-dd HH:mm:ss' %}
 {% assign now = 'Now' | Date:'yyyy-MM-dd HH:mm:ss' %}
 {% if registrationEndOverride and registrationEndOverride != '' and registrationEndOverride <= now %}
-        {% assign registration = 'Closed' %}
+    {% assign registration = 'Closed' %}
 {% endif %}
 {% if registration == 'Open' %}
     {% capture full %}{[ IsEventItemOccurrenceRegistrationFull EventItemOccurrenceId:'{{ EventItemOccurrence.Id }}' ]}{% endcapture %}
@@ -222,39 +222,39 @@
 {% endif %}
 
 
-<aside class="sidebar-event col-xs-12 col-md-4 p-0">
-    <h4 class="m-0"><i class="fa fa-user-plus fa-sm text-primary"></i> Registration Information</h4>
-    <hr class="my-3">
-    <div class="registration-card card shadow-lg text-center py-3">
-        <div class="row text-center icons d-flex flex-wrap justify-content-center">
-                <div class="col-xs-6 border-gray-500 border-right">
+        <aside class="sidebar-event col-xs-12 col-md-4 p-0">
+            <h4 class="m-0"><i class="fa fa-user-plus fa-sm text-primary"></i> Registration Information</h4>
+            <hr class="my-3">
+            <div class="registration-card card shadow-lg text-center py-3">
+                <div class="row text-center icons d-flex flex-wrap justify-content-center">
+                    <div class="col-xs-6 border-gray-500 border-right">
 {% case registration %}
 {% when 'Open' %}
-                                    <i class="fa fa-calendar-alt text-green-400"></i><br>
-                                    Registration Open
+                        <i class="fa fa-calendar-alt text-green-400"></i><br>
+                        Registration Open
 {% when 'Closed' %}
-                                    <i class="fa fa-calendar-alt text-red-500"></i><br>
-                                    Registration Closed
+                        <i class="fa fa-calendar-alt text-red-500"></i><br>
+                        Registration Closed
 {% when 'Full' %}
-                                    <i class="fa fa-calendar-alt text-red-500"></i><br>
-                                    Registration Full
+                        <i class="fa fa-calendar-alt text-red-500"></i><br>
+                        Registration Full
 
 {% else %}
-                                    <i class="fa fa-calendar-alt text-gray-400"></i><br>
-                                    Registration Not&nbsp;Required
+                        <i class="fa fa-calendar-alt text-gray-400"></i><br>
+                        Registration Not&nbsp;Required
 {% endcase %}
-                            </div><!-- /registration -->
-                            <div class="col-xs-6">
+                    </div><!-- /registration -->
+                    <div class="col-xs-6">
 {% assign childcare = EventItemOccurrence | Attribute:'ChildcareAvailable' | AsBoolean %}
 {% if childcare %}
-                                    <i class="fa fa-child text-blue-400"></i><br>
-                                    Childcare Available
+                        <i class="fa fa-child text-blue-400"></i><br>
+                        Childcare Available
 {% else %}
-                                    <i class="fa fa-child text-gray-300"></i><br>
-                                    Childcare Not&nbsp;Available
+                        <i class="fa fa-child text-gray-300"></i><br>
+                        Childcare Not&nbsp;Available
 {% endif %}
-                            </div><!-- /childcare -->
-                    </div><!-- /icons -->
+                    </div><!-- /childcare -->
+                </div><!-- /icons -->
             </div><!-- /registration-card -->
 {% assign registrationLinkOverride = EventItemOccurrence | Attribute:'RegistrationLinkOverride','RawValue' %}
 {% if registrationLinkOverride and registrationLinkOverride != '' %}
@@ -305,7 +305,7 @@
     {%- if time != '00:00' -%}
                             , {{ date | Date:'h:mm tt' | Downcase }}
     {% endif %}
-</span>
+                        </span>
                     </li>
 {% endfor %}
                 </ul>
