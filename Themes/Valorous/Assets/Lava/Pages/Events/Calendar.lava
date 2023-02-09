@@ -112,16 +112,25 @@
 //- Limit display to next x months (6 by default)
 {% assign monthsLimit = monthsLimit | Default:'6' | AsInteger %}
 {% assign dateLimit = 'Now' | DateAdd:6,'M' | Date:'yyyy-MM-dd' %}
+{% assign now = 'Now' | Date:'yyyy-MM-dd HH:mm:ss' %}
 
-//- {% assign eventItemOccurrenceCount = EventItemOccurrences | Size %}
-{% assign eventItemOccurrenceCount = 0 %}
-{% for item in EventItemOccurrences %}
-    {% assign itemDate = item.Date | Date:'yyyy-MM-dd' %}
-    {% if itemDate > dateLimit %}
-        {% break %}
+//- Filter the EventItemOccurrences array
+{% assign EventItemOccurrencesFiltered = null %}
+{% for eventItemOccurrence in EventItemOccurrences %}
+    {% assign startDate = eventItemOccurrence.EventItemOccurrence | Attribute:'StartDate' | Date:'yyyy-MM-dd' %}
+    {% if startDate == null or startDate == empty %}
+        {% assign itemDate = eventItemOccurrence.Date | Date:'yyyy-MM-dd' %}
+        {% if itemDate > dateLimit %}
+            {% continue %}
+        {% endif %}
+    {% else %}
+        {% if startDate > now %}
+            {% continue %}
+        {% endif %}
     {% endif %}
-    {% assign eventItemOccurrenceCount = eventItemOccurrenceCount | Plus:1 %}
+    {% assign EventItemOccurrencesFiltered = EventItemOccurrencesFiltered | AddToArray:eventItemOccurrence %}
 {% endfor %}
+{% assign eventItemOccurrenceCount = EventItemOccurrencesFiltered | Size %}
 
 {% if eventItemOccurrenceCount == 0 %}
 <div class="panel panel-default margin-t-md">
@@ -133,21 +142,12 @@
 {% unless perPage and perPage > 0 %}
     {% assign perPage = 12 %}
 {% endunless %}
-{% assign pages = eventItemOccurrenceCount |  DividedBy: perPage | Ceiling %}
+{% assign pages = eventItemOccurrenceCount | DividedBy: perPage | Ceiling %}
 {% assign currentPage = 'Global' | PageParameter:'page' | Default:'1' %}
 {% assign offset = currentPage | Minus:1 | Times:perPage %}
 
 <div class="row d-flex flex-wrap tw-clear-both">
-{% assign now = 'Now' | Date:'yyyy-MM-dd HH:mm:ss' %}
-{% for eventItemOccurrence in EventItemOccurrences limit:perPage offset:offset %}
-    {% assign itemDate = eventItemOccurrence.Date | Date:'yyyy-MM-dd' %}
-    {% if itemDate > dateLimit %}
-        {% break %}
-    {% endif %}
-    {% assign startDate = eventItemOccurrence.EventItemOccurrence | Attribute:'StartDate' | Date:'yyyy-MM-dd' %}
-    {% if startDate and startDate != '' and startDate > now %}
-        {% continue %}
-    {% endif %}
+{% for eventItemOccurrence in EventItemOccurrencesFiltered limit:perPage offset:offset %}
     {% if eventItemOccurrence.DetailPage != null %}
         {% assign eventLink = eventItemOccurrence.DetailPage %}
     {% else %}
