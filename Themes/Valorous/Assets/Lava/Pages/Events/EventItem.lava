@@ -214,7 +214,7 @@
 {% if registrationEndOverride and registrationEndOverride != '' and registrationEndOverride <= now %}
     {% assign registration = 'Closed' %}
 {% endif %}
-{% if registration == 'Open' %}
+{% if registration == 'Open' and registrationOverride == null or registrationOverride == empty %}
     {% capture full %}{[ IsEventItemOccurrenceRegistrationFull EventItemOccurrenceId:'{{ EventItemOccurrence.Id }}' ]}{% endcapture %}
     {% if full == 'True' %}
         {% assign registration = 'Full'%}
