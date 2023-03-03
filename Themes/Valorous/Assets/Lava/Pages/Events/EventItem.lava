@@ -292,24 +292,31 @@
                     <a href="{{ contactLink }}" class="btn btn-primary ml-auto pb-1 pt-1 my-1">Contact</a>
                 </div>
             </div>
+{% eventscheduledinstance eventid:'{{ EventItemOccurrence.EventItemId }}' maxoccurrences:'5' %}
+    {% if EventScheduledInstances != null and EventScheduledInstances != empty %}
             <h4 class="mb-0 mt-5"><i class="fa fa-calendar-alt text-primary fa-sm"></i> Upcoming Times</h4>
             <hr class="my-3">
             <div class="quick-links">
                 <ul class="w-100">
-{% assign upcomingDates = EventItemOccurrence.Schedule.iCalendarContent | DatesFromICal:5 %}
-{% for date in upcomingDates %}
-    {% assign time = date | Date:'HH:mm' %}
-                    <li class="py-2">
-                        <span class="px-0">
-                            {{ date | Date:'ddd, MMMM d' }}
-    {%- if time != '00:00' -%}
-                            , {{ date | Date:'h:mm tt' | Downcase }}
-    {% endif %}
-                        </span>
+        {% for event in EventScheduledInstances %}
+            {% assign time = event.DateTime | Date:'HH:mm' %}
+                    <li class="pb-2">
+            {% if event.EventItemOccurrence.Id != EventItemOccurrence.Id %}
+                        <a href="/events/{{ event.EventItemOccurrence.Id }}">
+            {% endif %}
+                            {{ event.DateTime | Date:'ddd. MMMM d' }}
+            {%- if time != '00:00' -%}
+                            , {{ event.DateTime | Date:'h:mm tt' | Downcase }}
+            {% endif %}
+            {% if event.EventItemOccurrence.Id != EventItemOccurrenceId %}
+                        </a>
+            {% endif %}
                     </li>
-{% endfor %}
+        {% endfor %}
                 </ul>
             </div>
+    {% endif %}
+{% endeventscheduledinstance %}
         </aside>
     </div><!-- /row -->
 </div><!-- /container -->
