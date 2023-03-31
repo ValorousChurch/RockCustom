@@ -252,7 +252,10 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.Groups
                 // Update the attribute value.
                 var attributeService = new AttributeService( rockContext );
                 var attribute = attributeService.Get( action.Activity.Workflow.TypeId, "WorkflowTypeId", action.Activity.Workflow.WorkflowTypeId.ToString(), attrKey );
+                // Needed to persist the value across multiple instances
                 attribute.DefaultValue = person.Id.ToString();
+                // Needed for multiple uses in the same workflow
+                action.Activity.Workflow.SetAttributeValue( attrKey, person.Id.ToString() );
                 rockContext.SaveChanges();
             }
 
