@@ -245,10 +245,13 @@
 {% endcase %}
                     </div><!-- /registration -->
                     <div class="col-xs-6">
-{% assign childcare = EventItemOccurrence | Attribute:'ChildcareAvailable' | AsBoolean %}
-{% if childcare %}
+{% assign childcare = EventItemOccurrence | Attribute:'ChildcareAvailable','RawValue' %}
+{% if childcare and childcare == "Yes" %}
                         <i class="fa fa-child text-blue-400"></i><br>
                         Childcare Available
+{% elseif childcare and childcare == "Kids" %}
+                        <i class="fa fa-child text-blue-400"></i><br>
+                        Valorous&nbsp;|&nbsp;Kids Available
 {% else %}
                         <i class="fa fa-child text-gray-300"></i><br>
                         Childcare Not&nbsp;Available
