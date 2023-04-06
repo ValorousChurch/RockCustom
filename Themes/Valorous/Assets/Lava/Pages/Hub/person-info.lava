@@ -1,0 +1,68 @@
+{% if CurrentPerson != null %} //- Known Person
+    <div class="row d-flex flex-column flex-sm-row justify-content-center">
+        <div class="col-sm-4 col-md-3">
+            <div class="mx-auto" style="border-radius:100%;max-width:150px;overflow:hidden;position:relative">
+    {% if CurrentPerson.PhotoId and CurrentPerson.PhotoId != '' %}
+                <img src="{{ CurrentPerson.PhotoUrl }}" class="img-responsive" style="width:100%">
+    {% else %}
+                <a href="/page/1044" target="_blank" class="text-current">
+                    <img src="/Assets/Images/person-no-photo-male.svg" class="img-responsive" style="width:100%">
+                    <div style="background-color:white;border:1px solid black;left:-5%;position:absolute;text-align:center;top:60px;width:110%">Add Profile Pic</div>
+                </a>
+    {% endif %}
+            </div>
+        </div>
+        <div id="contact-info" class="col-sm-8 col-md-9 text-center text-sm-left align-self-stretch align-self-sm-center">
+            <h3>{{CurrentPerson.NickName}} {{CurrentPerson.LastName}}</h3>
+            <p>
+                <i class="fa fa-envelope"></i>
+    {% if CurrentPerson.Email %}
+                {{ CurrentPerson.Email }}
+    {% else %}
+                <span class="text-muted">(No Email)</span>
+    {% endif %}
+                <br>
+                <i class="fa fa-mobile-alt"></i>&nbsp;
+    {% assign mobileNumber = CurrentPerson | PhoneNumber:'Mobile' %}
+    {% if mobileNumber and mobileNumber != '' %}
+                {{ mobileNumber }}
+    {% else %}
+                <span class="text-muted">(No Phone Number)</span>
+    {% endif %}
+            </p>
+            <div class="row">
+                <div class="col-sm-6 mb-2">
+                    <a class="btn btn-primary btn-block" href="/MyAccount" role="button" target="_blank">
+                        <i class="fa fa-pencil"></i>&nbsp; Edit Your Profile
+                    </a>
+                </div>
+                <div class="col-sm-6 mb-2">
+                    <a class="btn btn-primary btn-block" href="#" role="button" onclick="javascript: Rock.controls.modal.show($(this), '/subscriptions?pb=&sb=Save&t=Manage%20Subscriptions')">
+                        <i class="fa fa-paper-plane"></i>&nbsp; Manage Email Lists
+                    </a>
+                </div>
+            </div>
+        </div><!-- /contact-info -->
+    </div><!-- /row -->
+{% else %} //- Unknown Person
+    <div class="row d-flex flex-row justify-content-center align-items-center">
+        <div class="col-xs-4 col-md-3">
+            <img src="/Assets/Images/person-no-photo-male.svg" class="img-responsive img-circle mx-auto" style="max-width:250px; width:100%">
+        </div>
+        <div id="contact-info" class="col-xs-8 col-md-9 text-left">
+            <p class="mb-2">Consider logging in or creating an account to see your information.</p>
+            <div class="row">
+                <div class="col-sm-6 mb-2">
+                    <a class="btn btn-primary btn-block" href="/Login?returnurl=hub" role="button">
+                        <i class="fa fa-lock"></i>&nbsp; Login
+                    </a>
+                </div>
+                <div class="col-sm-6">
+                    <a class="btn btn-primary btn-block" href="/NewAccount?returnurl=hub" target="_blank" role="button">
+                        <i class="fa fa-user-plus"></i>&nbsp; Create Account
+                    </a>
+                </div>
+            </div>
+        </div><!-- /contact-info -->
+    </div><!-- /row -->
+{% endif %}

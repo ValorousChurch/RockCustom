@@ -1,0 +1,11 @@
+<div class="text-center">
+    <p class="mb-0">Our mission is to reach people worldwide with the message of hope in Christ and help every person become all that God created them to be. Your generous support allows us to connect with people to impact lives around the world with His truth, and to create incredible environments for them to discover and develop their God-potential.</p>
+    <p class="my-3">
+        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" data-merlin-key="01DZPK8Z9C6NCZWRZNYAQ1CZN3" href="#">Give With Card or ACH</a>
+        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" data-merlin-key="01GQTHSNE1RPWCC89X60PZ715N" data-merlin-payment-mode="crypto" href="#">Give With Crypto</a>
+    </p>
+</div>
+<blockquote class="m-0" style="font-size:unset">
+    <p class="mb-1">"Each of you should give what you have decided in your heart to give, not reluctantly or under compulsion, for God loves a cheerful giver."</p>
+    <small>2 Corinthians 9:7</small>
+</blockquote>

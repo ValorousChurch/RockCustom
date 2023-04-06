@@ -1,0 +1,18 @@
+<h3 class="mt-0">Get Involved</h3>
+<p>No matter your age or stage in life, there is a place for you to get involved, grow, and lead.</p>
+<hr>
+<a class="d-flex align-items-center text-current" href="/connect/group-finder" target="_blank">
+    <div>
+        <b style="font-size:1.2em">Find a Small Group</b><br>
+        <p class="mb-1">Life Groups are one of the best ways that people connect and grow in their faith.</p>
+    </div>
+    <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+</a>
+<hr>
+<a class="d-flex align-items-center text-current" href="/connect/volunteer" target="_blank">
+    <div>
+        <b style="font-size:1.2em">Join a Volunteer Team</b><br>
+        <p class="mb-1">Connect with others, discover your purpose, and make a difference in the church.</p>
+    </div>
+    <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+</a>

@@ -1,0 +1,31 @@
+{% assign channelId = 84 %} //- Featured Event - Valorous.info
+{% assign maxEvents = 3 %}
+{% assign now = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss' %}
+
+{% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime ) as EventItemOccurrence )' %}
+    {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
+    {% for item in itemsSorted limit:maxEvents %}
+        {% if forloop.first %}
+            <h3 class="mt-0">Featured Events</h3>
+        {% endif %}
+        <hr>
+        <a class="d-flex align-items-center text-current" href="/events/{{ item.EventItemOccurrence.Id }}" target="_blank">
+            <div style="flex-grow:1">
+                <p class="mb-1" style="font-size:1.2em">
+                    <b>{{ item.ContentChannelItem.Title }}</b><br>
+                    {{ item.EventItemOccurrence.NextStartDateTime | Date:'ddd. MMM.' }} {{ item.EventItemOccurrence.NextStartDateTime | Date:'d' | NumberToOrdinal }} at {{ item.EventItemOccurrence.NextStartDateTime | Date:'h:mm tt' }}
+                </p>
+                {{ item.ContentChannelItem.Content | Replace:'<p>','<p class="mb-1">' }}
+            </div>
+            <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+        </a>
+        {% if forloop.last %}<hr>{% endif %}
+    {% endfor %}
+{% endeventitemoccurrencechannelitem %}
+<a class="d-flex align-items-center text-current" href="/events" target="_blank">
+    <div style="flex-grow:1">
+        <b style="font-size:1.2em">View All Events</b><br>
+        See everything that is happening.
+    </div>
+    <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+</a>
