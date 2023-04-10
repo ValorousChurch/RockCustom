@@ -1,5 +1,5 @@
 <a class="d-flex align-items-center text-current" href="/Workflows/67" target="_blank">
-    <div>
+    <div style="flex-grow:1">
         <b style="font-size:1.2em">Connect With Us</b><br>
         <p class="mb-1">Whether it is your first time here or you've been coming for years, we want to hear from you.</p>
     </div>
@@ -7,7 +7,7 @@
 </a>
 <hr>
 <a class="d-flex align-items-center text-current" href="/prayer" target="_blank">
-    <div>
+    <div style="flex-grow:1">
         <b style="font-size:1.2em">Need Prayer?</b><br>
         <p class="mb-1">No matter what you're facing, we have a team of prayer warriors that would love to pray with you.</p>
     </div>
