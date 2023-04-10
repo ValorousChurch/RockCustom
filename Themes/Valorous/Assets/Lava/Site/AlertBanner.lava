@@ -1,0 +1,56 @@
+{% for item in Items limit:1 %}
+    {% assign allowclose = item | Attribute:'allowclose' | AsBoolean %}
+    {% stylesheet compile:'less' cacheduration:'43200' %}
+        .alert-bar-top {
+            background-color: {{ item | Attribute:'BackgroundColor' }};
+            border-color: {{ item | Attribute:'BackgroundColor' }};
+            border-radius: 0px;
+            color: {{ item | Attribute:'TextColor' }};
+            display: none;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1050;
+            a {
+                background-color: {{ item | Attribute:'BackgroundColor' }};
+                color: {{ item | Attribute:'TextColor' }};
+            }
+            .close {
+                top:4px;
+            }
+        }
+    {% endstylesheet %}
+
+    {% javascript id:'alert-banner' %}
+        function alertMargin() {
+            var alertHeight = $('.alert-bar-top').outerHeight();
+            $('#body-wrap, #mainNav').css('padding-top', alertHeight);
+        }
+        
+        {% if allowclose %}
+            // Save data to sessionStorage
+            $("#close-{{item.Id}}").click(function() {
+                sessionStorage.setItem('alert-closed-{{item.Id}}', '1');
+                $('#body-wrap, #mainNav').css('padding-top', '');
+            });
+        {% endif %}
+        
+        // Only show if it wasn't previously closed
+        if (sessionStorage.getItem('alert-closed-{{item.Id}}') != 1) {
+            $(function(){
+                $("#alert-{{item.Id}}").show();
+                alertMargin();
+                $(window).resize(alertMargin);
+            });
+        }
+    {% endjavascript %}
+
+    <div class='alert text-center margin-b-none alert-bar-top' role="alert" id="alert-{{item.Id}}">
+        {{ item.Content }}
+        {% if allowclose %}
+            <button type="button" class="close" id="close-{{item.Id}}" data-dismiss="alert" arialabel="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        {% endif %}
+    </div>
+{% endfor %}
