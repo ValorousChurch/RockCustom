@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Quartz;
-
 using Rock;
 using Rock.Data;
+using Rock.Jobs;
 using Rock.Model;
 
 namespace com.shepherdchurch.Misc.Jobs
 {
-    [DisallowConcurrentExecution]
-    public class CleanupScheduledTransactions : IJob
+    public class CleanupScheduledTransactions : RockJob
     {
-        public virtual void Execute(IJobExecutionContext context)
+        public override void Execute()
         {
             List<string> messages = new List<string>();
 
@@ -41,7 +39,7 @@ namespace com.shepherdchurch.Misc.Jobs
                 }
             }
 
-            context.Result = string.Join( "\r\n", messages );
+            this.Result = string.Join( "\r\n", messages );
         }
     }
 }

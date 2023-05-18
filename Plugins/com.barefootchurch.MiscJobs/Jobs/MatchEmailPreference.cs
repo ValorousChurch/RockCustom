@@ -16,10 +16,9 @@
 //
 using System.Linq;
 
-using Quartz;
-
 using Rock;
 using Rock.Data;
+using Rock.Jobs;
 using Rock.Model;
 
 namespace com.centralaz.GeneralJobs.Jobs
@@ -27,8 +26,7 @@ namespace com.centralaz.GeneralJobs.Jobs
     /// <summary>
     /// For any people that share an email, this job sets everyone's preference to the most restrictive setting that one of them has.
     /// </summary>
-    [DisallowConcurrentExecution]
-    public class MatchEmailPreference : IJob
+    public class MatchEmailPreference : RockJob
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MatchEmailPreference"/> class.
@@ -41,7 +39,7 @@ namespace com.centralaz.GeneralJobs.Jobs
         /// Executes the specified context.
         /// </summary>
         /// <param name="context">The context.</param>
-        public virtual void Execute(IJobExecutionContext context)
+        public override void Execute()
         {
             var rockContext = new RockContext();
             var personService = new PersonService( rockContext );

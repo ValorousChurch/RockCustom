@@ -1,25 +1,22 @@
 ﻿using System.Linq;
 
-using Quartz;
-
 using Rock.Attribute;
 using Rock.Data;
 using Rock.Model;
+using Rock.Jobs;
 using Rock.Web.Cache;
 using Rock.Web.UI.Controls;
 
 namespace com.bricksandmortarstudio.FixCombinedGivers
 {
-    [DisallowConcurrentExecution]
     [SlidingDateRangeField( "Date Range", "Apply to Person records created within this time frame. If not set then all records are considered.", false, "", enabledSlidingDateRangeTypes: "Previous, Last, Current, DateRange" )]
-    public class FixCombinedGivers : IJob
+    public class FixCombinedGivers : RockJob
     {
-        public void Execute(IJobExecutionContext context)
+        public override void Execute()
         {
-            var dataMap = context.JobDetail.JobDataMap;
             RockContext rockContext = null;
             IQueryable<GroupMember> familyMembers = null;
-            var dateRange = SlidingDateRangePicker.CalculateDateRangeFromDelimitedValues( dataMap.GetString( "DateRange" ) ?? "-1||" );
+            var dateRange = SlidingDateRangePicker.CalculateDateRangeFromDelimitedValues( GetAttributeValue( "DateRange" ) ?? "-1||" );
             int peopleUpdated = 0;
             var familyGroupType = GroupTypeCache.Get( Rock.SystemGuid.GroupType.GROUPTYPE_FAMILY );
 
@@ -54,7 +51,7 @@ namespace com.bricksandmortarstudio.FixCombinedGivers
                 }
             } while ( familyMembers.Any() );
 
-            context.Result = string.Format( "Combined giving on {0} {1}", peopleUpdated, peopleUpdated == 1 ? "person" : "people" );
+            this.Result = string.Format( "Combined giving on {0} {1}", peopleUpdated, peopleUpdated == 1 ? "person" : "people" );
         }
     }
 }
