@@ -1,0 +1,111 @@
+/-
+    Source: https://community.rockrms.com/recipes/370
+    Modifications:
+        - Small formatting changes
+-/
+
+{% stylesheet id:'checkin-summary' cacheduration:'3600' compile:'less' %}
+    #checkinInfo {
+        .label {
+            margin: 0 3px;
+            i {
+                margin-right: 3px;
+            }
+        }
+        a {
+            .label:hover, .label:focus {
+                color: black !important;
+            }
+        }
+        hr {
+            margin: 3px 0;
+        }
+    }
+{% endstylesheet %}
+<div class="col-md-12" id="checkinInfo">
+    <dl>
+        <dt style="font-weight:600;margin-bottom:0;">Check-In Locations</dt>
+{% assign locations = Group.GroupLocations %}
+{% assign locationsSize = locations | Size %}
+{% if locationsSize > 0 %}
+        <div style="display:flex;flex-direction:row;flex-wrap:wrap;gap:5px;">
+    {% for GroupLocation in Group.GroupLocations %}
+        {% assign canEditLocation = GroupLocation.Location.Id | HasRightsTo:'Edit','Rock.Model.Location' %}
+        {% assign scheduleSize = GroupLocation.Schedules | Where:'IsActive', 'true', 'equal'| Size %}
+        {% capture campus %}
+            {% if GroupLocation.Location.CampusId %}
+                {% campus id:'{{ GroupLocation.Location.CampusId }}' %}
+            {{ campus.Name }}
+                {% endcampus %}
+            {% endif %}
+        {% endcapture %}
+            <div style="margin-bottom:5px;line-height:1.75;flex:1 0 30%;" class="well">
+                <strong>{{ campus }}</strong>
+        {% if scheduleSize > 0 %}
+                <span class="label label-success">Check-In Ready</span>
+        {% endif %}
+                <br>
+        {% if canEditLocation == true %}
+                <a href="/admin/checkin/named-locations?LocationId={{ GroupLocation.Location.Id }}" target="_blank">
+        {% endif %}
+                    <span class="label label-campus">
+                        <i class="far fa-map-marker-check"></i> {{ GroupLocation.Location.Name }}
+                    </span>
+        {% if canEditLocation == true %}
+                </a>
+        {% endif %}
+        {% if scheduleSize > 0 %}
+            {% for schedule in GroupLocation.Schedules %}
+                {% assign canEditSchedule = schedule.Id | HasRightsTo:'Edit','Rock.Model.Schedule' %}
+                {% if schedule.IsActive == true %}
+                    {% assign openOffset = schedule.CheckInStartOffsetMinutes | Times: -1 %}
+                    {% assign openTime = schedule.NextStartDateTime | DateAdd: openOffset,'m' | Date:'yyyy-MM-ddTHH:mm:ss.fffzzz' %}
+                    {% assign closeOffset = schedule.CheckInEndOffsetMinutes %}
+                    {% assign closeTime = schedule.NextStartDateTime | DateAdd: closeOffset,'m' | Date:'yyyy-MM-ddTHH:mm:ss.fffzzz' %}
+                    {% assign endTime = schedule.NextStartDateTime | DateAdd: schedule.DurationInMinutes, 'm' | Date:'yyyy-MM-ddTHH:mm:ss.fffzzz' %}
+                    {% assign endOffset = schedule.NextStartDateTime | DateDiff: endTime, 'm' %}
+
+                    //- Find out if check in closes at the offset time or when the schedule closes
+                    {% if endOffset < closeOffset %}
+                        {% assign checkInCloseOffset=endOffset %}
+                        {% assign checkInClose=endTime %}
+                    {% elseif closeOffset < endOffset %}
+                        {% assign checkInCloseOffset=closeOffset %}
+                        {% assign checkInClose=closeTime %}
+                    {% else %}
+                        {% assign checkInCloseOffset=closeOffset %}
+                        {% assign checkInClose=closeTime %}
+                    {% endif %}
+                    {% capture nextUpSummary %}<strong>Next Start:</strong> {{ schedule.NextStartDateTime | HumanizeDateTime }} {{ schedule.NextStartDateTime | Date:'dddd, MMMM d, yyyy h:mmtt' }}{% endcapture %}
+                    {% capture opensSummary %}<strong>Opens:</strong> {{ schedule.CheckInStartOffsetMinutes }} Minutes Before Start at {{ openTime | Date:'h:mmtt' }}{% endcapture %}
+                    {% capture closesSummary %}<strong>Closes:</strong> {{ checkInCloseOffset }} Minutes After Start at {{ checkInClose | Date:'h:mmtt' }}{% endcapture %}
+                    {% capture friendlySummary %}<strong>Occurs</strong> {{ schedule.FriendlyScheduleText }}{% endcapture %}
+
+                    {% if canEditSchedule == true %}
+                <a href="/page/308?ScheduleId={{ schedule.Id }}" target="_blank">
+                    {% endif %}
+                    <span
+                    {% if schedule.IsCheckInActive==true %}
+                        class="label label-type required-indicator" title="<strong>Check-In Currently Open</strong><br><hr>{{ closesSummary }}<br><hr>{{ friendlySummary }}"
+                    {% else %}
+                        class="label label-type" title="{{ nextUpSummary }}<br><hr>{{ opensSummary }}<br><hr>{{ closesSummary }}<br><hr>{{ friendlySummary }}"
+                    {% endif %}
+                        data-toggle="tooltip" data-placement="bottom" data-html="true"><i class="fal fa-calendar-check"></i> {{ schedule }}
+                    </span>
+                    {% if canEditSchedule == true %}
+                </a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% if scheduleSize == 0 %}
+                <span class="label label-danger">Schedule Missing or Inactive</span>
+        {% endif %}
+            </div>
+    {% endfor %}
+        </div>
+{% else %}
+        <span class="label label-danger">Location and Schedule Missing</span><br>
+{% endif %}
+    </dl>
+</div>
