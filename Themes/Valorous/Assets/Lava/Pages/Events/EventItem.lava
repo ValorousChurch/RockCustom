@@ -8,6 +8,9 @@
             padding-bottom: 10px;
         }
     }
+    .regLink {
+        white-space: normal !important;
+    }
 {% endstylesheet %}
 
 {% assign description = Event.Description | Trim | RunLava %}
@@ -190,12 +193,12 @@
                                 {% else %}
                                     {% assign registrationButtonText = eventItemOccurrenceLinkage.PublicName | Append:' (Registration Full) ' %}
                                 {% endif %}
-        <div class='label label-default text-center margin-t-md' style='display: block; padding: 8px; font-size: 16px;'>{{ registrationButtonText }}</div>
+        <div class='regLink label label-default text-center margin-t-md' style='display: block; padding: 8px; font-size: 16px;'>{{ registrationButtonText }}</div>
                         {% else %}
                                 {% if eventItemOccurrenceLinkage.UrlSlug != '' %}
-        <a href='{{ RegistrationPage }}/{{eventItemOccurrenceLinkage.UrlSlug}}' class='btn btn-primary btn-block margin-t-md rounded'>{{ registrationButtonText }}</a>
+        <a href='{{ RegistrationPage }}/{{eventItemOccurrenceLinkage.UrlSlug}}' class='regLink btn btn-primary btn-block margin-t-md rounded'>{{ registrationButtonText }}</a>
                                 {% else %}
-        <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ eventItemOccurrenceLinkage.RegistrationInstanceId }}&EventOccurrenceID={{ eventItemOccurrenceLinkage.EventItemOccurrenceId }}" class="btn btn-primary btn-block margin-t-md rounded">{{ registrationButtonText }}</a>
+        <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ eventItemOccurrenceLinkage.RegistrationInstanceId }}&EventOccurrenceID={{ eventItemOccurrenceLinkage.EventItemOccurrenceId }}" class="regLink btn btn-primary btn-block margin-t-md rounded">{{ registrationButtonText }}</a>
                                 {% endif %}
                         {% endif %}
                     {% else %}
