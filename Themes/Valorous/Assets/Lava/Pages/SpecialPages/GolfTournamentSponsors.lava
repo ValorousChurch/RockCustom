@@ -1,0 +1,184 @@
+{%- assign level1 = '' -%}
+{%- assign level2 = '' -%}
+{%- assign level3 = '' -%}
+{%- assign level4 = '' -%}
+
+//- Sort the items
+{%- for item in Items -%}
+    {%- assign level = item | Attribute:'SponsorshipLevel','RawValue' -%}
+    {%- case level -%}
+        {%- when '1' -%}
+            {%- assign level1 = level1 | AddToArray:item -%}
+        {%- when '2' -%}
+            {%- assign level2 = level2 | AddToArray:item -%}
+        {%- when '3' -%}
+            {%- assign level3 = level3 | AddToArray:item -%}
+        {%- when '4' -%}
+            {%- assign level4 = level4 | AddToArray:item -%}
+    {%- endcase -%}
+{%- endfor -%}
+
+//- Shuffle items
+{%- assign level1 = level1 | Shuffle -%}
+{%- assign level2 = level2 | Shuffle -%}
+{%- assign level3 = level3 | Shuffle -%}
+{%- assign level4 = level4 | Shuffle -%}
+
+{%- stylesheet compile:'less' id:'sponsors' -%}
+.logo-grid {
+    align-items: center;
+    -webkit-box-align: center;
+    display: grid;
+    justify-content: center;
+    -webkit-box-pack: center;
+    width: 100%;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    grid-template-columns: 1fr 1fr;
+
+    div {
+        padding: 0;
+    }
+
+    a {
+        align-self: center;
+        border: 1px solid #e5e5e5;
+        border-radius: 4px;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+        -moz-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+        -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1), 0px 1px 2px rgba(0, 0, 0, 0.06);
+        display: flex;
+        height: 100%;
+        justify-self: center;
+        width: 100%;
+    }
+
+    img {
+        display: block;
+        height: auto;
+        max-height: 100px;
+        max-width: 100%;
+        margin: auto;
+        padding: 10px;
+        vertical-align: middle;
+    }
+}
+
+.level1-grid, .level2-grid {
+    div {
+        height: 240px;
+    }
+
+    img {
+        max-height: 200px;
+        max-width: 400px;
+        //width: 90%;
+    }
+}
+
+.level1-grid {
+    grid-template-columns: 1fr;
+}
+
+.level2-grid {
+    grid-template-columns: 1fr 1fr;
+}
+
+.level3-grid {
+    div {
+        height: 190px;
+    }
+
+    img {
+        max-height: 100px;
+    }
+}
+
+.level4-grid {
+    div {
+        height: 160px;
+    }
+}
+
+@media (min-width:578px) {
+    .level3-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .level4-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (min-width:768px) {
+    .level3-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .level4-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+}
+
+@media (min-width:992px) {
+    .level3-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .level4-grid {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    }
+}
+{%- endstylesheet -%}
+
+{%- capture template %}{% raw -%}
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center mb-3">{{ categoryName }}</h3>
+        <div class="logo-grid {{ class }}-grid">
+    {%- for item in sponsors -%}
+        {%- assign sponsorURL = item | Attribute:'SponsorURL','RawValue' | Trim -%}
+        {%- assign sponsorLogo = item | Attribute:'SponsorLogo','RawValue' -%}
+            <div>
+        {%- if sponsorURL and sponsorURL != '' -%}
+                <a href="{{ sponsorURL }}" rel="nofollow" target="_blank">
+        {%- else -%}//- still need the <a> for styling purposes
+                <a>
+        {%- endif -%}
+            {%- if sponsorLogo != '' -%}
+                    <img src="/GetImage.ashx?guid={{ sponsorLogo }}&w=400" alt="{{ item.Title }}" />
+            {%- else -%}
+                    <img src="https://dummyimage.com/400x90/fff/000&text={{ item.Title | Replace:' ','+' }}"" />
+            {%- endif -%}
+                </a>
+            </div>
+    {%- endfor -%}
+        </div>
+    </div>
+</div>
+{%- endraw %}{% endcapture -%}
+
+{%- if level1 != empty -%}
+    {%- assign categoryName = 'Tournament Sponsors' -%}
+    {%- assign class = 'level1' -%}
+    {%- assign sponsors = level1 -%}
+    {{- template | RunLava -}}
+{%- endif -%}
+
+{%- if level2 != empty -%}
+    {%- assign categoryName = 'Gold Sponsors' -%}
+    {%- assign class = 'level2' -%}
+    {%- assign sponsors = level2 -%}
+    {{- template | RunLava -}}
+{%- endif -%}
+
+{%- if level3 != empty -%}
+    {%- assign categoryName = 'Silver Sponsors' -%}
+    {%- assign class = 'level3' -%}
+    {%- assign sponsors = level3 -%}
+    {{- template | RunLava -}}
+{%- endif -%}
+
+{%- if level4 != empty -%}
+    {%- assign categoryName = 'Sponsors' -%}
+    {%- assign class = 'level4' -%}
+    {%- assign sponsors = level4 -%}
+    {{- template | RunLava -}}
+{%- endif -%}
