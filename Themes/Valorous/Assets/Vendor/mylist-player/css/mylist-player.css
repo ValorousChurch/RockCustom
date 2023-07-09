@@ -1,0 +1,230 @@
+
+
+/*  COLORS 
+############################### */
+
+/* color of titles that appear  below 
+each thumbnail image in the playlist */
+.vid-item .desc {
+	color: #111;
+}
+
+.vid-item:hover .desc {
+	color: #CC181E;		/* <-- hover state color of titles */
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition:.5s;
+}
+
+.current-vid {
+	opacity: 1 !important;
+	color: #CC181E !important;	/* <-- color of title for currently selected video */
+}
+
+
+/* color of playlist arrows */
+.mlvp-arrow-left, .mlvp-arrow-right {
+	color: #111;
+}
+
+/* hover color of playlist arrows */
+.mlvp-arrow-left:hover, .mlvp-arrow-right:hover {
+	color: #CC181E;
+}
+
+
+
+
+
+.mlvp-arrows {
+	/*display: none;*/ /*uncomment this to hide the left/right arrows*/
+}
+
+.player-container {
+	width: 100%;
+	/*max-width: 904px;*/
+	/*min-width: 300px;*/
+}
+
+.ui-body{ border: none !important; }
+.ui-page-active { outline:none !important;  }
+
+/*  VIDEO CONTAINER
+############################### */
+.mlvp-container {
+    position: relative;
+    padding-bottom: 52%;
+    padding-top: 38px; 
+    height: 0; 
+}
+ 
+.mlvp-container iframe,
+.mlvp-container object,
+.mlvp-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+
+/*  VIDEOS PLAYLIST 
+############################### */
+.mlvp-list-container {
+	/*width: 90%;*/
+	overflow: hidden;
+	margin-top: 16px;
+	margin-left:37px;
+	margin-right:38px;
+	padding-bottom: 20px;
+	-webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+.mlvp-list {
+	/*width: 3192px;*/
+	position: relative;
+	top:0;
+	left: 0;
+	-webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+.vid-item {
+	display: block;
+	width: 148px;
+	float: left;
+	margin: 10px;
+	padding: 0;
+	-webkit-box-sizing: inherit;
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
+
+.thumb {
+	overflow:hidden;
+	height: 84px;
+}
+
+.thumb img {
+	width: 100%;
+	position: relative;
+	top: -13px;
+	opacity: 0.6;
+}
+
+.vid-item .desc {
+	font-size: 15px;
+	margin-top:5px;
+}
+
+.vid-item:hover {
+	/*background: #eee;*/
+	cursor: pointer;
+}
+
+.vid-item:hover .thumb img {
+	opacity: 1;
+	-o-transition:.5s;
+  	-ms-transition:.5s;
+  	-moz-transition:.5s;
+  	-webkit-transition:.5s;
+  	transition:.5s;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+
+/*  ARROWS
+############################### */
+
+.mlvp-arrows {
+	position:relative;
+	width: 100%;
+	top: 52px;
+}
+
+.mlvp-arrow-left {
+	position: absolute;
+	padding: 0;
+	left: 0;
+	top: 0;
+	z-index: 99;
+	cursor: pointer;
+}
+
+.mlvp-arrow-right {
+	position: absolute;
+	padding: 0;
+	right: 0;
+	top: 0;
+	z-index:100;
+	cursor: pointer;
+}
+
+
+
+
+/*  ARROW ICONS
+############################### */
+@font-face {
+  font-family: 'fontello';
+  src: url('../fonts/fontello.eot?64872243');
+  src: url('../fonts/fontello.eot?64872243#iefix') format('embedded-opentype'),
+       url('../fonts/fontello.woff?64872243') format('woff'),
+       url('../fonts/fontello.ttf?64872243') format('truetype'),
+       url('../fonts/fontello.svg?64872243#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+ 
+ 
+.demo-icon
+{
+  font-family: "fontello";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  /*width: 1em;*/
+  /*margin-right: .2em;*/
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  /*margin-left: .2em;*/
+ 
+  /* You can be more comfortable with increased icons size */
+   font-size: 32px; 
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+

@@ -1,0 +1,81 @@
+//- *********************************** NAME ***************************************
+Slick Full-Width Image Carousel
+
+//- *********************************** TagType ************************************
+inline
+
+//- *********************************** TAG NAME ***********************************
+youtubeplaylist
+
+//- *********************************** DESCRIPTION ********************************
+Display a youtube playlist using "MyListPlayer"
+
+//- *********************************** DOCUMENTATION ******************************
+<p>
+    <b>Example:</b>
+    <code>{[ youtubeplaylist playlist:'PLxAoWrxXtwMrPaBAi3YNmbN7fmAMKr_V_' ]}</code>
+</p>
+<hr>
+<b>Parameters:</b>
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required?</th>
+            <th>Default</th>
+        </tr>
+        <tr>
+            <td>playlist</td>
+            <td>The Youtube playlist id. (Get from the URL)</td>
+            <td>yes</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>apikey</td>
+            <td>Your Youtube API key.</td>
+            <td>no</td>
+            <td>Valorous API key</td>
+        </tr>
+    </tbody>
+</table>
+
+//- *********************************** MARKUP *************************************
+
+{{ '~~/Assets/Vendor/mylist-player/css/mylist-player.css' | AddCssLink }}
+{{ '~~/Assets/Vendor/mylist-player/js/mylist-player.js' | AddScriptLink }}
+
+{% javascript id:'mylist-settings' disableanonymousfunction:'true' %}
+var playListID = ["{{ playlist }}"]; // replace with your desired youtube playlist ID
+var apiKey = "{{ apikey }}";
+var autoPlayNext = 0; // auto play next video in list when current ends? 0 for no. 1 for yes.
+var showPlayerControls = 1; // display YouTube video player controls? 0 for no. 1 for yes.
+var showVideoInfo = 1; // display video title on youtube player? 0 for no. 1 for yes.
+var showRelatedVideos = 0; // display related videos after video ends? 0 for no. 1 for yes.
+var showTitlesInList = 1; // display video titles under each thumbnail in playlist? 0 for no. 1 for yes.
+{% endjavascript %}
+
+<!-- MYLIST PLAYER HTML START -->
+<div id="player-container1" class="player-container">
+    <!-- THE YOUTUBE PLAYER -->
+    <div class="mlvp-container">
+        <div id="vid_frame1"></div>
+    </div>
+    <!-- LEFT AND RIGHT ARROWS -->
+    <div class="mlvp-arrows">
+        <div class="mlvp-arrow-left"><i class="demo-icon icon-left-open">&#xe800;</i></div>
+        <div class="mlvp-arrow-right"><i class="demo-icon icon-right-open">&#xe801;</i></div>
+    </div>
+    <!-- THE PLAYLIST -->
+    <div class="mlvp-list-container">
+        <div class="mlvp-list noselect"></div>
+    </div>
+</div>
+<!-- MYLIST LIST PLAYER HTML END -->
+
+//- *********************************** PARAMETERS *********************************
+playlist -
+apikey - (our api key)
+
+//- *********************************** ENABLED COMMANDS ***************************
+None
