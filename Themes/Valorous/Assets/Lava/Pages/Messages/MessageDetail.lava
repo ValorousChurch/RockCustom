@@ -7,6 +7,7 @@
 {% assign podcastLink = Item | Attribute:'PodcastLink','RawValue' %}
 {% assign videoDownload = Item | Attribute:'VideoDownload','RawValue' %}
 {% assign audioDownload = Item | Attribute:'AudioDownload','RawValue' %}
+{% assign transcript = Item | Attribute:'Transcript','RawValue' %}
 
 {% assign messageNotes = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' %}
 {% assign messageNotesSize = messageNotes | Size %}
@@ -30,6 +31,13 @@
         Title: "Audio Podcast",
         Link: "{{ podcastLink }}",
         Icon: "fa fa-headphones"
+    },
+{% endif %}
+{% if transcript and transcript != '' %}
+    {
+        Title: "Transcript",
+        Link: "/GetFile.ashx?guid={{ transcript }}",
+        Icon: "fa fa-file-alt"
     },
 {% endif %}
 {% if videoDownload and videoDownload != '' %}
