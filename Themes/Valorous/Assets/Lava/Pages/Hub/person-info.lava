@@ -53,12 +53,12 @@
             <p class="mb-2">Consider logging in or creating an account to see your information.</p>
             <div class="row">
                 <div class="col-sm-6 mb-2">
-                    <a class="btn btn-primary btn-block" href="/Login?returnurl=hub" role="button">
+                    <a class="btn btn-primary btn-block" href="/Login?returnurl=/info" role="button">
                         <i class="fa fa-lock"></i>&nbsp; Login
                     </a>
                 </div>
                 <div class="col-sm-6">
-                    <a class="btn btn-primary btn-block" href="/NewAccount?returnurl=hub" target="_blank" role="button">
+                    <a class="btn btn-primary btn-block" href="/NewAccount?returnurl=/info" target="_blank" role="button">
                         <i class="fa fa-user-plus"></i>&nbsp; Create Account
                     </a>
                 </div>
