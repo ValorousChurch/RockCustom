@@ -3,14 +3,20 @@
     {% assign maxEvents = 3 %}
     {% assign now = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss' %}
 
-    {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime ) as EventItemOccurrence )' %}
+    {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime, EventItemOccurrence.EventItem.DetailsUrl ) as EventItemOccurrence )' %}
         {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
         {% for item in itemsSorted limit:maxEvents %}
             {% if forloop.first %}
                 <h3 class="mt-0">Featured Events</h3>
             {% endif %}
             <hr>
-            <a class="d-flex align-items-center text-current" href="/events/{{ item.EventItemOccurrence.Id }}" target="_blank">
+            {% capture link %}
+                {% assign detailsUrlOverride = item.EventItemOccurrence.DetailsUrl | Trim %}
+                {% if detailsUrlOverride and detailsUrlOverride != '' %}{{ detailsUrlOverride }}
+                {% else %}/events/{{ item.EventItemOccurrence.Id }}
+                {% endif %}
+            {%- endcapture %}
+            <a class="d-flex align-items-center text-current" href="{{ link | Trim }}" target="_blank">
                 <div style="flex-grow:1">
                     <p class="mb-1" style="font-size:1.2em">
                         <b>{{ item.ContentChannelItem.Title }}</b><br>

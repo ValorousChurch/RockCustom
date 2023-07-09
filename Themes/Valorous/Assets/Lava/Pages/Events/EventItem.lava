@@ -1,3 +1,9 @@
+//- If we end up on this page for an event that has a "Details URL" override, redirect us there instead
+{% assign detailsUrlOverride = Event.DetailsUrl | Trim %}
+{% if detailsUrlOverride and detailsUrlOverride != '' %}
+    {{ detailsUrlOverride | PageRedirect }}
+{% endif %}
+
 {% stylesheet compile:'less' %}
     .registration-card .icons {
         font-size: .75em;
