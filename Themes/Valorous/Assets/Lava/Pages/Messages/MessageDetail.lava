@@ -7,15 +7,15 @@
 {% assign podcastLink = Item | Attribute:'PodcastLink','RawValue' %}
 {% assign videoDownload = Item | Attribute:'VideoDownload','RawValue' %}
 {% assign audioDownload = Item | Attribute:'AudioDownload','RawValue' %}
-{% assign transcript = Item | Attribute:'Transcript','RawValue' %}
 
-{% assign messageNotes = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' %}
-{% assign messageNotesSize = messageNotes | Size %}
-{% if messageNotesSize > 0 %}
-    {% assign studyGuide = messageNotes[0] | Attribute:'PDF','Guid' %}
-    {% if studyGuide and studyGuide != '' %}
-        {% assign studyGuideLink = '/GetFile.ashx?guid=' | Append:studyGuide %}
-    {% endif %}
+{% assign studyGuide = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' | First | Attribute:'PDF','Guid' %}
+{% if studyGuide != null and studyGuide != '' %}
+    {% assign studyGuideLink = '/GetFile.ashx?guid=' | Append:studyGuide %}
+{% endif %}
+
+{% assign transcript = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','93' | First %}
+{% if transcript != null and transcript != '' %}
+    {% assign transcriptLink = '/watch/transcript/' | Append:transcript.Guid %}
 {% endif %}
 {% capture resources %}
 [
@@ -33,11 +33,12 @@
         Icon: "fa fa-headphones"
     },
 {% endif %}
-{% if transcript and transcript != '' %}
+{% if transcriptLink and transcriptLink != '' %}
     {
         Title: "Transcript",
-        Link: "/GetFile.ashx?guid={{ transcript }}",
-        Icon: "fa fa-file-alt"
+        Link: "{{ transcriptLink }}",
+        Icon: "fa fa-file-alt",
+        Popup: "true"
     },
 {% endif %}
 {% if videoDownload and videoDownload != '' %}
@@ -64,29 +65,31 @@
         <div class="row">
             <div class="col-md-12">
                 {[ mediaplayer media:'{{ videoId }}' relatedentityid:'{{ Item.Id }}' relatedentitytypeid:'208' ]}{[ endmediaplayer ]}
-		        <h1 class="mt-1">{{ Item.Title }}</h1>
-		        <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
-	        </div>
+                <h1 class="mt-1">{{ Item.Title }}</h1>
+                <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
+            </div>
         </div>
-	</div>
+    </div>
 </div><!-- end video area -->
 
 <div class="container my-4">
-	<div class="row">
-		<div class="col-md-4"><!-- begin resources -->
+    <div class="row">
+        <div class="col-md-4"><!-- begin resources -->
             <div class="panel panel-default">
                 <div class="panel-heading">Downloads &amp; Resources</div>
                 <div class="list-group">
                 {% if resourceSize > 0 %}
                     {% for resource in resources %}
-                        <a href="{{ resource.Link }}" class="list-group-item" target="_blank"><i class="{{ resource.Icon }}"></i> {{ resource.Title }}</a>
+                        <a href="{{ resource.Link }}" class="list-group-item" target="_blank" {% if resource.Popup == 'true' %}onclick="return !window.open(this.href, 'Transcript - {{ Item.Title | Replace:"'", "’" }}', 'width=840,height=1000')"{% endif %}>
+                            <i class="{{ resource.Icon }}"></i> {{ resource.Title }}
+                        </a>
                     {% endfor %}
                 {% else %}
                     <a class="list-group-item">No Resources Available</a>
                 {% endif %}
                 </div>
             </div>
-		</div><!-- end resources -->
+        </div><!-- end resources -->
         <div class="col-md-8 "><!-- begin speaker bio -->
             <div class="col-xs-5 col-sm-4 col-sm-3 col-md-3 mb-2 photo-wrap">
             {% assign imageGuid = speaker | Attribute:'Photo','Guid' %}
