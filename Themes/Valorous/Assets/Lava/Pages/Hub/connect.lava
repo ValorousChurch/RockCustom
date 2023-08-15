@@ -13,3 +13,11 @@
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
+<hr>
+<a class="d-flex align-items-center text-current" href="/decision" target="_blank">
+    <div style="flex-grow:1">
+        <b style="font-size:1.2em">I Have Decided!</b><br>
+        <p class="mb-1">We believe making the decision to follow Jesus is the most inportant moment in your life. We are celebrating with you.</p>
+    </div>
+    <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+</a>
