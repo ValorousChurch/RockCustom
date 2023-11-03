@@ -8,7 +8,7 @@ inline
 TemporaryShortLink
 
 //- *********************************** DESCRIPTION ********************************
-Creates a short link that will automatically self destruct after a set amount of days.
+Creates a short link that will automatically self-destruct after a set amount of days.
 
 //- *********************************** DOCUMENTATION ******************************
 <p>Basic: {[ <b>TemporaryShortLink</b> <b>url</b>:'The long URL'&nbsp;]}</p>
@@ -20,7 +20,7 @@ Creates a short link that will automatically self destruct after a set amount of
 {%- assign tokenLength = length | AsInteger -%}
 {%- assign siteId = site | AsInteger -%}
 {%- assign link = url | CreateShortLink:'',siteId,true,tokenLength -%}
-{%- workflowactivate workflowtype:'94' workflowName:'{{ url | Url:'LocalPath' }}' LinkToken:'{{ link | AsString | Right:tokenLength }}' ExpireDays:'{{ expire }}' %}{% endworkflowactivate -%}
+{%- workflowactivate workflowtype:'94' workflowname:'{{ url | Url:'LocalPath' }}' linktoken:'{{ link | AsString | Right:tokenLength }}' expiredays:'{{ expire }}' %}{% endworkflowactivate -%}
 {{- link -}}
 
 //- *********************************** PARAMETERS *********************************
