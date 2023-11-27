@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E6047FC0-B290-48B4-B5C2-A9DFC7C2BB45}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>com.valorouschurch.Obsidian</RootNamespace>
+    <AssemblyName>com.valorouschurch.Obsidian</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="DotLiquid">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\DotLiquid.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\EntityFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\Quartz.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\Rock.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Common">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\Rock.Common.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Enums">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\Rock.Enums.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Lava.Shared">
+      <HintPath>..\..\..\..\Rock\RockWeb\Bin\Rock.Lava.Shared.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Blocks\ObsidianBoilerplate.cs" />
+    <Compile Include="ViewModels\ObsidianBoilerplateBox.cs" />
+    <Compile Include="ViewModels\RunLavaBag.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /Y /R "$(ProjectDir)bin\$(Configuration)\com.valorouschurch.Obsidian.dll" "$(SolutionDir)..\..\Rock\RockWeb\bin"</PostBuildEvent>
+  </PropertyGroup>
+</Project>

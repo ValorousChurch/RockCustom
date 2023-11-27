@@ -1,0 +1,66 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "incremental": true,
+    "noImplicitAny": false,
+    "noImplicitOverride": true,
+    "noEmitOnError": false,
+    "removeComments": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "target": "ES2016",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "strict": true,
+    "importHelpers": true,
+    "jsx": "preserve",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2016",
+      "ES2020.Symbol.WellKnown"
+    ],
+    "paths": {
+      "@Obsidian/Controls/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Controls/*" ],
+      "@Obsidian/Core/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Core/*" ],
+      "@Obsidian/Directives/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Directives/*" ],
+      "@Obsidian/Enums/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Enums/*" ],
+      "@Obsidian/FieldTypes/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/FieldTypes/*" ],
+      "@Obsidian/Libs/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Libs/*" ],
+      "@Obsidian/PageState": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/PageState" ],
+      "@Obsidian/SystemGuids/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/SystemGuids/*" ],
+      "@Obsidian/Templates/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Templates/*" ],
+      "@Obsidian/Types": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Types" ],
+      "@Obsidian/Types/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Types/*" ],
+      "@Obsidian/Utility": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Utility" ],
+      "@Obsidian/Utility/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Utility/*" ],
+      "@Obsidian/ValidationRules": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/ValidationRules" ],
+      "@Obsidian/ViewModels/*": [ "../../../../Rock/Rock.JavaScript.Obsidian/Framework/ViewModels/*" ]
+    }
+  },
+  "references": [
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Controls" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Core" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Directives" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Enums" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/FieldTypes" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Libs" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/PageState" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/SystemGuids" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Templates" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/Utility" },
+    { "path": "../../../../Rock/Rock.JavaScript.Obsidian/Framework/ValidationRules" }
+  ],
+  "vueCompilerOptions": {
+    "extensions": [
+      ".obs"
+    ]
+  },
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.obs"
+  ]
+}

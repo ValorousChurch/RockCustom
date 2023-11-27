@@ -1,0 +1,87 @@
+<template>
+    <div>
+        <!-- <NotificationBox v-if="blockError" alertType="warning">{{ blockError }}</NotificationBox>
+        <NotificationBox v-if="errorMessage" alertType="danger">{{ errorMessage }}</NotificationBox> -->
+        <Panel title="Lava Runner" title-icon-css-class="fa fa-signal" type="block">
+            {{ runResult }}
+
+            <RockCodeEditor mode="lava" v-model="lavaTemplate">
+            </RockCodeEditor>
+
+            <template #footerActions>
+
+                <RockButton :btnSize="BtnSize.Default" :btnType="BtnType.Primary" @click="runLava">
+                    Run
+                </RockButton>
+            </template>
+        </Panel>
+    </div>
+</template>
+ 
+<script setup lang="ts">
+import { computed, onMounted, ref } from "vue";
+import ObsidianBoilerplateBox from './ViewModels/obsidianBoilerplateBox';
+import { onConfigurationValuesChanged, useConfigurationValues, useInvokeBlockAction, useReloadBlock } from "@Obsidian/Utility/block";
+import RockButton from "@Obsidian/Controls/rockButton.obs";
+import RockCodeEditor from "@Obsidian/Controls/codeEditor.obs";
+import { BtnType } from "@Obsidian/Enums/Controls/btnType";
+import { BtnSize } from "@Obsidian/Enums/Controls/btnSize";
+import Panel from "@Obsidian/Controls/panel.obs";
+import { RunLavaBag } from "./ViewModels/RunLavaBag";
+import { resourceLimits } from "worker_threads";
+
+const config = useConfigurationValues<ObsidianBoilerplateBox>();
+const invokeBlockAction = useInvokeBlockAction();
+const reloadBlock = useReloadBlock();
+
+//#region Values
+
+const isRunning = ref<boolean>(false);
+const runResult = ref<string>("");
+const errorMessage = ref<string>("");
+const lavaTemplate = ref<string>(config.message);
+
+//#endregion
+
+//#region Computed Values
+
+//#endregion
+
+//#region Events
+
+/**
+ * Event handler for the form being submitted.
+ */
+async function runLava(): Promise<void> {
+    try {
+        isRunning.value = true;
+        runResult.value = "";
+        errorMessage.value = "";
+
+        const bag: RunLavaBag = {
+            Lava: lavaTemplate.value
+        };
+
+        const result = await invokeBlockAction<string>("RunLava", { runLavaBag: bag });
+
+        if (result?.isSuccess) {
+            isRunning.value = false;
+            runResult.value = result.data || "";
+        }
+        else {
+            errorMessage.value = result?.errorMessage || "An unexpected error occurred while saving.";
+        }
+    } finally {
+        isRunning.value = false;
+    }
+}
+
+//#endregion
+
+//#region Functions
+
+//#endregion
+
+onConfigurationValuesChanged(reloadBlock);
+
+</script>
