@@ -31,7 +31,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RockWeb", "..\..\Rock\RockW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7A95143-C918-41B8-B605-2D61543A649E}"
 	ProjectSection(SolutionItems) = preProject
-		Rockit.sln.vsspell = Rockit.sln.vsspell
+		.editorconfig = .editorconfig
 		Settings.StyleCop = Settings.StyleCop
 	EndProjectSection
 EndProject

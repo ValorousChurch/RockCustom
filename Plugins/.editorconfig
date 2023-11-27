@@ -11,6 +11,19 @@ root = true
 indent_style = space
 trim_trailing_whitespace = true
 
+vsspell_section_id = 9d7f9cd58382483cb2d77e362695cd10
+vsspell_ignored_words_9d7f9cd58382483cb2d77e362695cd10 = Admin|api|auth|Autofill|birthdate|birthyear|cancelled|Checkin|columncommand|deserialize|deserialized|enums|formfield|geocode|geocoded|geocoding|Guid|guids|href|javascript|linq|nullable|onblur|outlier|postback|Queryable|readonly|texting|workflow|workflows|fallback|valorous|valorouschurch
+vsspell_exclusion_expressions_9d7f9cd58382483cb2d77e362695cd10 = alert alert-.*(?@@PND@@/Options/None)btn btn-.*(?@@PND@@/Options/None)btn-.*(?@@PND@@/Options/None)col-.*-\d*(?@@PND@@/Options/None)fa fa-.*(?@@PND@@/Options/None)input-width-.*(?@@PND@@/Options/None)js-.*(?@@PND@@/Options/None)panel panel-.*(?@@PND@@/Options/None)Pre-Html(?@@PND@@/Options/IgnoreCase)runat=server(?@@PND@@/Options/None)table table-.*(?@@PND@@/Options/None)
+vsspell_dictionary_languages_9d7f9cd58382483cb2d77e362695cd10 = inherited
+
+[*.Designer.cs]
+vsspell_spell_check_as_you_type = false
+vsspell_include_in_project_spell_check = false
+
+[*/CodeGenerated/*.cs]
+vsspell_spell_check_as_you_type = false
+vsspell_include_in_project_spell_check = false
+
 [*.{json,csproj,less}]
 indent_size = 2
 
