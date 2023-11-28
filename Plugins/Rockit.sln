@@ -41,8 +41,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.MiscJobs
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "org.secc.Imaging", "org.secc.Imaging\org.secc.Imaging.csproj", "{C29F6616-7878-42D1-A7C5-DDAF08F203A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.barefootchurch.GroupMe", "com.barefootchurch.GroupMe\com.barefootchurch.GroupMe.csproj", "{5CF58291-9F80-4473-8333-0CF8A9917868}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "org.secc.PDF", "org.secc.PDF\org.secc.PDF.csproj", "{87D417B5-72E9-4B80-875B-3AAE79859C2A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "com.valorouschurch.WorkflowActions", "com.valorouschurch.WorkflowActions\com.valorouschurch.WorkflowActions.csproj", "{37FF15A8-6298-4ECB-BC69-00FF83CE5432}"
@@ -72,10 +70,6 @@ Global
 		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C29F6616-7878-42D1-A7C5-DDAF08F203A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5CF58291-9F80-4473-8333-0CF8A9917868}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5CF58291-9F80-4473-8333-0CF8A9917868}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5CF58291-9F80-4473-8333-0CF8A9917868}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5CF58291-9F80-4473-8333-0CF8A9917868}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87D417B5-72E9-4B80-875B-3AAE79859C2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
