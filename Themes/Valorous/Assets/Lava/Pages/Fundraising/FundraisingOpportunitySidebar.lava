@@ -1,0 +1,156 @@
+<!-- FundraisingOpportunitySidebar.lava -->
+{% stylesheet compile:'less' %}
+    .registration-card .icons {
+        font-size: .75em;
+        font-weight: 500;
+
+        i {
+            font-size: 3em;
+            padding-bottom: 10px;
+        }
+    }
+    .regLink {
+        white-space: normal !important;
+    }
+{% endstylesheet %}
+
+{% if RegistrationInstance %}
+    {% assign daysTillStartDate = 'Now' | DateDiff:RegistrationInstance.StartDateTime,'m' %}
+    {% assign daysTillEndDate = 'Now' | DateDiff:RegistrationInstance.EndDateTime,'m' %}
+    {% assign showRegistration = true %}
+    {% assign registrationMessage = '' %}
+
+    {% if RegistrationInstance.RegistrationTemplate.WaitListEnabled %}
+      {% assign waitListEnabled = true %}
+    {% else %}
+      {% assign waitListEnabled = false %}
+    {% endif %}
+
+    {% if daysTillStartDate and daysTillStartDate > 0 %}
+        {% assign showRegistration = false %}
+        {% capture registrationMessage %}(Opens on {{ RegistrationInstance.StartDateTime | Date:'MMM.' }} {{ RegistrationInstance.StartDateTime | Date:'d' | NumberToOrdinal }}){% endcapture %}
+    {% endif %}
+
+    {% if daysTillEndDate and daysTillEndDate < 0 %}
+        {% assign showRegistration = false %}
+        {% capture registrationMessage %}(Closed on {{ RegistrationInstance.EndDateTime | Date:'MMM.' }} {{ RegistrationInstance.EndDateTime | Date:'d' | NumberToOrdinal }}){% endcapture %}
+    {% endif %}
+
+    {% if RegistrationSpotsAvailable %}
+      {% if RegistrationSpotsAvailable <= 0 %}
+        {% assign registrationFull = true %}
+      {% else %}
+        {% assign registrationFull = false %}
+      {% endif %}
+    {% else %}
+      {% assign registrationFull = false %}
+    {% endif %}
+    {% if registrationFull and waitListEnabled %}
+        {% assign registrationButtonText = 'Join Wait List' %}
+    {% else %}
+        {% assign registrationButtonText = 'Register' %}
+    {% endif %}
+    {% assign anonMember = 51840 | Group:Group.Id | First %}
+    {% if anonMember != null and anonMember != empty %}
+        {% capture tripDonateParams %}GroupMemberId={{ anonMember.Id }}^AccountIds={{ Group | Attribute:'FinancialAccount','Id' }}{% endcapture %}
+<a class="btn btn-primary btn-block margin-t-md" href="{{ 1339 | PageRoute:tripDonateParams }}">Donate to the trip</a>
+    {% endif %}
+<div class="registration-sidebar">
+    <h4 class="mt-4 m-0"><i class="fa fa-user-plus fa-sm text-primary"></i> Registration Information</h4>
+    <hr class="my-3">
+    <div class="registration-card card shadow-lg text-center py-3">
+        <div class="row text-center icons d-flex flex-wrap justify-content-center">
+            <div class="col-xs-6 border-gray-500">
+    {% if showRegistration %}
+        {% if registrationFull %}
+                <i class="fa fa-calendar-alt text-red-500"></i><br>
+                Registration Full
+            {% if waitListEnabled == true %}
+                <br>
+                <small>Waitlist Available</small>
+            {% endif %}
+        {% else %}
+                <i class="fa fa-calendar-alt text-green-400"></i><br>
+                Registration Open<br>
+                <small>{{ RegistrationSpotsAvailable }} {{ 'spot' | PluralizeForQuantity:RegistrationSpotsAvailable }} available</small>
+        {% endif %}
+    {% else %}
+                <i class="fa fa-calendar-alt text-red-500"></i><br>
+                Registration Closed<br>
+                <small>{{ registrationMessage }}</small>
+    {% endif %}
+            </div><!-- /registration -->
+        </div><!-- /icons -->
+    </div><!-- /registration-card -->
+
+    {% if showRegistration %}
+        {% assign registrationNotes = Group | Attribute:'RegistrationNotes' %}
+        {% if registrationNotes != '' %}
+    <p class="mb-0 mt-3">
+        <strong>Registration Notes</strong><br />
+        {{ registrationNotes }}
+    </p>
+        {% endif %}
+
+        {% assign registrationInstanceLinkagesCount = RegistrationInstanceLinkages | Size %}
+        {% if registrationInstanceLinkagesCount > 0 %}
+            {% for registrationInstanceLinkage in RegistrationInstanceLinkages %}
+                {% if registrationInstanceLinkage.UrlSlug != '' %}
+    <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ RegistrationInstance.Id }}&Slug={{registrationInstanceLinkage.UrlSlug}}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
+                {% else %}
+    <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ RegistrationInstance.Id }}&EventOccurrenceID={{ registrationInstanceLinkage.EventItemOccurrenceId }}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+    <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ RegistrationInstance.Id }}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
+        {% endif %}
+    {% endif %}
+
+    <h4 class="mt-4 m-0"><span class="fa fa-question-circle text-primary fa-sm"></span> Contact Information</h4>
+    <hr class="my-3">
+    <div class="row">
+        <div class="col-xs-6">
+    {% assign contactPerson = RegistrationInstance.ContactPersonAlias.Person %}
+    {% assign extension = contactPerson | Attribute:'Extension' %}
+    {% if extension and extension != '' %}
+        {% assign contactPhone = '(843) 280-1270 x' | Append:extension %}
+    {% elseif RegistrationInstance.ContactPhone and RegistrationInstance.ContactPhone != '' %}
+        {% assign contactPhone = RegistrationInstance.ContactPhone %}
+    {% else %}
+        {% assign contactPhone = '(843) 280-1270' %}
+    {% endif %}
+            <p class="mb-0">
+                {{ contactPerson.FullName }}<br>
+                {{ contactPhone }}
+            </p>
+        </div>
+        <div class="col-xs-6 text-right">
+    {% if contactPerson and contactPerson != '' %}
+        {% assign contactLink = '/contact/' | Append:contactPerson.PrimaryAlias.Guid %}
+    {% elseif EventItemOccurrence.ContactEmail and EventItemOccurrence.ContactEmail != '' %}
+        //- This is kindof a hack, but since there isn't an `| Encrypt` lava filter it's the best I can do
+        {% assign encryptedEmail = 1 | PersonActionIdentifier:EventItemOccurrence.ContactEmail %}
+        {% assign contactLink = '/contact?ContactEmail=' | Append:encryptedEmail %}
+    {% else %}
+        {% assign contactLink = '/contact' %}
+    {% endif %}
+    {% capture contactLink %}{{ contactLink }}?Source={{ 'Mission Trip - ' | Append:Group.Name | EscapeDataString }}{% endcapture %}
+            <a href="{{ contactLink }}" class="btn btn-primary ml-auto my-1">Contact</a>
+        </div>
+    </div>
+</div> <!-- /registration-sidebar -->
+{% endif %}
+<script>
+    $(function() {
+        var sidebar = $('.registration-sidebar');
+        var column = sidebar.parent('.col-md-4');
+        var row = sidebar.closest('.row');
+        column.addClass('margin-b-md');
+        sidebar.addClass('hidden-xs hidden-sm');
+        sidebar.clone(true)
+            .removeClass('hidden-xs hidden-sm')
+            .addClass('hidden-md hidden-lg col-xs-12')
+            .appendTo(row);
+    });
+</script>
+<!-- end FundraisingOpportunitySidebar.lava -->

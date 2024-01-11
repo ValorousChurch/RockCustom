@@ -1,0 +1,12 @@
+<!-- FundraisingOpportunityUpdates.lava -->
+{% for item in ContentChannelItems %}
+<article class='margin-b-lg'>
+    <h3>{{ item.Title }}</h3>
+    {{ item | Attribute:'Image' }}
+    <div>
+        {{ item.Content }}
+    </div>
+    <hr />
+</article>
+{% endfor %}
+<!-- end FundraisingOpportunityUpdates.lava -->
