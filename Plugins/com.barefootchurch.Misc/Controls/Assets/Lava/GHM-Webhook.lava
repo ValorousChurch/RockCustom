@@ -1,6 +1,6 @@
 {%- sql -%}
 DECLARE @FamilyStatus int = 45; -- Approved
-DECLARE @OpportunityId int = 65;
+DECLARE @OpportunityId int = 70;
 DECLARE @Attr_timeslot int = 11417;
 DECLARE @Attr_checkedInTime int = 11775;
 DECLARE @Attr_shoppedTime int = 11774;
@@ -10,6 +10,7 @@ SELECT
     p_parent.[Id] 'ParentId'
     ,p_child.[Id] 'ChildId'
     ,cr.[Id] 'ConnectionId'
+    ,cr.[Comments] 'ConnectionComments'
     ,av_checkedInTime.[ValueAsDateTime] 'CheckedInTime'
     ,av_shoppedTime.[ValueAsDateTime] 'ShoppedTime'
     ,av_timeslot.[Value] 'TimeSlot'
@@ -66,6 +67,8 @@ ORDER BY
         {% assign checkedInTime = family[0].CheckedInTime %}
         {% assign shoppedTime = family[0].ShoppedTime %}
 
+        {% assign comments = family[0].ConnectionComments %}
+
         {% assign timeSlot = family[0].TimeSlot | Date:'2000-01-01THH:mm:00' %}
         {% assign timeDiff = 'Now' | Date:'2000-01-01THH:mm:00' | DateDiff:timeSlot,'m' %}
         {% if timeDiff > 15 %}
@@ -110,6 +113,11 @@ ORDER BY
             "CheckedInTimeStatus" : {{ checkedInTimeStatus | ToJSON }},
             "ShoppedTime" : {{ shoppedTime | ToJSON }},
             "LastName" : {{ parentName | Split:' ' | Index:1 | ToJSON }},
+{% if comments != '' %}
+            "Comments": {{ comments | ToJSON }},
+{% else %}
+            "Comments": null,
+{% endif %}
             "Children" : [
                 {% for child in family %}
                     {

@@ -1,6 +1,6 @@
 {{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
 
-{% attributequalifier where:'AttributeId==11417 && Key=="values"' limit:1 securityenabled:'false'%}
+{% attributequalifier where:'AttributeId==11417 && Key=="values"' limit:1 securityenabled:'false' lazyloadenabled:'false' %}
     {% assign timeSlots = attributequalifier.Value | Split:',' %}
 {% endattributequalifier %}
 
@@ -56,6 +56,7 @@
                     <ul class="list-group m-0">
                         <li v-for="child in family.Children" class="list-group-item">[[ child.Name ]] - [[ child.Age ]]</li>
                     </ul>
+                    <div class="alert alert-info mb-0 mt-2" v-if="family.Comments"><em>[[ family.Comments ]]</em></div>
                 </div>
                 <div class="card-footer text-center d-flex">
                     {% assign showInfo = 1014 | HasRightsTo:'View','Rock.Model.Page' %}
