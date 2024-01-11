@@ -14,7 +14,7 @@
                     Next gift is in {{ ScheduledTransactions[0].DaysTillNextPayment }} days.
                 {% endif %}
 		        {% if ScheduledTransactions[0].DaysTillNextPayment == 0 %}
-			        Next gift is scheduled for today.
+			        Next donation is scheduled for today.
 		        {% endif %}
                 {% if ScheduledTransactions[0].LastPaymentDate != null %}
                     {% if ScheduledTransactions[0].DaysSinceLastPayment > 0 %}
@@ -24,11 +24,11 @@
                     {% endif %}
                 {% endif %}
             </p>
-        {% elsif ScheduledTransactions.size > 1 %}
+        {% elseif ScheduledTransactions.size > 1 %}
             You currently have <span class='label label-default'>{{ ScheduledTransactions.size }}</span>
             giving profiles active.
         {% else %}
-            You currently have no active giving profiles.
+            You currently have no active profiles.
         {% endif %}
         <div class="clearfix">
             <a class="btn btn-default pull-left" href="{{ LinkedPages.ManageScheduledTransactionsPage }}">Manage</a>
