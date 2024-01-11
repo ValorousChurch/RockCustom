@@ -296,9 +296,11 @@
 {% if contactPerson and contactPerson != '' %}
     {% assign contactLink = '/contact/' | Append:contactPerson.PrimaryAlias.Guid %}
 {% elseif EventItemOccurrence.ContactEmail and EventItemOccurrence.ContactEmail != '' %}
-    {% assign contactLink = '/contact?ContactEmail=' | Append:EventItemOccurrence.ContactEmail %}
+    //- This is kindof a hack, but since there isn't an `| Encrypt` lava filter it's the best I can do
+    {% assign encryptedEmail = 1 | PersonActionIdentifier:EventItemOccurrence.ContactEmail %}
+    {% assign contactLink = '/contact?ContactEmail=' | Append:encryptedEmail %}
 {% else %}
-    {% assign contactLink = '/contact?ContactEmail=hello@valorouschurch.com' %}
+    {% assign contactLink = '/contact' %}
 {% endif %}
 {% capture contactLink %}{{ contactLink }}?Source={{ 'Event Page - ' | Append:Event.Name | EscapeDataString }}{% endcapture %}
                     <a href="{{ contactLink }}" class="btn btn-primary ml-auto pb-1 pt-1 my-1">Contact</a>
