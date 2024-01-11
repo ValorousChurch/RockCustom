@@ -67,6 +67,10 @@
                 {[ mediaplayer media:'{{ videoId }}' relatedentityid:'{{ Item.Id }}' relatedentitytypeid:'208' ]}{[ endmediaplayer ]}
                 <h1 class="mt-1">{{ Item.Title }}</h1>
                 <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
+{% assign summary = Item.Content | StripHtml | Trim %}
+{% if summary != null and summary != '' %}
+                <p class="mt-2 mb-0">{{ summary }}</p>
+{% endif %}
             </div>
         </div>
     </div>
@@ -90,7 +94,8 @@
                 </div>
             </div>
         </div><!-- end resources -->
-        <div class="col-md-8 "><!-- begin speaker bio -->
+        <div class="col-md-8 ">
+            <!-- begin speaker bio -->
             <div class="col-xs-5 col-sm-4 col-sm-3 col-md-3 mb-2 photo-wrap">
             {% assign imageGuid = speaker | Attribute:'Photo','Guid' %}
             {% unless imageGuid and imageGuid != '' %}
