@@ -37,7 +37,7 @@ p {
       eventType: 'staff',
       color: 'pink',
       name: "{{ item.NickName }}'s {{ item.Age }}-Year Anniversary",
-      description: "{{ item.NickName }} has been married for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎂",
+      description: "{{ item.NickName }} {{ item.LastName }} has been married for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎂",
       start: '{{ item.Date | Date:'yyyy-MM-dd' }}',
       timed: false,
     },
@@ -51,7 +51,7 @@ p {
       "eventType": "staff",
       "color": "pink",
       "name": "{{ item.NickName }}'s {{ item.Age | ToString | NumberToOrdinal }} Birthday",
-      "description": "Happy birthday {{ item.NickName }}! 🎈",
+      "description": "Happy birthday {{ item.NickName }} {{ item.LastName }}! 🎈",
       "start": "{{ item.Date | Date:'yyyy-MM-dd' }}",
       "timed": false,
     },
@@ -65,7 +65,7 @@ p {
       "eventType": "staff",
       "color": "pink",
       "name": "{{ item.NickName }}'s {{ item.Age }}-Year Workiversary",
-      "description": "{{ item.NickName }} has been on staff for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎉",
+      "description": "{{ item.NickName }} {{ item.LastName }} has been on staff for {{ item.Age | ToString | NumberToWords }} {{ 'year' | PluralizeForQuantity:item.Age }}! 🎉",
       "start": "{{ item.Date  | Date:'yyyy-MM-dd' }}",
       "timed": false,
     },
@@ -90,12 +90,12 @@ p {
 {% comment %} Time Off - PTO Plugin {%endcomment %}
   {%- assign loadpastdate = 'Now' | Date | DateAdd:-6,'M' -%}
   {%- assign loadfuturedate = 'Now' | Date | DateAdd:6,'M' -%}
-  {%- ptorequest securityenabled:'false' where:'PtoRequestApprovalState == "1" && RequestDate < "{{ loadfuturedate }}" && RequestDate >= "{{ loadpastdate }}"' lazyloadenabled:'false' select:'new( PtoAllocation.PersonAlias.Person.NickName AS Name, Guid, RequestDate )' -%}
+  {%- ptorequest securityenabled:'false' where:'PtoRequestApprovalState == "1" && RequestDate < "{{ loadfuturedate }}" && RequestDate >= "{{ loadpastdate }}"' lazyloadenabled:'false' select:'new( PtoAllocation.PersonAlias.Person.NickName AS NickName, PtoAllocation.PersonAlias.Person.LastName AS LastName, Guid, RequestDate )' -%}
   {%- for request in ptorequestItems -%}
     {
       "eventType": "pto",
       "color": "grey",
-      "name": "{{ request.Name }} Out of Office",
+      "name": "{{ request.NickName }} {{ request.LastName | First }}. Out of Office",
       "description": "This event has no description.",
       "editLink": "/WorkflowEntry/144?PTORequest={{ request.Guid }}",
       "start": "{{ request.RequestDate | Date:'yyyy-MM-dd' }}",
