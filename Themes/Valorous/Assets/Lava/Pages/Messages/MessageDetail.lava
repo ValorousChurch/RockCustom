@@ -65,7 +65,14 @@
         <div class="row">
             <div class="col-md-12">
                 {[ mediaplayer media:'{{ videoId }}' relatedentityid:'{{ Item.Id }}' relatedentitytypeid:'208' ]}{[ endmediaplayer ]}
-                <h1 class="mt-1">{{ Item.Title }}</h1>
+{% assign titleParts = Item.Title | Split:' - ', true, 2 %}
+{% assign titleSize = titleParts | Size %}
+                <h1 class="mt-1">
+                    {{ titleParts[0] }}
+{% if titleSize > 1 %}
+                    <small style="position:relative;top:-2px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
+{% endif %}
+                </h1>
                 <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
 {% assign summary = Item.Content | StripHtml | Trim %}
 {% if summary != null and summary != '' %}
@@ -139,7 +146,7 @@
                     <h4 class="card-title">
                         {{ titleParts[0] }}
             {% if titleSize > 1 %}
-                        <small style="position:relative;top:-2px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
+                        <small style="position:relative;top:-2px">[{{ titleParts | Last | Replace:' ','&nbsp;' }}]</small>
             {% endif %}
                     </h4>
                     <h5 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h5>
