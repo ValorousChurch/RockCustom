@@ -23,6 +23,19 @@
 
 <section class="contentComponent contentcomponent-vc-sidebyside">
 {%- for item in Items -%}
+    {%- assign validDates = item | Attribute:'ValidDates','RawValue' | Split:',',false %}
+    {%- assign validSize = validDates | Size -%}
+    {%- if validSize == 2 -%}
+        {%- assign now = 'Now' | Date:'yyyy-MM-dd' %}
+        {%- assign validStart = validDates[0] | Date:'yyyy-MM-dd' -%}
+        {%- if validStart != '' and now <= validStart -%}
+            {% continue %}
+        {%- endif -%}
+        {%- assign validEnd = validDates[1] | Date:'yyyy-MM-dd' -%}
+        {%- if validEnd != '' and now >= validEnd -%}
+            {% continue %}
+        {%- endif -%}
+    {%- endif -%}
     {%- if channelBackgroundColor != '' -%}
         {%- capture contentItemStyle -%}{{ contentItemStyle }}background-color:{{ channelBackgroundColor }};{%- endcapture -%}
     {%- endif -%}
