@@ -101,7 +101,12 @@ function loadVideo(el,guid) {
                         </ul>
                         <h4>Audio</h4>
                         <ul>
+            {% if service.People.AudioBroadcast and service.People.AudioBroadcast != '' %}
+                            <li>{{ service.People.Audio }} (FoH)</li>
+                            <li>{{ service.People.AudioBroadcast }} (Broadcast)</li>
+            {% else %}
                             <li>{{ service.People.Audio }}</li>
+            {% endif %}
                         </ul>
             {% if service.People.Director and service.People.Director != '' %}
                         <h4>Director</h4>
