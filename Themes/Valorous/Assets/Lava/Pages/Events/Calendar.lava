@@ -245,7 +245,7 @@
                         Valorous&nbsp;|&nbsp;Kids Available
     {% else %}
                         <i class="fa fa-child text-gray-300"></i><br>
-                        Childcare Not&nbsp;Available
+                        Valorous&nbsp;|&nbsp;Kids Not&nbsp;Available
     {% endif %}
                     </div><!-- /childcare -->
                 </div><!-- /icons -->
