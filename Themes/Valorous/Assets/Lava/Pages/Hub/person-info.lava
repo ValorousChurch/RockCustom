@@ -37,7 +37,7 @@
                     </a>
                 </div>
                 <div class="col-sm-6 mb-2">
-                    <a class="btn btn-primary btn-block" href="#" role="button" onclick="javascript: Rock.controls.modal.show($(this), '/subscriptions?pb=&sb=Save&t=Manage%20Subscriptions')">
+                    <a class="btn btn-primary btn-block" href="#" role="button" onclick="Rock.controls.modal.show($(this), '/subscriptions?pb=&sb=Save&t=Manage%20Subscriptions')">
                         <i class="fa fa-paper-plane"></i>&nbsp; Manage Email Lists
                     </a>
                 </div>
