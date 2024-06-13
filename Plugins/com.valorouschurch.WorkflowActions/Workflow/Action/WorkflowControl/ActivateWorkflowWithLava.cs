@@ -41,7 +41,7 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
     [ExportMetadata( "ComponentName", "Activate Workflow with Lava" )]
 
     [TextField( "Workflow Name",
-        Description = "The name of your new workflow",
+        Description = "The name of your new workflow. <span class='tip tip-lava'></span>",
         IsRequired = true,
         Key = AttributeKey.WorkflowName,
         Order = 1 )]
@@ -139,11 +139,17 @@ namespace com.valorouschurch.WorkflowActions.Workflow.Action.WorkflowControl
 
             sourceKeyMap = sourceKeyMap ?? new Dictionary<string, string>();
 
+            var mergeFields = GetMergeFields( action );
+            mergeFields["Entity"] = entity;
+
+            if ( LavaHelper.IsLavaTemplate( workflowName ) )
+            {
+                workflowName = workflowName.ResolveMergeFields( mergeFields );
+            }
+
             var workflow = Rock.Model.Workflow.Activate( workflowType, workflowName );
             workflow.LoadAttributes( rockContext );
             var newWorkFlowAttr = SetWorkflowAttributeValue( action, AttributeKey.WorkflowAttribute, workflow.Guid );
-            var mergeFields = GetMergeFields( action );
-            mergeFields["Entity"] = entity;
 
             foreach ( var keyPair in sourceKeyMap )
             {
