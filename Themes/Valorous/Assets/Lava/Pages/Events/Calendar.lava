@@ -158,6 +158,7 @@
     {% assign location = eventItemOccurrence.EventItemOccurrence | Attribute:'CustomLocation','Object' %}
     {% assign registration = eventItemOccurrence.EventItemOccurrence | Attribute:'RegistrationStatusOverride' %}
     {% assign registrationEnd = eventItemOccurrence.EventItemOccurrence | Attribute:'RegistrationCloseOverride' | Date:'yyyy-MM-dd HH:mm:ss' %}
+    {% assign timeStringOverride = eventItemOccurrence.EventItemOccurrence | Attribute:'TimeStringOverride' | Trim %}
     {% if registrationEnd and registrationEnd != '' and registrationEnd <= now %}
         {% assign registration = 'Closed' %}
     {% endif %}
@@ -202,7 +203,9 @@
                     {{ eventItemOccurrence.Date | Date:'ddd. MMM. d' }} - {{ eventItemOccurrence.EndDate | Date:'ddd. MMM. d' }}
     {% else %}
                     {{ eventItemOccurrence.Date | Date:'dddd MMM. d' }}
-        {% if eventItemOccurrence.Time and eventItemOccurrence.Time != '' %}
+        {% if timeStringOverride and timeStringOverride != '' %}
+            <br><small>{{ timeStringOverride }}</small>
+        {% elseif eventItemOccurrence.Time and eventItemOccurrence.Time != '' and eventItemOccurrence.Time != '12:00 AM' %}
                     <br><small>{{ eventItemOccurrence.Time }}</small>
         {% endif %}
     {% endif %}
