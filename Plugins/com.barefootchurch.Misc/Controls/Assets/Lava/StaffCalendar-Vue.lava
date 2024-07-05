@@ -26,8 +26,30 @@ p {
   font-size: 1.2em;
 }
 </style>
+{% comment %} Room Reservation Dataset {% endcomment %}
+//- {% assign reservations = 'reservationscalendar' | PersistedDataset %}
+{% assign startofmonth = 'Now' | Date:'yyyy-MM-01' %}
+{% assign startdate = startofmonth | DateAdd:-1,'M' %}
+{% assign enddate = startofmonth | DateAdd:7,'M' | DateAdd:-1,'d' %}
+{% reservationsummaries approvalstates:'2' startdatetime:'{{ startdate | Date:"yyyy-MM-dd" }}' enddatetime:'{{ enddate | Date:"yyyy-MM-dd" }}' maxsummaries:'500' %}
+{% capture reservations -%}
+[
+{%- for reservation in ReservationSummaries -%}
+  {
+    "Id" : {{ reservation.Id }},
+    "Name" : {{ reservation.ReservationName | ToJSON }},
+    "Type" : {{ reservation.ReservationType.Id | ToJSON }},
+    "Start" : "{{ reservation.EventStartDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+    "End" : "{{ reservation.EventEndDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+    "Locations" : {{ reservation.ReservationLocations | Select:'Location' | Sort:'Name' | Select:'Name' | ToJSON }}
+  },
+{%- endfor -%}
+]
+{%- endcapture %}
+{% endreservationsummaries %}
+{% assign reservations = reservations | FromJSON %}
+
 {%- capture events -%}
-{%- cache key:'staff-calendar-events' duration:'900' -%}
 [
 {% comment %} Staff Life - Anniversaries {%endcomment %}
   {%- assign anniversaryItems = 'staffanniversaries' | PersistedDataset -%}
@@ -120,7 +142,7 @@ p {
 {%- endcontentchannelitem -%}
 
 {% comment %} Room Reservations - General {%endcomment %}
-  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',1 -%}
+  {%- assign reservationItems = reservations | Where:'Type',1 -%}
   {%- for item in reservationItems -%}
     {
       "eventType": "reservationGeneral",
@@ -135,7 +157,7 @@ p {
   {%- endfor -%}
 
 {% comment %} Room Reservations - Life Groups {%endcomment %}
-  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',2 -%}
+  {%- assign reservationItems = reservations | Where:'Type',2 -%}
   {%- for item in reservationItems -%}
     {
       "eventType": "reservationGroups",
@@ -150,7 +172,7 @@ p {
   {%- endfor -%}
 
 {% comment %} Room Reservations - Daily School {%endcomment %}
-  {%- assign reservationItems = 'reservationscalendar' | PersistedDataset | Where:'Type',3 -%}
+  {%- assign reservationItems = reservations | Where:'Type',3 -%}
   {%- for item in reservationItems -%}
     {
       "eventType": "reservationSchool",
@@ -213,7 +235,6 @@ p {
     {%- endfor -%}
   {%- endcontentchannelitem -%}
 ]
-{%- endcache -%}
 {%- endcapture -%}
 {% comment %} Debug {% endcomment %}
 {% comment %} <div class="hidden"><pre>{{ events }}</pre></div> {% endcomment %}
