@@ -8,9 +8,9 @@
 {% assign videoDownload = Item | Attribute:'VideoDownload','RawValue' %}
 {% assign audioDownload = Item | Attribute:'AudioDownload','RawValue' %}
 
-{% assign studyGuide = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' | First | Attribute:'PDF','Guid' %}
+{% assign studyGuide = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' | First %}
 {% if studyGuide != null and studyGuide != '' %}
-    {% assign studyGuideLink = '/GetFile.ashx?guid=' | Append:studyGuide %}
+    {% assign studyGuideLink = '/watch/notes/' | Append:studyGuide.Guid %}
 {% endif %}
 
 {% assign transcript = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','93' | First %}
@@ -23,7 +23,8 @@
     {
         Title: "Study Guide",
         Link: "{{ studyGuideLink }}",
-        Icon: "fa fa-file-pdf"
+        Icon: "fa fa-file-pdf",
+        Popup: "true"
     },
 {% endif %}
 {% if podcastLink and podcastLink != '' %}
