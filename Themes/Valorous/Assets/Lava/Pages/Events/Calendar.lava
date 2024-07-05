@@ -201,6 +201,9 @@
                 <h4 class="text-center mb-4">
     {% if eventItemOccurrence.Date != eventItemOccurrence.EndDate %}
                     {{ eventItemOccurrence.Date | Date:'ddd. MMM. d' }} - {{ eventItemOccurrence.EndDate | Date:'ddd. MMM. d' }}
+        {% if timeStringOverride and timeStringOverride != '' %}
+                    <br><small>{{ timeStringOverride }}</small>
+        {% endif %}
     {% else %}
                     {{ eventItemOccurrence.Date | Date:'dddd MMM. d' }}
         {% if timeStringOverride and timeStringOverride != '' %}
