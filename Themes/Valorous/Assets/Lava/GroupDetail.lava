@@ -68,11 +68,16 @@
 		</div>
 	</div>
 
-	{% if AllowedActions.Edit == true %}
 	<div class="actions margin-v-md clearfix">
-		<a class="btn btn-default btn-sm pull-right" href="#" onclick="{{ Group.Id | Postback:'EditGroup' }}">Edit</a>
-	</div>
+		{% if AllowedActions.Edit == true %}
+			<a class="btn btn-default btn-sm pull-right ml-2" href="#" onclick="{{ Group.Id | Postback:'EditGroup' }}"><i class="fa fa-pencil"></i> Edit</a>
+		{% endif %}
+
+		{% assign canSchedule = Group | HasRightsTo:'Schedule' %}
+		{% if canSchedule %}
+		<a class="btn btn-default btn-sm pull-right ml-2" href="/page/1365?GroupId={{ Group.Id }}"><i class="fa fa-calendar"></i> Schedule</a>
 	{% endif %}
+	</div>
 
 	{% if LinkedPages.RosterPage and LinkedPages.AttendancePage and Group.GroupType.TakesAttendance == 'True' %}
 	<ul class="nav nav-tabs margin-v-lg">
@@ -268,7 +273,7 @@
 		{% endif %}
 
 	<div class="pull-right margin-b-md">
-		{% if AllowedActions.Edit == true %}
+		{% if AllowedActions.ManageMembers == true %}
 		<a href="#" onclick="{{ '' | Postback:'AddGroupMember' }}" class="btn btn-default btn-xs">
 			<i class="fa fa-plus"></i> Add Member
 		</a>
