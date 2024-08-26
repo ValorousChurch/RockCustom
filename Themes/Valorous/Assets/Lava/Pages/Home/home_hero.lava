@@ -13,7 +13,7 @@
                 </div>
             {[ endwow ]}
             {[ wow animate:'fadeIn' duration:'0.4s' delay:'0.8s' ]}
-                <p class="tw-leading-snug md:tw-leading-normal tw-m-0 tw-text-3xs md:tw-text-base">With an unshakable hope in Jesus, we are a church who believes we can face and experience victory over any challenge that comes our way. To the warriors and the weary, the courageous and the curious, the families and to those who feel on the outside: we welcome you.</p>
+                <p class="tw-leading-snug md:tw-leading-normal tw-m-0 tw-text-3xs md:tw-text-base">With an unshakable hope in Jesus, we are a church who believes we can face and experience victory over any challenge that comes our way. To the warriors and the weary, the courageous and the curious, to the families and those who feel on the outside: We welcome you!</p>
             {[ endwow ]}
         </div>
     </div>
