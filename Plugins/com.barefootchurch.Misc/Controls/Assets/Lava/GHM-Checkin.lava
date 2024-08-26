@@ -1,8 +1,7 @@
 {{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
 
-{% attributequalifier where:'AttributeId==11417 && Key=="values"' limit:1 securityenabled:'false' lazyloadenabled:'false' %}
-    {% assign timeSlots = attributequalifier.Value | Split:',' %}
-{% endattributequalifier %}
+{% assign rigging = 'hopemall-rigging' | PersistedDataset %}
+{% assign timeSlots = rigging.timeSlots %}
 
 <div id="app">
     <div class="row">

@@ -1,6 +1,11 @@
+{%- assign rigging = 'hopemall-rigging' | PersistedDataset -%}
+
+//- Not using the persisted dataset here because we need realtime data
 {%- sql -%}
+DECLARE @OpportunityId int = {{ rigging.ConnectionOpportunity.Id }};
+
+-- Hard-coded since they dont change from year to year
 DECLARE @FamilyStatus int = 45; -- Approved
-DECLARE @OpportunityId int = 75;
 DECLARE @Attr_timeslot int = 11417;
 DECLARE @Attr_checkedInTime int = 11775;
 DECLARE @Attr_shoppedTime int = 11774;
@@ -16,7 +21,7 @@ SELECT
     ,av_timeslot.[Value] 'TimeSlot'
     ,CONCAT_WS( ' ', p_parent.[NickName], p_parent.[LastName] ) 'ParentName'
     ,CONCAT_WS( ' ', p_child.[NickName], p_child.[LastName] ) 'ChildName'
-    ,DATEDIFF( d, p_child.[BirthDate], GETDATE() ) / 365 'Age'
+    , p_child.[Age]
 FROM
     [ConnectionRequest] cr
     JOIN [Registration] r ON cr.[ForeignId] = r.[Id]
