@@ -39,7 +39,7 @@
                 <h3 class="card-title">
                     {{ titleParts[0] }}
         {% if titleSize > 1 %}
-                    <small style="position:relative;top:-2px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
+                    <br><small style="position:relative;top:-5px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
         {% endif %}
                 </h3>
                 <h4 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h4>
