@@ -17,6 +17,9 @@ If (Test-Path "$bkupfolder"){
 	Remove-Item "$bkupfolder\*" -Recurse -Force
 }
 
+# flush IIS temp files (Fixes Obsidian caching issue)
+Remove-Item "C:\inetpub\temp\IIS Temporary Compressed Files\*" -Recurse -Force
+
 # remove the app offline flag
 If (Test-Path "$webroot\app_offline.htm"){
 	Write-Host "Removing app offline template"
