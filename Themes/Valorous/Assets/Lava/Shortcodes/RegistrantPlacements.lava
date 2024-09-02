@@ -1,0 +1,118 @@
+//- *********************************** NAME ***************************************
+Registrant Placements
+
+//- *********************************** TagType ************************************
+Inline
+
+//- *********************************** TAG NAME ***********************************
+RegistrantPlacements
+
+//- *********************************** DESCRIPTION ********************************
+Given a registrant ID, return a list of all the placement groups they are in. **Returns JSON**
+
+//- *********************************** DOCUMENTATION ******************************
+
+<p>
+    <b>Example:</b><br>
+    <code>
+      {% capture result %}{[ RegistrantPlacements RegistrantId:'6404' ]}{% endcapture %}<br>
+      {% assign placements = result | FromJSON %}<br>
+      {% for placement in placements %}{{ placement.PlacementName }} - {{ placement.GroupName }};{% endfor %}
+    </code>
+</p>
+<hr>
+<b>Parameters:</b>
+<table class="table table-bordered">
+    <tbody><tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Required?</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td>RegistrantId</td>
+        <td>Which registrant to pull data for</td>
+        <td>yes</td>
+        <td>0</td>
+    </tr>
+</tbody></table>
+<hr>
+<b>Return Format:</b><br>
+<pre>[
+    {
+        "PlacementName": "Team",
+        "GroupId": 123,
+        "GroupName": "Red Team",
+        "GroupMemberId": 321
+    },
+    ...
+]</pre>
+
+//- *********************************** MARKUP *************************************
+
+{%- sql RegistrantId:'{{ registrantid }}' -%}
+-- Pull in the IDs we'll need later
+DECLARE @RegistrationInstanceId int, @RegistrationTemplateId int;
+SELECT
+    @RegistrationInstanceId = r.[RegistrationInstanceId]
+    ,@RegistrationTemplateId = rr.[RegistrationTemplateId]
+FROM
+    [RegistrationRegistrant] rr
+    JOIN [Registration] r ON r.[Id] = rr.[RegistrationId]
+WHERE rr.[Id] = @RegistrantId
+;
+
+-- Calculate all possible placement groups (Template & Instance)
+DECLARE @PlacementGroups table(
+    [PlacementName] varchar(max)
+    ,[GroupId] int
+    ,[GroupName] varchar(max)
+);
+INSERT INTO @PlacementGroups
+SELECT
+    rtp.[Name]
+    ,g.[Id]
+    ,g.[Name]
+FROM
+    [RelatedEntity] rel
+    JOIN [RegistrationTemplatePlacement] rtp ON rtp.[Id] = rel.[QualifierValue]
+    JOIN [Group] g ON g.[Id] = rel.[TargetEntityId]
+WHERE
+    rel.[SourceEntityId] = @RegistrationTemplateId
+    AND rel.[PurposeKey] = 'PLACEMENT-TEMPLATE'
+;
+INSERT INTO @PlacementGroups
+SELECT
+    rtp.[Name]
+    ,g.[Id]
+    ,g.[Name]
+FROM
+    [RelatedEntity] rel
+    JOIN [RegistrationTemplatePlacement] rtp ON rtp.[Id] = rel.[QualifierValue]
+    JOIN [Group] g ON g.[Id] = rel.[TargetEntityId]
+WHERE
+    rel.[SourceEntityId] = @RegistrationInstanceId
+    AND rel.[PurposeKey] = 'PLACEMENT'
+;
+
+-- Find the group(s) they are in
+SELECT(
+    SELECT
+        pl.*
+        ,gm.[Id] 'GroupMemberId'
+    FROM
+        [RegistrationRegistrant] rrt
+        JOIN [PersonAlias] pa ON pa.[Id] = rrt.[PersonAliasId]
+        JOIN [GroupMember] gm ON gm.[PersonId] = pa.[PersonId]
+        JOIN @PlacementGroups pl ON pl.[GroupId] = gm.[GroupId]
+    WHERE rrt.[Id] = @RegistrantId
+    FOR JSON PATH
+) 'JSON'
+{%- endsql -%}
+{{- results[0].JSON | Default:'[]' -}}
+
+//- *********************************** PARAMETERS *********************************
+registrantid = 0
+
+//- *********************************** ENABLED COMMANDS ***************************
+SQL
