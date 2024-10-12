@@ -44,10 +44,6 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="DotLiquid">
-      <HintPath>..\..\..\Rock\RockWeb\Bin\DotLiquid.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\..\..\Rock\RockWeb\Bin\EntityFramework.dll</HintPath>
       <Private>False</Private>
@@ -65,12 +61,16 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Rock.Lava.Shared">
+      <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Lava.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Rock.Lava.Shared">
       <HintPath>..\..\..\Rock\RockWeb\Bin\Rock.Lava.Shared.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lava\Blocks\WebRequestBlock.cs" />
+    <Compile Include="Lava\Blocks\VCWebRequestBlock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
