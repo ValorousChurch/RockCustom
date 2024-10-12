@@ -14,6 +14,14 @@
 // limitations under the License.
 // </copyright>
 //
+
+/***
+ * Source: Webrequest block from v16.0
+ * Changes:
+ *   - Added ability to POST a file
+ ***/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
@@ -27,13 +35,19 @@ using Newtonsoft.Json.Converters;
 
 using RestSharp;
 using RestSharp.Authenticators;
+using RestSharp.Extensions;
+using Rock;
+using Rock.Data;
+using Rock.Lava;
+using Rock.Lava.Blocks;
+using Rock.Model;
 
-namespace Rock.Lava.Blocks
+namespace com.valorouschurch.Lava.Blocks
 {
     /// <summary>
     /// Web
     /// </summary>
-    public class WebRequestBlock : LavaBlockBase, ILavaSecured
+    public class VCWebRequestBlock : LavaBlockBase, ILavaSecured
     {
         private static readonly Regex Syntax = new Regex( @"(\w+)" );
 
@@ -106,6 +120,35 @@ namespace Rock.Lava.Blocks
                         {
                             request.AddHeader( header.Key, header.Value.ToString() );
                         }
+                    }
+
+                    // upload the provided file (like `--data-binary @file` in CURL)
+                    // we're expecting `binaryfile` to be the Guid of a binaryfile
+                    if ( !string.IsNullOrWhiteSpace( parms["binaryfile"] ) )
+                    {
+                        Guid? binaryFileGuid = parms["binaryfile"]?.AsGuidOrNull();
+                        
+                        if ( !binaryFileGuid.HasValue )
+                        {
+                            result.Write( "The 'binaryfile' parameter should contain the Guid of a binary file." );
+                            base.OnRender( context, result );
+                            return;
+                        }
+
+                        var rockContext = LavaHelper.GetRockContextFromLavaContext( context );
+                        var binaryFileService = new BinaryFileService( rockContext );
+                        var binaryFile = binaryFileService.Get( binaryFileGuid.Value );
+
+                        if ( binaryFile == null )
+                        {
+                            result.Write( "Invalid binaryfile Guid." );
+                            base.OnRender( context, result );
+                            return;
+                        }
+
+                        request.AddHeader( "Content-Type", binaryFile.MimeType );
+                        request.AddHeader( "Content-Length", binaryFile.FileSize.ToString() );
+                        request.AddParameter( binaryFile.MimeType, binaryFile.ContentStream.ReadAsBytes(), ParameterType.RequestBody );
                     }
 
                     // add body, this will be ignored if other parameters exist
@@ -188,6 +231,7 @@ namespace Rock.Lava.Blocks
             attributes.AddOrIgnore( "basicauth", "" );
             attributes.AddOrIgnore( "parameters", "" );
             attributes.AddOrIgnore( "headers", "" );
+            attributes.AddOrIgnore( "binaryfile", "" );
             attributes.AddOrIgnore( "responsecontenttype", "json" );
             attributes.AddOrIgnore( "body", "" );
             attributes.AddOrIgnore( "requesttype", "text/plain" );
@@ -203,7 +247,7 @@ namespace Rock.Lava.Blocks
         {
             get
             {
-                return "WebRequest";
+                return "VCWebRequest";
             }
         }
 
