@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Valorous Church" )]
-[assembly: AssemblyProduct( "com.valorouschurch.MiscJobs" )]
+[assembly: AssemblyProduct( "com.valorouschurch.WorkflowActions" )]
 [assembly: AssemblyCopyright( "" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible( false )]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid( "ece42e78-6a54-4e09-8bb0-e9ee0e45734b" )]
+[assembly: Guid( "37FF15A8-6298-4ECB-BC69-00FF83CE5432" )]
 
 // Version information for an assembly consists of the following four values:
 //
