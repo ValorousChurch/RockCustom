@@ -88,6 +88,7 @@ namespace com.valorouschurch.Lava.Blocks
             if ( !string.IsNullOrWhiteSpace( parms["url"] ) )
             {
                 dynamic responseData = null;
+                int responseCode;
 
                 try {
                     var client = new RestClient( parms["url"].ToString() );
@@ -169,6 +170,7 @@ namespace com.valorouschurch.Lava.Blocks
                     System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 
                     IRestResponse response = client.Execute( request );
+                    responseCode = (int) response.StatusCode;
 
                     if ( response.StatusCode == System.Net.HttpStatusCode.OK )
                     {
@@ -216,6 +218,7 @@ namespace com.valorouschurch.Lava.Blocks
                 }
 
                 context.SetMergeField( parms["return"], responseData );
+                context.SetMergeField( "StatusCode", responseCode );
             }
             else {
                 result.Write( "No url parameter was found." );
