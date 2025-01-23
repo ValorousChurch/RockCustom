@@ -3,7 +3,7 @@
     {% assign maxEvents = 3 %}
     {% assign now = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss' %}
 
-    {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime, EventItemOccurrence.EventItem.DetailsUrl ) as EventItemOccurrence )' %}
+    {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}" && EventItemOccurrence.NextStartDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime, EventItemOccurrence.EventItem.DetailsUrl ) as EventItemOccurrence )' %}
         {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
         {% for item in itemsSorted limit:maxEvents %}
             {% if forloop.first %}
