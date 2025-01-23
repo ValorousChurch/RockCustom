@@ -1,3 +1,9 @@
+<style>
+    .card {
+        border-radius: 2%;
+        overflow: hidden;
+    }
+</style>
 <div class="row d-flex flex-wrap">
 {% for message in Items %}
     <div class=" col-md-4 col-sm-6 mb-4">
