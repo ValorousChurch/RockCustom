@@ -96,7 +96,7 @@
         {% if registrationInstanceLinkagesCount > 0 %}
             {% for registrationInstanceLinkage in RegistrationInstanceLinkages %}
                 {% if registrationInstanceLinkage.UrlSlug != '' %}
-    <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ RegistrationInstance.Id }}&Slug={{registrationInstanceLinkage.UrlSlug}}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
+    <a href="{{ RegistrationPage }}/{{registrationInstanceLinkage.UrlSlug}}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
                 {% else %}
     <a href="{{ RegistrationPage }}?RegistrationInstanceId={{ RegistrationInstance.Id }}&EventOccurrenceID={{ registrationInstanceLinkage.EventItemOccurrenceId }}" class="regLink btn btn-primary btn-block margin-t-md">{{ registrationButtonText }}</a>
                 {% endif %}
