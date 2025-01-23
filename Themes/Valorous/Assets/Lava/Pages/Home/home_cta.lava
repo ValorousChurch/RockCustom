@@ -3,7 +3,7 @@
   <div class="container tw-px-5 tw-py-24 tw-mx-auto">
     <div class="tw-text-center tw-mb-20">
       <h1 class="tw-text-gray-900 tw-mb-4 tw-mt-0 tw-font-bold">Get Involved</h1>
-      <p class="xl:tw-w-2/4 lg:tw-w-3/4 tw-mx-auto tw-text-gray-500s">When you choose to connect with a local church beyond only attending on Sundays, you?re choosing to become a part of something bigger than yourself and cultivate lifelong relationships.</p>
+      <p class="xl:tw-w-2/4 lg:tw-w-3/4 tw-mx-auto tw-text-gray-500s">When you choose to connect with a local church beyond only attending on Sundays, you're choosing to become a part of something bigger than yourself and cultivate lifelong relationships.</p>
       <div class="tw-flex tw-mt-6 tw-justify-center">
         <div class="tw-w-16 tw-h-1 tw-rounded-full tw-bg-c-primary tw-bg-opacity-50 tw-inline-flex"></div>
       </div>
@@ -15,7 +15,7 @@
         </div>
         <div class="tw-flex-grow">
           <h2 class="tw-text-gray-900 tw-title-font tw-font-medium tw-mb-5">Life Groups</h2>
-          <p class="tw-leading-relaxed">Life Groups are at the heartbeat of our church ? they are our commitment to create a healthy sense of community and family. Life Groups are the best way to meet new people and forge genuine relationships with others.</p>
+          <p class="tw-leading-relaxed">Life Groups are at the heartbeat of our church — they are our commitment to create a healthy sense of community and family. Life Groups are the best way to meet new people and forge genuine relationships with others.</p>
           <a class="tw-mt-3 tw-text-c-primary tw-inline-flex tw-items-center" href="/connect/group-finder">Join A Group
             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="tw-w-4 tw-h-4 tw-ml-2" viewBox="0 0 24 24">
               <path d="M5 12h14M12 5l7 7-7 7"></path>
