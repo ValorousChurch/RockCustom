@@ -31,18 +31,39 @@ p {
 {% assign startofmonth = 'Now' | Date:'yyyy-MM-01' %}
 {% assign startdate = startofmonth | DateAdd:-1,'M' %}
 {% assign enddate = startofmonth | DateAdd:7,'M' | DateAdd:-1,'d' %}
-{% reservationsummaries approvalstates:'2' startdatetime:'{{ startdate | Date:"yyyy-MM-dd" }}' enddatetime:'{{ enddate | Date:"yyyy-MM-dd" }}' maxsummaries:'500' %}
+{% reservationsummaries approvalstates:'2' startdatetime:'{{ startdate | Date:"yyyy-MM-dd" }}' enddatetime:'{{ enddate | Date:"yyyy-MM-dd" }}' maxsummaries:'1500' %}
 {% capture reservations -%}
 [
 {%- for reservation in ReservationSummaries -%}
+  {%- assign locations = reservation.ReservationLocations | Select:'Location' | Sort:'Name' | Select:'Name' -%}
   {
     "Id" : {{ reservation.Id }},
     "Name" : {{ reservation.ReservationName | ToJSON }},
     "Type" : {{ reservation.ReservationType.Id | ToJSON }},
     "Start" : "{{ reservation.EventStartDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
     "End" : "{{ reservation.EventEndDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
-    "Locations" : {{ reservation.ReservationLocations | Select:'Location' | Sort:'Name' | Select:'Name' | ToJSON }}
+    "Locations" : {{ locations | ToJSON }}
   },
+  {%- if reservation.ReservationStartDateTime != reservation.EventStartDateTime -%}
+    {
+      "Id" : {{ reservation.Id }},
+      "Name" : {{ "Setup: " | Append:reservation.ReservationName | ToJSON }},
+      "Type" : 99,
+      "Start" : "{{ reservation.ReservationStartDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "End" : "{{ reservation.EventStartDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "Locations" : {{ locations | ToJSON }}
+    },
+  {%- endif -%}
+  {%- if reservation.ReservationEndDateTime != reservation.EventEndDateTime -%}
+    {
+      "Id" : {{ reservation.Id }},
+      "Name" : {{ "Cleanup: " | Append:reservation.ReservationName | ToJSON }},
+      "Type" : 99,
+      "Start" : "{{ reservation.EventEndDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "End" : "{{ reservation.ReservationEndDateTime | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "Locations" : {{ locations | ToJSON }}
+    },
+  {%- endif -%}
 {%- endfor -%}
 ]
 {%- endcapture %}
@@ -177,6 +198,21 @@ p {
     {
       "eventType": "reservationSchool",
       "color": "orange",
+      "name": {{ item.Name | ToJSON }},
+      "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
+      "link": "/ReservationDetail?ReservationId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
+{% comment %} Room Reservations - Setup/Cleanup Times {%endcomment %}
+  {%- assign reservationItems = reservations | Where:'Type',99 -%}
+  {%- for item in reservationItems -%}
+    {
+      "eventType": "reservationSetupCleanup",
+      "color": "#999",
       "name": {{ item.Name | ToJSON }},
       "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
       "link": "/ReservationDetail?ReservationId={{ item.Id }}",
@@ -385,13 +421,14 @@ p {
 </div>
 
 <script>
-  //Saves the events object built above to a javascript variable used in the data object in the vue app.  The FromJSON ToJSON removes any extra line breaks which is not completely necessary but was helpful in development.
+  //Saves the events object built above to a javascript variable used in the data object in the vue app.
+  //The FromJSON ToJSON removes any extra line breaks which is not completely necessary but was helpful in development.
   var events = {{ events }}; {% comment %} | FromJSON | ToJSON }}; {%endcomment %}
 
   new Vue({
-  	el: '#app',
-  	delimiters: ['{$', '$}'],
-  	vuetify: new Vuetify({
+    el: '#app',
+    delimiters: ['{$', '$}'],
+    vuetify: new Vuetify({
       theme: {
         options: {
           customProperties: true
@@ -399,109 +436,112 @@ p {
       },
     }),
     data: () => ({
-  		focus: '',
-  		type: 'week',
-  		typeToLabel: {
-  			month: 'Month',
-  			week: 'Week',
-  			day: 'Day',
-  		},
-  		startMenu: false,
-  		calendar: "{{ 'Now' | Date:'MMMM yyyy' }}",
-  		selectedEvent: {},
-  		selectedElement: null,
-  		selectedOpen: false,
+      focus: '',
+      type: 'week',
+      typeToLabel: {
+        month: 'Month',
+        week: 'Week',
+        day: 'Day',
+      },
+      startMenu: false,
+      calendar: "{{ 'Now' | Date:'MMMM yyyy' }}",
+      selectedEvent: {},
+      selectedElement: null,
+      selectedOpen: false,
       selectedEventTypes: [],
-  		events: events,
-  		start:'',
-  		calendartypes: [
-  			{ value:'month', text:'Month' },
-  			{ value:'week',  text:'Week' },
-  			{ value:'day',   text:'Day' },
+      events: events,
+      start:'',
+      calendartypes: [
+        { value:'month', text:'Month' },
+        { value:'week',  text:'Week' },
+        { value:'day',   text:'Day' },
       ],
       eventTypes: [
-        { value: 'oncall',             text: 'On-Call Pastors' },
-        { value: 'reservationGeneral', text: 'Room Reservations - General' },
-        { value: 'reservationGroups',  text: 'Room Reservations - Life Groups' },
-        { value: 'reservationSchool',  text: 'Room Reservations - Daily School' },
-        { value: 'staff',              text: 'Staff Life Events' },
-        { value: 'pto',                text: 'Time Off' },
-        { value: 'blackout',           text: 'Vacation Blackouts' },
-        { value: 'other',              text: 'Other Events' },
+        { value: 'oncall',                  text: 'On-Call Pastors' },
+        { value: 'reservationGeneral',      text: 'Room Reservations - General' },
+        { value: 'reservationGroups',       text: 'Room Reservations - Life Groups' },
+        { value: 'reservationSchool',       text: 'Room Reservations - Daily School' },
+        { value: 'reservationSetupCleanup', text: 'Room Reservations - Setup & Cleanup Times' },
+        { value: 'staff',                   text: 'Staff Life Events' },
+        { value: 'pto',                     text: 'Time Off' },
+        { value: 'blackout',                text: 'Vacation Blackouts' },
+        { value: 'other',                   text: 'Other Events' },
       ],
-  	}),
-  	created()
+    }),
+    created()
     {
-  	  let type = localStorage.getItem( 'calendarTypePreference' );
-  	  if( type )
+      let type = localStorage.getItem( 'calendarTypePreference' );
+      if( type )
       {
-  		  this.type = JSON.parse( type )
-  	  }
-  	},
-  	mounted()
+        this.type = JSON.parse( type )
+      }
+      this.selectedEventTypes = this.eventTypes
+        .flatMap(e => e.value !== 'reservationSchool' && e.value !== 'reservationSetupCleanup' ? [e.value] : [])
+    },
+    mounted()
     {
       this.$refs.calendar.checkChange()
       },
-  	computed: {
-  		filteredEvents()
+    computed: {
+      filteredEvents()
       {
-  			var filteredArray = this.events;
-  			var filter = this.selectedEventTypes;
+        var filteredArray = this.events;
+        var filter = this.selectedEventTypes;
 
-  			if( filter.length > 0 )
+        if( filter.length > 0 )
         {
-  				filteredArray = filteredArray.filter( event => filter.includes( event.eventType ) == true )
-  			}
+          filteredArray = filteredArray.filter( event => filter.includes( event.eventType ) == true )
+        }
 
-  			return filteredArray;
-  		},
-  	},
-  	methods: {
+        return filteredArray;
+      },
+    },
+    methods: {
       openLink( url )
       {
         window.open( url, '_blank' )
       },
-  		//Sets the calendar type and saves it to local storage to persist value when the refreshes.
-  		updateType( type )
+      //Sets the calendar type and saves it to local storage to persist value when the refreshes.
+      updateType( type )
       {
-  		  this.type = type
-  		  localStorage.setItem( "calendarTypePreference", JSON.stringify( type ) )
-  		},
-  		viewDay( { date } )
+        this.type = type
+        localStorage.setItem( "calendarTypePreference", JSON.stringify( type ) )
+      },
+      viewDay( { date } )
       {
-  			this.focus = date;
-  			this.type = 'day';
-  		},
-  		setToday()
+        this.focus = date;
+        this.type = 'day';
+      },
+      setToday()
       {
         this.focus = ''
       },
-  		prev()
+      prev()
       {
         this.$refs.calendar.prev()
       },
-  		next()
+      next()
       {
         this.$refs.calendar.next()
       },
-  		showEvent( { nativeEvent, event } )
+      showEvent( { nativeEvent, event } )
       {
-  			const open = () => {
-  				this.selectedEvent = event;
-  				this.selectedElement = nativeEvent.target;
-  				setTimeout( () => this.selectedOpen = true, 10 );
-  			}
-  			if ( this.selectedOpen )
+        const open = () => {
+          this.selectedEvent = event;
+          this.selectedElement = nativeEvent.target;
+          setTimeout( () => this.selectedOpen = true, 10 );
+        }
+        if ( this.selectedOpen )
         {
-  				this.selectedOpen = false
-  				setTimeout( open, 10 );
-  			}
+          this.selectedOpen = false
+          setTimeout( open, 10 );
+        }
         else
         {
-  				open()
-  			}
-  			nativeEvent.stopPropagation()
-  		},
-  	},
+          open()
+        }
+        nativeEvent.stopPropagation()
+      },
+    },
   })
 </script>
