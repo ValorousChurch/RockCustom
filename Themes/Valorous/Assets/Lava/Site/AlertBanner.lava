@@ -1,12 +1,13 @@
 {% for item in Items limit:1 %}
     {% assign allowclose = item | Attribute:'allowclose' | AsBoolean %}
-    {% stylesheet compile:'less' cacheduration:'43200' %}
+    {% stylesheet compile:'less' %}
         .alert-bar-top {
             background-color: {{ item | Attribute:'BackgroundColor' }};
             border-color: {{ item | Attribute:'BackgroundColor' }};
             border-radius: 0px;
             color: {{ item | Attribute:'TextColor' }};
             display: none;
+            padding: 14px;
             position: fixed;
             top: 0;
             width: 100%;
@@ -21,7 +22,7 @@
         }
     {% endstylesheet %}
 
-    {% javascript id:'alert-banner' %}
+    {% javascript %}
         function alertMargin() {
             var alertHeight = $('.alert-bar-top').outerHeight();
             $('#body-wrap, #mainNav').css('padding-top', alertHeight);
