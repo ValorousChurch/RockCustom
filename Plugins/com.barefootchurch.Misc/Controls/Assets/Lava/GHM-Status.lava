@@ -88,7 +88,7 @@
                     <div style="flex: 1" class="mt-4">
                         <h1><span class="fa fa-user"></span></h1>
                         <h1>{{ stats.People.Kids.Approved.Count }}</h1>
-                        <h3>Children Registerd</h3>
+                        <h3>Children Registered</h3>
                     </div>
                     <div style="flex: 1" class="mt-4">
                         <h1><span class="fa fa-gift"></span></h1>

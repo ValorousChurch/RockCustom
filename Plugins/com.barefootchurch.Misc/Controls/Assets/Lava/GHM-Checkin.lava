@@ -1,7 +1,31 @@
 {{ "https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js" | AddScriptLink }}
 
 {% assign rigging = 'hopemall-rigging' | PersistedDataset %}
-{% assign timeSlots = rigging.timeSlots %}
+{% assign timeSlots = rigging.TimeSlots %}
+{% assign showMidnightTimeslots = rigging.CheckIn.ShowMidnightTimeslots | AsBoolean %}
+
+<script>
+function printLabels(labels) {
+    try {
+        window.RockCheckinNative.PrintLabels(JSON.stringify(labels))
+        .catch(a => Rock.dialogs.alert('Failed to print labels: ' + JSON.stringify(a)));
+    } catch(e) {
+        Rock.dialogs.alert('Failed to print labels: ' + JSON.stringify(e));
+    }
+}
+$(function(){
+    window.addEventListener(
+        "message",
+        event => {
+            if(event.data.command == "print" && event.data.labels.length > 0) {
+                //console.log('Printing labels:\n' + event.data.labels);
+                printLabels(event.data.labels);
+            }
+        },
+        false
+    );
+})
+</script>
 
 <div id="app">
     <div class="row">
@@ -42,7 +66,7 @@
     <em class="text-right" style="display:block;position:relative;top:-12px">Showing [[ filteredSize]] of [[ size ]] Famlies.</em>
     <div class="row d-flex flex-wrap">
         <family-card inline-template v-for="family in filteredFamlies" :key="family.ConnectionId" :family="family">
-        <div class="col-md-4 mb-4">
+        <div class="col-xs-12 col-sm-6 col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-header" :class="headerClasses">
                     <h5 class="card-title text-center">[[ family.ParentName ]]</h5>
@@ -101,7 +125,7 @@ var app = new Vue({
 
     methods: {
         loadData() {
-            $.getJSON( 'https://rock.valorouschurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response );
+            $.getJSON( 'https://rock.valorouschurch.com/Webhooks/Lava.ashx/ghm-checkin', response => this.famlies = response{% unless showMidnightTimeslots %}.filter( item => item.TimeSlot !== '00:00' ){% endunless %} );
         }
     },
 
