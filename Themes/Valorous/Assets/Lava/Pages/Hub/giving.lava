@@ -1,9 +1,23 @@
+/-
+    This searches the defined type "Merlin Source" for a value that matches
+    the utm_source and sends it to merlin as a data attribute.
+    Once the transaction posts, a workflow trigger grabs the EntityID and
+    sets a Transaction attribute.
+-/
+{%- lava
+    assign source = 'Gobal' | PageParameter:'utm_source' | Downcase | Replace:'+',' '
+    assign definedType = '411' | FromCache:'DefinedType'
+    assign definedValue = definedType.DefinedValues | Where:'Value', source
+    if definedValue != empty and definedValue[0].Id > 0
+        assign merlindataattributes = 'data-merlin-form-entity-type-id="31" data-merlin-form-entity-id="' | Append:definedValue[0].Id | Append:'"'
+    endif
+-%}
 <div class="text-center">
     <p class="mb-0">Our mission is to reach people worldwide with the message of hope in Christ and help every person become all that God created them to be. Your generous support allows us to connect with people to impact lives around the world with His truth, and to create incredible environments for them to discover and develop their God-potential.</p>
     <p class="my-3">
         //- These buttons just open the Merlin popover. Merlin must already be initalized elsewhere on the page for them to work.
-        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" data-merlin-key="01DZPK8Z9C6NCZWRZNYAQ1CZN3" data-merlin-primary-color="687f82" href="#">Give With Card or ACH</a>
-        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" data-merlin-key="01GQTHSNE1RPWCC89X60PZ715N" data-merlin-primary-color="687f82" data-merlin-payment-mode="crypto" href="#">Give With Crypto</a>
+        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" {{ merlindataattributes }} data-merlin-key="01DZPK8Z9C6NCZWRZNYAQ1CZN3" data-merlin-primary-color="687f82" href="#">Give With Card or ACH</a>
+        <a class="btn btn-primary px-4 py-2 mb-3 mx-3 rounded open-merlin" {{ merlindataattributes }} data-merlin-key="01GQTHSNE1RPWCC89X60PZ715N" data-merlin-primary-color="687f82" data-merlin-payment-mode="crypto" href="#">Give With Crypto</a>
     </p>
 </div>
 <blockquote class="m-0" style="font-size:unset">
