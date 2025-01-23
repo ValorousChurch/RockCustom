@@ -1,0 +1,135 @@
+{% comment %}Toast Below{% endcomment %}
+<style>
+    .toast-notification {
+        background: white;
+        color: black;
+        border-radius: 0 5px 5px 0;
+        box-shadow: rgba(0, 0, 0, 0.1) 1.95px 1.95px 2.6px;
+        position: fixed;
+        bottom: 30px;
+        right: 20px;
+        padding: 10px 20px;
+        z-index: 10000;
+        opacity: 1;
+        transition: opacity 0.5s;
+        display: flex;
+        align-items: center;
+    }
+
+    .toast-notification.success {
+        border-left: 4px solid #2e844a; /* Success green */
+    }
+
+    .toast-notification.error {
+        border-left: 4px solid #C12700; /* Error red */
+    }
+
+    .toast-icon {
+        margin-right: 10px;
+    }
+
+    .toast-icon.success {
+        color: #2e844a; /* Match success border color */
+    }
+
+    .toast-icon.error {
+        color: #C12700; /* Match error border color */
+    }
+</style>
+
+<script>
+(function() {
+    var toastTimeout;
+
+    // Function to display a toast notification
+    function showToast(message, type) {
+        var toast = document.createElement('div');
+        toast.className = 'toast-notification ' + type;
+
+        // Create the icon element
+        var icon = document.createElement('i');
+        icon.className = (type === 'success' ? 'far fa-check-circle' : 'far fa-exclamation-circle') + ' toast-icon ' + type;
+
+        // Create the text node
+        var text = document.createElement('span');
+        text.innerText = message;
+
+        // Append icon and text to the toast
+        toast.appendChild(icon);
+        toast.appendChild(text);
+
+        // Append the toast to the body
+        document.body.appendChild(toast);
+
+        // Remove toast after 3 seconds
+        setTimeout(function() {
+            toast.style.opacity = 0;
+            setTimeout(function() {
+                document.body.removeChild(toast);
+            }, 500);
+        }, 3000);
+    }
+
+    // Function to debounce showing the toast notification
+    function debounceToast(message, type) {
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(function() {
+            showToast(message, type);
+        }, 750); // Show toast after inactivity
+    }
+
+    // Intercept XMLHttpRequests
+    var originalOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function(method, url) {
+        var xhr = this;
+
+        // Success event listener
+        xhr.addEventListener('load', function() {
+            if (url.includes('MarkAttendance')) {
+                if (xhr.status === 200) {
+                    debounceToast('Attendance Saved', 'success');
+                } else {
+                    debounceToast('Problem Saving', 'error');
+                }
+            }
+        });
+
+        // Error event listener
+        xhr.addEventListener('error', function() {
+            if (url.includes('MarkAttendance')) {
+                debounceToast('Problem Saving', 'error');
+            }
+        });
+
+        // Timeout event listener
+        xhr.addEventListener('timeout', function() {
+            if (url.includes('MarkAttendance')) {
+                debounceToast('Problem Saving', 'error');
+            }
+        });
+
+        originalOpen.apply(this, arguments);
+    };
+
+    // Intercept fetch requests if used
+    var originalFetch = window.fetch;
+    window.fetch = function() {
+        var args = arguments;
+        return originalFetch.apply(this, arguments).then(function(response) {
+            if (args[0] && args[0].includes('MarkAttendance')) {
+                if (response.status === 200) {
+                    debounceToast('Attendance Saved', 'success');
+                } else {
+                    debounceToast('Problem Saving', 'error');
+                }
+            }
+            return response;
+        }).catch(function() {
+            // Catch network errors like timeout, connection refused, etc.
+            if (args[0] && args[0].includes('MarkAttendance')) {
+                debounceToast('Problem Saving', 'error');
+            }
+        });
+    };
+})();
+</script>
