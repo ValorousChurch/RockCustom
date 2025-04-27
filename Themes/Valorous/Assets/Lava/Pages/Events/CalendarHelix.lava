@@ -1,0 +1,78 @@
+{% stylesheet compile:'less' %}
+    .card {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 25px -5px, rgba(0, 0, 0, 0.09) 0px 10px 10px -5px;
+            transform: translateY(-10px);
+        }
+
+        .icons {
+            font-size: .75em;
+            font-weight: 500;
+
+            i {
+                font-size: 3em;
+                padding-bottom: 10px;
+            }
+        }
+    }
+    .htmx-indicator {
+        text-align: center;
+        width: 100%;
+
+        img {
+            width: 150px;
+            display: inline-block;
+        }
+    }
+{% endstylesheet %}
+{% lava
+    assign audience = 'Global' | PageParameter:'audience' | Trim
+    assign campus = 'Global' | PageParameter:'campus' | Trim
+%}
+
+<lava-form class="row">
+    <div class="col-md-6">
+{% assign audienceExcludedValues = '[25,148]' | FromJSON %}
+{% assign audienceDefinedType = 16 | FromCache:'DefinedType' %}
+{% assign audienceDefinedValues = audienceDefinedType.DefinedValues | OrderBy:'Order' %}
+        {[ dropdown label:'Category' name:'audience' value:'{{ audience }}' additionalattributes:'hx-get="^/calendar/events?audience={{ audience }}&calendar={{ calendar }}&campus={{ campus }}&date-range={{ dateRange }}&initial=true" hx-trigger="change" hx-target="#calendar-event-items" hx-swap="innerHTML" hx-indicator="#loading-calendar-events"' ]}
+            [[ item value:'0' text:'All Categories' ]][[ enditem]]
+{% for definedvalue in audienceDefinedValues %}
+    {% assign isExcluded = audienceExcludedValues | Contains:definedvalue.Id %}
+    {% if definedvalue.IsActive == true and isExcluded == false %}
+            [[ item value:'{{ definedvalue.Id }}' text:'{{ definedvalue.Value }}' ]][[ enditem]]
+    {% endif %}
+{% endfor %}
+        {[ enddropdown ]}
+    </div>
+    <div class="col-md-6">
+{% assign campusExcludedValues = '[11]' | FromJSON %}
+{% assign campusValues = 'All' | FromCache:'Campus' | OrderBy:'Order' %}
+        {[ dropdown label:'Campus' name:'campus' value:'{{ campus }}' additionalattributes:'hx-get="^/calendar/events?audience={{ audience }}&calendar={{ calendar }}&campus={{ campus }}&date-range={{ dateRange }}&initial=true" hx-trigger="change" hx-target="#calendar-event-items" hx-swap="innerHTML" hx-indicator="#loading-calendar-events"' ]}
+            [[ item value:'0' text:'All Campuses' ]][[ enditem]]
+{% for campusvalue in campusValues %}
+    {% assign isExcluded = campusExcludedValues | Contains:campusvalue.Id %}
+    {% if campusvalue.IsActive == true and campusvalue.CampusStatusValueId == 2331 and isExcluded == false %}
+            [[ item value:'{{ campusvalue.Id }}' text:'{{ campusvalue.Name }}' ]][[ enditem]]
+    {% endif %}
+{% endfor %}
+        {[ enddropdown ]}
+    </div>
+</lava-form>
+
+<div class="row d-flex flex-wrap tw-clear-both" id="calendar-event-items">
+    <div hx-get="^/calendar/events?audience={{ audience }}&calendar={{ calendar }}&campus={{ campus }}&date-range={{ dateRange }}&initial=true"
+        hx-trigger="load"
+        hx-swap="outerHTML"
+        hx-indicator="#loading-calendar-events">
+    </div>
+
+    <div id="loading-calendar-events" class="htmx-indicator loading-indicator">
+        <img src="/Content/ExternalSite/svg-spinners/3-dots-fade.svg">
+    </div>
+
+</div>

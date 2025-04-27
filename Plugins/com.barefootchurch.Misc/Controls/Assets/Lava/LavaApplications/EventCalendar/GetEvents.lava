@@ -1,0 +1,180 @@
+/-
+    Slug: events
+    HTTP Method: GET
+    Security Mode: Applicatoin View
+    Enabled Lava Commands: Entity
+-/
+{% lava
+    //- Get initial values from page parmaeters
+    assign audience = 'Global' | PageParameter:'audience' | AsInteger
+    assign calendar = 'Global' | PageParameter:'calendar' | Default:ConfigurationRigging.Calendar | AsInteger
+    assign campus = 'Global' | PageParameter:'campus' | AsInteger
+    assign dateRange = 'Global' | PageParameter:'date-range' | Default:ConfigurationRigging.DateRange | AsInteger
+    assign initial = 'Global' | PageParameter:'initial' | Default:'false' | AsBoolean
+    assign startDate = 'Global' | PageParameter:'start-date' | Default:'Now' | Date
+
+    if audience == 0
+        assign audience = null
+    endif
+    if campus == 0
+        assign campus = null
+    endif
+
+    //- Make sure the calendar is allowed
+    assign calendar = calendar | AsInteger
+    unless ConfigurationRigging.AllowedCalendars contains calendar
+        assign calendar = 0
+    endunless
+
+    //- No past start dates
+    assign now = 'Now' | Date:'yyyy-MM-dd'
+    assign diff = now | DateDiff:startDate,'d'
+    if diff < 0
+        assign startDate = now
+    endif
+
+    //- Lookup the events
+    assign events = '[]' | FromJSON
+    if calendar > 0
+        calendarevents calendarid:'{{ calendar }}' startdate:'{{ startDate | Date:'yyyy-MM-dd'}}' daterange:'{{ dateRange }}' audienceids:'{{ audience }}' campusids:'{{ campus }}'
+            {% assign events = EventScheduledInstances %}
+        endcalendarevents
+    endif
+    assign events = events | OrderBy:'DateTimeSort'
+
+    //- Calculate next dates
+    assign nextStart = startDate | DateAdd:dateRange | Date:'yyy-MM-dd'
+    assign maxDate = now | DateAdd:ConfigurationRigging.MaxDateRange | Date:'yyyy-MM-dd'
+%}
+
+{% if initial == true %}
+<div class="col-md-12" id="no-events">
+    <div class="alert alert-warning"> There are no events found that match that criteria.</div>
+</div>
+{% endif %}
+{% if events != empty %}
+<style>#no-events{display:none}</style>
+{% endif %}
+{% for event in events %}
+    {% lava
+        if event.DetailPage != null
+            assign eventLink = event.DetailPage
+        else
+            assign eventLink = '/events/' | Append:event.EventItemOccurrence.Id
+        endif
+        assign eventLinkRelative = eventLink | RegExMatch:'^/'
+        assign childcare = event.EventItemOccurrence | Attribute:'ChildcareAvailable','RawValue'
+        assign location = event.EventItemOccurrence | Attribute:'CustomLocation','Object'
+        assign registration = event.EventItemOccurrence | Attribute:'RegistrationStatusOverride'
+        assign registrationEnd = event.EventItemOccurrence | Attribute:'RegistrationCloseOverride' | Date:'yyyy-MM-dd HH:mm:ss'
+        assign timeStringOverride = event.EventItemOccurrence | Attribute:'TimeStringOverride' | Trim
+        if registrationEnd and registrationEnd != '' and registrationEnd <= now
+            assign registration = 'Closed'
+        endif
+        unless registration and registration != ''
+            eventitemoccurrence id:'{{ event.EventItemOccurrence.Id }}' lazyloadenabled:'false' securityenabled:'false' selectmany:'Linkages.Select(RegistrationInstance).Where(IsActive == true)' iterator:'registrationInstances'
+            endeventitemoccurrence
+                assign size = registrationInstances | Size
+                if size > 0
+                    assign registrationEnd = registrationInstances[0].EndDateTime | Date:'yyyy-MM-dd HH:mm:ss'
+                    if registrationEnd <= now
+                        assign registration = 'Closed'
+                    else
+                        assign registration = 'Open'
+                    endif
+                endif
+            if registration == 'Open'
+                assign full = "{[ IsEventItemOccurrenceRegistrationFull EventItemOccurrenceId:'{{ event.EventItemOccurrence.Id }}' ]}" | RunLava
+                if full == 'True'
+                    assign registration = 'Full'
+                endif
+            endif
+        endunless
+    %}
+<div class="event-item col-xs-12 col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 border-0">
+        <a href="{{ eventLink }}"{% unless eventLinkRelative %} target="_blank"{% endunless %}>
+            {%- assign eventDomain = event.EventItemOccurrence.EventItem | Attribute:'EventDomain','Object' %}
+            <img width="100%" height="130px" src="{{ eventDomain | Attribute:'HeaderImage','Url' }}" class="event-image card-img-top" alt="{{ eventDomain.Value }}"/>
+        </a>
+        <div class="card-body pb-2">
+            <a href="{{ eventLink }}" {% unless eventLinkRelative %}target="_blank" {% endunless %}class="event-calendar-title tw-no-underline">
+                <h4 class="text-center text-primary mb-4">
+                    <span class="text-uppercase">{{ event.Name }}</span>
+    {% assign subtitle = event.EventItemOccurrence | Attribute:'Subtitle' | Trim %}
+    {% if subtitle and subtitle != '' %}
+                    <br><small>{{ subtitle }}</small>
+    {% endif %}
+                </h4>
+            </a>
+            <h4 class="text-center mb-4">
+    {% if event.Date != event.EndDate %}
+                {{ event.Date | Date:'ddd. MMM. d' }} - {{ event.EndDate | Date:'ddd. MMM. d' }}
+        {% if timeStringOverride and timeStringOverride != '' %}
+                <br><small>{{ timeStringOverride }}</small>
+        {% endif %}
+    {% else %}
+                {{ event.Date | Date:'dddd MMM. d' }}
+        {% if timeStringOverride and timeStringOverride != '' %}
+        <br><small>{{ timeStringOverride }}</small>
+        {% elseif event.Time and event.Time != '' and event.Time != '12:00 AM' %}
+                <br><small>{{ event.Time }}</small>
+        {% endif %}
+    {% endif %}
+            </h4>
+        </div><!-- /card-body -->
+        <div class="text-center card-footer pt-0 pb-3 bg-transparent border-0">
+            <div class="row text-center icons d-flex flex-wrap justify-content-center">
+                <div class="col-xs-4 border-gray-500 border-right">
+    {% case registration %}
+        {% when 'Open' %}
+                    <i class="fa fa-calendar-alt text-green-400"></i><br>
+                    Registration Open
+        {% when 'Closed' %}
+                    <i class="fa fa-calendar-alt text-red-500"></i><br>
+                    Registration Closed
+        {% when 'Full' %}
+                    <i class="fa fa-calendar-alt text-red-500"></i><br>
+                    Registration Full
+        {% else %}
+                    <i class="fa fa-calendar-alt text-gray-400"></i><br>
+                    Registration Not&nbsp;Required
+    {% endcase %}
+                </div><!-- /registration -->
+    {% if location and location != '' %}
+        {% assign icon = location | Attribute:'CustomIcon' | Default:'fa fa-map-marker-alt' %}
+                <div class="col-xs-4 border-gray-500 border-right">
+                    <i class="{{ icon }} text-primary"></i><br>
+                    {{ location }}
+                </div><!-- /Location -->
+    {% endif %}
+                <div class="col-xs-4">
+    {% if childcare and childcare == "Yes" %}
+                    <i class="fa fa-child text-blue-400"></i><br>
+                    Childcare Available
+    {% elseif childcare and childcare == "Kids" %}
+                    <i class="fa fa-child text-blue-400"></i><br>
+                    Valorous&nbsp;|&nbsp;Kids Available
+    {% else %}
+                    <i class="fa fa-child text-gray-300"></i><br>
+                    Valorous&nbsp;|&nbsp;Kids Not&nbsp;Available
+    {% endif %}
+                </div><!-- /childcare -->
+            </div><!-- /icons -->
+        </div><!-- /card-footer -->
+        <div class="text-center card-footer p-0">
+            <a href="{{ eventLink }}" {% unless eventLinkRelative %}target="_blank" {% endunless %}class="event-more-info btn btn-primary tw-py-3 w-100 h-100">
+                More Info &nbsp;<i class="fa fa-chevron-circle-right"></i>
+            </a>
+        </div><!-- /card-footer -->
+    </div><!-- /card -->
+</div><!-- /event-item -->
+{% endfor %}
+
+{% unless nextStart > maxDate %}
+<div hx-get="^/calendar/events?calendar={{ calendar }}&start-date={{ nextStart }}&audience={{ audience }}&campus={{ campus }}"
+    hx-trigger="revealed"
+    hx-swap="outerHTML"
+    hx-indicator="#loading-calendar-events">
+</div>
+{% endunless %}
