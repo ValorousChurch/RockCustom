@@ -18,8 +18,8 @@
   <style>
     html, body {
       height: auto;
-      width: 100%;
-      min-width: 100%;
+      width: 100vw;
+      min-width: 100vw;
       background-color: #ffffff;
       margin: 0 0 0 0;
       padding: 0 0 0 0;

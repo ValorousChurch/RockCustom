@@ -45,7 +45,7 @@
     {%- assign imageGuid = item | Attribute:'Image','RawValue' -%}
     <div class="row" style="margin-bottom:-25px">
         <div class="col-md-6 {% if channelContentAlignment == 'Right' %}{% cycle 'firstcol': 'col-md-push-6', '' %}{% else %}{% cycle 'firstcol': '', 'col-md-push-6' %}{% endif %}" style="margin-bottom:25px">
-            <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ imageGuid }}" class="img-responsive">
+            <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ imageGuid }}&w=720" class="img-responsive">
         </div>
         <div class="col-md-6 {% if channelContentAlignment == 'Right' %}{% cycle 'secondcol': 'col-md-pull-6', '' %}{% else %}{% cycle 'secondcol': '', 'col-md-pull-6' %}{% endif %}" style="margin-bottom:25px">
             <div class='content-item' {% if contentItemStyle != '' %}style='{{ contentItemStyle }}'{% endif %}>

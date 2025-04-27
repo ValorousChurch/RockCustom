@@ -72,7 +72,9 @@
         {% else %}
                 <i class="fa fa-calendar-alt text-green-400"></i><br>
                 Registration Open<br>
+            {% if RegistrationSpotsAvailable %}
                 <small>{{ RegistrationSpotsAvailable }} {{ 'spot' | PluralizeForQuantity:RegistrationSpotsAvailable }} available</small>
+            {% endif %}
         {% endif %}
     {% else %}
                 <i class="fa fa-calendar-alt text-red-500"></i><br>
