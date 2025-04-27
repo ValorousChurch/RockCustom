@@ -29,8 +29,8 @@ p {
 {% comment %} Room Reservation Dataset {% endcomment %}
 //- {% assign reservations = 'reservationscalendar' | PersistedDataset %}
 {% assign startofmonth = 'Now' | Date:'yyyy-MM-01' %}
-{% assign startdate = startofmonth | DateAdd:-1,'M' %}
-{% assign enddate = startofmonth | DateAdd:7,'M' | DateAdd:-1,'d' %}
+{% assign startdate = startofmonth | DateAdd:-1,'M' | Date:'yyyy-MM-dd' %}
+{% assign enddate = startofmonth | DateAdd:7,'M' | DateAdd:-1,'d' | Date:'yyyy-MM-dd' %}
 {% reservationsummaries approvalstates:'2' startdatetime:'{{ startdate | Date:"yyyy-MM-dd" }}' enddatetime:'{{ enddate | Date:"yyyy-MM-dd" }}' maxsummaries:'1500' %}
 {% capture reservations -%}
 [
@@ -131,8 +131,8 @@ p {
   {%- endcontentchannelitem -%}
 
 {% comment %} Time Off - PTO Plugin {%endcomment %}
-  {%- assign loadpastdate = 'Now' | Date | DateAdd:-6,'M' -%}
-  {%- assign loadfuturedate = 'Now' | Date | DateAdd:6,'M' -%}
+  {%- assign loadpastdate = 'Now' | Date | DateAdd:-6,'M' | Date:'yyyy-MM-dd' -%}
+  {%- assign loadfuturedate = 'Now' | Date | DateAdd:6,'M' | Date:'yyyy-MM-dd' -%}
   {%- ptorequest securityenabled:'false' where:'PtoRequestApprovalState == "1" && RequestDate < "{{ loadfuturedate }}" && RequestDate >= "{{ loadpastdate }}"' lazyloadenabled:'false' select:'new( PtoAllocation.PersonAlias.Person.NickName AS NickName, PtoAllocation.PersonAlias.Person.LastName AS LastName, Guid, RequestDate )' -%}
   {%- for request in ptorequestItems -%}
     {
