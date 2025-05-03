@@ -1,0 +1,254 @@
+{% unless AllowedActions.View == true or AllowedActions.Edit == true or AllowedActions.ManageMembers == true or AllowedActions.Administrate == true %}
+    <div class='alert alert-warning'>You do not have permission to view this group.</div>
+{% else %}
+    {% lava
+        assign countActive = -1
+        assign countInactive = -1
+        assign countPending = -1
+        for member in Group.Members
+            case member.GroupMemberStatus
+                when 'Active'
+                    assign countActive = countActive | Plus: 1
+                when 'Inactive'
+                    assign countInactive = countInactive | Plus: 1
+                when 'Pending'
+                    assign countPending = countPending | Plus: 1
+                else
+            endcase
+        endfor
+    %}
+<style>
+    .card,
+    .locationImg,
+    .avatarBox {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
+    }
+    .avatarBox {
+        font-size: 1.15em;
+        overflow: hidden;
+    }
+    .avatarImg {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+    .avatarBox img {
+        border: 3px solid #ccc;
+        border-radius: 100%;
+    }
+    .rollover-item {
+        position: absolute;
+        right: 7px;
+        top:5px;
+    }
+    p {
+        margin-bottom: 1em;
+    }
+</style>
+{% capture memberAvatarTemplate %}{% raw %}
+<div class="avatarImg"><img src="/GetAvatar.ashx?Radius=circle&Size=70&PersonGuid={{ member.Person.Guid }}" /></div>
+    <div class="pl-3">
+        <strong>{{ member.Person.FullName }}</strong><br>
+{% for phone in member.Person.PhoneNumbers %}
+    {% if phone.IsUnlisted != true and phone.NumberTypeValue.Value == 'Mobile' %}
+        <a href="tel:{{ phone.NumberFormatted | RegExReplace:'[^0-9]','' }}">{{ phone.NumberFormatted }}</a><br>
+    {% endif %}
+{% endfor %}
+{% if member.Person.IsEmailActive == true %}
+        <a href="mailto:{{ member.Person.Email }}">{{ member.Person.Email }}</a>
+{% endif %}
+    </div>
+{% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true %}
+    <div class="pull-left rollover-item">
+        <a href="#" onclick="{{ member.Id | Postback:'DeleteGroupMember' }}" ><i class="fa fa-times"></i></a>
+        <a href="#" onclick="{{ member.Id | Postback:'EditGroupMember' }}" class="margin-l-sm"><i class="fa fa-pencil"></i></a>
+    </div>
+{% endif %}
+{% endraw %}{% endcapture %}
+{% if Group.GroupTypeId == 25 %}
+    {% lava
+        webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ Group.IdKey }}' return:'group'
+        endwebrequest
+        assign leaderSize = group.Leaders | Size
+        assign startDateOffset = 'Now' | DateDiff:startDate,'d'
+
+        //- Capacity Calculation
+        if Group.GroupCapacity != null and Group.GroupType.GroupCapacityRule != 'None' and Group.GroupCapacity != ''
+            assign capacityWarningLevel = 'warning'
+            if Group.GroupType.GroupCapacityRule == 'Hard'
+                assign capacityWarningLevel = 'danger'
+            endif
+            assign activeMemberCount = countActive | Plus:1
+            assign capacityOverageAmount = activeMemberCount | Minus:Group.GroupCapacity
+        endif
+    %}
+<div class="d-grid grid-cols-md-2 gap-3">
+    <div>
+        <h3 class="mt-1">Group Info</h3>
+        <div class="card rounded-lg">
+            <div class="card-header bg-gray-200">
+                <p class="badges text-center mb-0">
+    {% if group.IsFull %}
+                    <span class="badge bg-danger"
+                        data-toggle="tooltip"
+                        data-title="This group is at capacity and isn't acepting new members."
+                    >Full</span>
+    {% else %}
+                    <span class="badge {{ group.Status.Class }}"
+                        data-toggle="tooltip"
+                        data-title="{{ group.Status.Description }}"
+                    >{{ group.Status.Name }}</span>
+        {% for tag in group.Tags %}
+                    <span class="badge {{ tag.Class }}"
+                        data-toggle="tooltip"
+                        data-title="{{ tag.Description }}"
+                    >{{ tag.Name }}</span>
+        {% endfor %}
+    {% endif %}
+                </p>
+            </div><!-- /card-header -->
+            <div class="card-body">
+    {% if group.Location.Description != '' %}
+                <p>
+                    <strong>Location:</strong><br>
+                    {{ group.Location.Description }}
+                </p>
+    {% endif %}
+    {% if group.Schedule.Text != '' %}
+                <p>
+                    <strong>Schedule:</strong><br>
+                    {{ group.Schedule.Text }}
+        {% if startDateOffset > 0 %}
+                    (Beginning on {{ group.Schedule.StartDate | Date:'MMM.' }} {{ group.Schedule.StartDate | Date:'d' | NumberToOrdinal }})
+        {% endif %}
+                </p>
+    {% endif %}
+                <p>
+                    <strong>About the group:</strong><br>
+                    {{ group.ExtendedDescription | Default:group.Description}}
+                </p>
+                <p>
+                    <strong>About the {{ 'leader' | PluralizeForQuantity:leaderSize }}:</strong><br>
+                    {{ group.LeaderBio }}
+                </p>
+            </div><!-- /card-body -->
+    {% if AllowedActions.Edit == true %}
+            <div class="card-footer">
+                <a class="btn btn-primary w-100" href="/forms/9d6aa3c4-c536-4f95-b5ce-3788b054597e?Group={{ Group.Guid }}" target="_blank" role="button">
+                    <i class="fa fa-pencil"></i> Edit Group Info
+                </a>
+            </div><!-- /card-footer -->
+    {% endif %}
+        </div><!-- /card -->
+    </div><!-- /group-info -->
+    <div>
+        <h3 class="mt-1">Meeting Location</h3>
+        <p>
+            <img src="{{ group.Location.MapUrl | Default:group.Location.ImageUrl }}" class="img-responsive rounded-lg locationImg" />
+            {{ group.Location.Address }}
+        </p>
+        <h3 class="mt-2">Group {{ 'Leader' | PluralizeForQuantity:leaderSize }}</h3>
+        <div class="avatars d-grid grid-cols-md-1 gap-3">
+    {% for member in Group.Members %}
+        {% if member.GroupMemberStatus == 'Active' and member.GroupRole.IsLeader == true %}
+            <div class="avatarBox rollover-container d-flex justify-content-start align-items-center border border-gray-400 rounded-lg p-2">
+                {{ memberAvatarTemplate | RunLava }}
+            </div>
+        {% endif %}
+    {% endfor%}
+        </div><!-- /avatars -->
+    </div><!-- /meeting-location+group-leaders -->
+</div><!-- /grid -->
+{% else %}
+    //- Not A Life Group
+    <h1>{{ Group.Name }}</h1>
+    <p>{{ Group.Description }}</p>
+    <h4>Leaders:</h4>
+        <ul>
+    {% for member in Group.Members %}
+        {% if member.GroupRole.IsLeader %}
+            <li>{{ member.Person.FullName }}</li>
+        {% endif %}
+    {% endfor %}
+        </ul>
+    {% if capacityOverageAmount > 0 %}
+            <div class="alert alert-{{ capacityWarningLevel }} margin-t-sm">This group is over capacity by {{ overageAmount }} {{ 'individual' | PluralizeForQuantity:overageAmount }}.</div>
+    {% endif %}
+        <div class="actions margin-v-md clearfix">
+    {% if AllowedActions.Edit == true %}
+                <a class="btn btn-default btn-sm pull-right ml-2" href="#" onclick="{{ Group.Id | Postback:'EditGroup' }}"><i class="fa fa-pencil"></i> Edit</a>
+    {% endif %}
+    {% assign canSchedule = Group | HasRightsTo:'Schedule' %}
+    {% if canSchedule %}
+                <a class="btn btn-default btn-sm pull-right ml-2" href="/page/1365?GroupId={{ Group.Id }}"><i class="fa fa-calendar"></i> Schedule</a>
+    {% endif %}
+        </div>
+{% endif %}
+
+{% if LinkedPages.RosterPage or LinkedPages.AttendancePage %}
+<ul class="nav nav-tabs margin-v-lg">
+    {% if LinkedPages.RosterPage %}
+    <li role="presentation"{% if LinkedPages.RosterPage == CurrentPage.Path %} class="active"{% endif %}><a href="{{ LinkedPages.RosterPage }}?GroupId={{ Group.Id }}">Roster</a></li>
+    {% endif %}
+    {% if LinkedPages.AttendancePage and Group.GroupType.TakesAttendance == 'True' %}
+    <li role="presentation"{% if LinkedPages.AttendancePage == CurrentPage.Path %} class="active"{% endif %}><a href="{{ LinkedPages.AttendancePage }}?GroupId={{ Group.Id }}">Attendance</a></li>
+    {% endif %}
+</ul>
+{% endif %}
+
+{% if LinkedPages.RosterPage == CurrentPage.Path %}
+    {% if countPending > -1 %}
+<div class="well">
+    <h4>Pending Members</h4>
+    <div class="avatars d-grid grid-cols-md-2 gap-3">
+        {% for member in Group.Members %}
+            {% if member.GroupMemberStatus == 'Pending' %}
+        <div class="avatarBox rollover-container d-flex justify-content-start align-items-center border border-gray-400 rounded-lg p-2">
+            {{ memberAvatarTemplate | RunLava }}
+        </div>
+            {% endif %}
+        {% endfor%}
+    </div><!-- /avatars -->
+</div><!-- /well -->
+    {% endif %}
+    {% if countActive > -1 %}
+<h4>Active Members</h4>
+<div class="avatars d-grid grid-cols-md-2 gap-3">
+        {% for member in Group.Members %}
+            {% if member.GroupMemberStatus == 'Active' and member.GroupRole.IsLeader == false %}
+    <div class="avatarBox rollover-container d-flex justify-content-start align-items-center border border-gray-400 rounded-lg p-2">
+        {{ memberAvatarTemplate | RunLava }}
+    </div>
+            {% endif %}
+        {% endfor%}
+</div><!-- /avatars -->
+    {% endif %}
+    {% if countInactive > -1 %}
+<h4>Inactive Members</h4>
+<div class="avatars d-grid grid-cols-md-2 gap-3">
+        {% for member in Group.Members %}
+            {% if member.GroupMemberStatus == 'Inactive' and member.GroupRole.Name != 'Leader' %}
+    <div class="avatarBox rollover-container d-flex justify-content-start align-items-center border border-gray-400 rounded-lg p-2">
+        {{ memberAvatarTemplate | RunLava }}
+    </div>
+            {% endif %}
+        {% endfor%}
+</div><!-- /avatars -->
+    {% endif %}
+{% endif %}
+
+<div class="pull-right margin-b-md">
+{% if AllowedActions.ManageMembers == true %}
+    <a href="#" onclick="{{ '' | Postback:'AddGroupMember' }}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add Member</a>
+{% endif %}
+{% if LinkedPages.CommunicationPage %}
+    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true %}
+    <a href="#" onclick="{{ '' | Postback:'SendCommunication' }}" class="btn btn-default btn-xs"><i class="fa fa-envelope-o"></i> Email Roster</a>
+    {% endif %}
+{% endif %}
+{% if LinkedPages.AlternateCommunicationPage %}
+    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true %}
+    <a href="#" onclick="{{ '' | Postback:'SendAlternateCommunication' }}" class="btn btn-default btn-xs"><i class="fa fa-mobile-phone"></i> Text Roster</a>
+    {% endif %}
+{% endif %}
+</div>
+{% endunless %}
