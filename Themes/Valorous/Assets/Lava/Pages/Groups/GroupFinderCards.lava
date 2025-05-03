@@ -1,0 +1,106 @@
+<style>
+    p {
+        margin-bottom: 1em;
+    }
+    .leaders {
+        text-align: center;
+        margin-top: -26px;
+    }
+    .leaders img {
+        border: 3px solid #fff;
+        border-radius: 100%;
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
+        display: inline-block;
+        margin: 0 -10px;
+        position: relative;
+    }
+    .leaders img:hover {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 25px -5px, rgba(0, 0, 0, 0.09) 0px 10px 10px -5px;
+        transform: translateY(-3px) translateX(-1.5px);
+        z-index: 25 !important;
+    }
+    .infoTable th {
+        text-align: right;
+        padding: 0 5px 0 0 !important;
+    }
+    .infoTable td {
+        padding: 0 !important;
+    }
+</style>
+<div class="mt-4 d-grid grid-cols-sm-1 grid-cols-md-2 grid-cols-lg-3 gap-3 p-1">
+{% for g in Groups %}
+    {% lava
+        webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ g.IdKey }}' return:'group'
+        endwebrequest
+        assign leaderSize = group.Leaders | Size
+        assign startDateOffset = 'Now' | DateDiff:startDate,'d'
+    %}
+    <div class="card">
+        <img src="{{ group.Location.ImageUrl | Default:group.Location.MapUrl }}" class="card-img-top" />
+        <div class="leaders mb-2">
+    {% for leader in group.Leaders %}
+            <img
+                src="/GetAvatar.ashx?Radius=circle&Size=50&PersonGuid={{ leader.PersonGuid }}"
+                alt="{{ leader.FullName }}"
+                data-toggle="tooltip"
+                data-title="{{ leader.FullName }}"
+                style="z-index:{{ forloop.rindex }}"
+            />
+    {% endfor%}
+        </div>
+        <div class="card-body pt-1">
+            <h4 class="card-title text-center">{{ group.Name }}</h4>
+            <p class="badges text-center">
+    {% if group.IsFull %}
+                <span class="badge bg-danger"
+                    data-toggle="tooltip"
+                    data-title="This group is at capacity and isn't acepting new members."
+                >Full</span>
+    {% else %}
+                <span class="badge {{ group.Status.Class }}"
+                    data-toggle="tooltip"
+                    data-title="{{ group.Status.Description }}"
+                >{{ group.Status.Name }}</span>
+        {% for tag in group.Tags %}
+                <span class="badge {{ tag.Class }}"
+                    data-toggle="tooltip"
+                    data-title="{{ tag.Description }}"
+                >{{ tag.Name }}</span>
+        {% endfor %}
+    {% endif %}
+            </p>
+            <table class="infoTable table mb-4">
+                <tr>
+                    <th>{{ 'Leader' | PluralizeForQuantity:leaderSize }}:</th>
+                    <td>{{ group.Leaders | Select:'FullName' | Join:', ' | ReplaceLast:', ',' & ' }}</td>
+                </tr>
+    {% if group.Location.Description != '' %}
+                <tr>
+                    <th>Location:</th>
+                    <td>{{ group.Location.Description }}</td>
+                </tr>
+    {% endif %}
+    {% if group.Schedule.Text != '' %}
+                <tr>
+                    <th>Schedule:</th>
+                    <td>{{ group.Schedule.Text }}</td>
+                </tr>
+    {% endif %}
+    {% if startDateOffset > 0 %}
+                <tr>
+                    <th>Starts On:</th>
+                    <td>{{ group.Schedule.StartDate | Date:'MMM.' }} {{ group.Schedule.StartDate | Date:'d' | NumberToOrdinal }}</td>
+                </tr>
+    {% endif %}
+            </table>
+            {{ group.Description }}
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary w-100" role="button" onclick="Rock.controls.modal.show($(this), '/connect/group-finder/info-modal/{{ group.IdKey }}?pb=&sb=Close&t={{ group.Name | UrlEncode }}&r={{ LinkedPages.RegisterPage | UrlEncode }}');">
+                <i class="fa fa-info-circle"></i> More Info
+            </a>
+        </div>
+    </div>
+
+{% endfor %}
+</div>
