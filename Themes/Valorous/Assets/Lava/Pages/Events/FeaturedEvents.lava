@@ -1,0 +1,46 @@
+{% stylesheet compile:'less' %}
+    .featured-event {
+        box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: rgba(0, 0, 0, 0.15) 0px 20px 25px -5px, rgba(0, 0, 0, 0.09) 0px 10px 10px -5px;
+            transform: translateY(-10px);
+        }
+    }
+{% endstylesheet %}
+{% lava
+    //- Featured Event - Calendar
+    assign channelId = 86
+    assign maxEvents = 2
+    assign now = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss'
+%}
+
+{% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}" && EventItemOccurrence.NextStartDateTime > "{{ now }}"' securityenabled:'false' iterator:'items' %}
+    {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
+    {% for item in itemsSorted limit:maxEvents %}
+        {% if forloop.first %}
+            <a name="featured" style="scroll-margin-top:100px"></a>
+            <h3>Featured Events</h3>
+            <div class="row">
+        {% endif %}
+        {% capture link %}
+            {% assign detailsUrlOverride = item.EventItemOccurrence.DetailsUrl | Trim %}
+            {% if detailsUrlOverride and detailsUrlOverride != '' %}{{ detailsUrlOverride }}
+            {% else %}/events/{{ item.EventItemOccurrence.Id }}
+            {% endif %}
+        {%- endcapture %}
+        {% assign imageGuid = item.ContentChannelItem | Attribute:'ImageOverride','RawValue' | Trim | Default:item.EventItemOccurrence.EventItem.Photo.Guid %}
+                <div class="col-md-6 mb-4">
+                    <div class="featured-event rounded-lg">
+                        <a href="{{ link | Trim }}" target="_blank">
+                            <img src="/GetImage.ashx?guid={{ imageGuid }}&w=720" class="img-responsive" />
+                        </a>
+                    </div>
+                </div>
+        {% if forloop.last %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endeventitemoccurrencechannelitem %}
