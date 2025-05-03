@@ -33,18 +33,30 @@
         assign startDate = now
     endif
 
-    //- Lookup the events
     assign events = '[]' | FromJSON
-    if calendar > 0
-        calendarevents calendarid:'{{ calendar }}' startdate:'{{ startDate | Date:'yyyy-MM-dd'}}' daterange:'{{ dateRange }}' audienceids:'{{ audience }}' campusids:'{{ campus }}'
-            {% assign events = EventScheduledInstances %}
-        endcalendarevents
-    endif
-    assign events = events | OrderBy:'DateTimeSort'
 
-    //- Calculate next dates
-    assign nextStart = startDate | DateAdd:dateRange | Date:'yyy-MM-dd'
-    assign maxDate = now | DateAdd:ConfigurationRigging.MaxDateRange | Date:'yyyy-MM-dd'
+    //- Hacky do-while loop
+    for i in (1..9)
+        //- Lookup the events
+        if calendar > 0
+            calendarevents calendarid:'{{ calendar }}' startdate:'{{ startDate | Date:'yyyy-MM-dd'}}' daterange:'{{ dateRange }}' audienceids:'{{ audience }}' campusids:'{{ campus }}'
+            endcalendarevents
+            assign events = EventScheduledInstances
+        endif
+        assign events = events | OrderBy:'DateTimeSort'
+
+        //- Calculate next dates
+        assign nextStart = startDate | DateAdd:dateRange | Date:'yyy-MM-dd'
+        assign maxDate = now | DateAdd:ConfigurationRigging.MaxDateRange | Date:'yyyy-MM-dd'
+
+        //- If we have events, break the loop
+        assign eventSize = events | Size
+        if eventSize > 0
+            break
+        endif
+        //- If we dont have events, increment start date and try again
+        assign startDate = nextStart
+    endfor
 %}
 
 {% if initial == true %}
