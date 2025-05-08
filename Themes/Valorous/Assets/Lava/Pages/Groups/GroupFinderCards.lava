@@ -96,7 +96,8 @@
             {{ group.Description }}
         </div>
         <div class="card-footer">
-            <a class="btn btn-primary w-100" role="button" onclick="Rock.controls.modal.show($(this), '/connect/group-finder/info-modal/{{ group.IdKey }}?pb=&sb=Close&t={{ group.Name | UrlEncode }}&r={{ LinkedPages.RegisterPage | UrlEncode }}');">
+//-            <a class="btn btn-primary w-100" role="button" onclick="Rock.controls.modal.show($(this), '/connect/group-finder/info-modal/{{ group.IdKey }}?pb=&sb=Close&t={{ group.Name | UrlEncode }}&r={{ LinkedPages.RegisterPage | UrlEncode }}');">
+            <a class="btn btn-primary w-100" role="button" onclick="Rock.controls.modal.show($(this), '/{{ LinkedPages.GroupDetailPage | Replace:'{GroupKey}',group.IdKey }}?pb=&sb=Close&t={{ group.Name | UrlEncode }}&r={{ LinkedPages.RegisterPage | Remove:'{GroupId}' | UrlEncode }}');">
                 <i class="fa fa-info-circle"></i> More Info
             </a>
         </div>
