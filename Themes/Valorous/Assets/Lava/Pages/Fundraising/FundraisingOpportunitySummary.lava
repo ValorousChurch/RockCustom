@@ -1,7 +1,4 @@
 <!-- FundraisingOpportunitySummary.lava -->
-{{ Group | Attribute:'OpportunityTitle' | AddMetaTagToHead:'property','twitter:title' }}
-{{ Group | Attribute:'OpportunitySummary' | AddMetaTagToHead:'property','twitter:description' }}
-
 {{ Group | Attribute:'OpportunityTitle' | AddMetaTagToHead:'property','og:title' }}
 {{ Group | Attribute:'OpportunitySummary' | AddMetaTagToHead:'property','og:description' }}
 
@@ -9,8 +6,6 @@
 {% if opportunityPhoto != null and opportunityPhoto != empty %}
     {% assign opportunityPhotoUrl = 'Global' | Attribute:'PublicApplicationRoot' | Append:'GetImage.ashx?guid=' | Append:opportunityPhoto %}
     {{ opportunityPhotoUrl | AddMetaTagToHead:'property','og:image' }}
-    {{ opportunityPhotoUrl | AddMetaTagToHead:'property','twitter:image' }}
-    {{ 'summary_large_image' | AddMetaTagToHead:'property','twitter:card' }}
 {% endif %}
 
 {% assign setPageTitleToOpportunityTitle = Block | Attribute:'SetPageTitletoOpportunityTitle','RawValue' %}
