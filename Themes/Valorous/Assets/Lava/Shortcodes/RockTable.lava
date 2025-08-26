@@ -1,0 +1,135 @@
+//- *********************************** NAME ***************************************
+Rock Table
+
+//- *********************************** TagType ************************************
+Block
+
+//- *********************************** TAG NAME ***********************************
+rocktable
+
+//- *********************************** DESCRIPTION ********************************
+This shortcode generates a dynamic table wrapped in a panel. The table header is defined by the fields parameter and each row is defined by a nested row shortcode. Each row can optionally be made clickable by providing a link parameter to the row shortcode.
+
+//- *********************************** DOCUMENTATION ******************************
+<p>
+    <b>Example:</b>
+    <code>
+<pre>{[ rocktable title:'Title' iconcss:'fa fa-user' fields:'Name,Email,Phone' ]}
+    {% for person in People %}
+        [[ row data:'{{ person.FullName }},{{ person.Email }},{{ person | PhoneNumber:'Mobile' }}' ]][[ endrow ]]
+    {% endfor %}
+{[ endrocktable ]}</pre>
+    </code>
+</p><hr>
+<b>Shortcode Parameters:</b>
+<table class="table table-bordered">
+    <tbody><tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Required?</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td>title</td>
+        <td>Title for the panel that wraps the table</td>
+        <td>No</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>iconcss</td>
+        <td>CSS class for the icon to display in the title</td>
+        <td>No</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>fields</td>
+        <td>Comma delimited list of field names to display in the table header</td>
+        <td>Yes</td>
+        <td></td>
+    </tr>
+</tbody></table>
+<b>Row Parameters:</b>
+<table class="table table-bordered">
+    <tbody><tr>
+        <th>Parameter</th>
+        <th>Description</th>
+        <th>Required?</th>
+        <th>Default</th>
+    </tr>
+    <tr>
+        <td>data</td>
+        <td>Comma delimited list of data values to display in the row. The number of values should match the number of fields specified in the shortcode.</td>
+        <td>Yes</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>id</td>
+        <td>Id attribute to add to the row</td>
+        <td>No</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>class</td>
+        <td>CSS class to add to the row</td>
+        <td>No</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>link</td>
+        <td>If provided, the row will be clickable and take the user to the provided URL</td>
+        <td>No</td>
+        <td></td>
+    </tr>
+</tbody></table>
+
+//- *********************************** MARKUP *************************************
+{% assign fields = fields | Split:',' %}
+<div class="panel panel-block">
+    {% if title != null and title != empty %}
+    <div class="panel-heading">
+        <h4 class="panel-title"><i class="{{ iconcss }}"></i> {{ title }}</h4>
+    </div>
+    {% endif %}
+    <div class="panel-body">
+        <div class="grid grid-panel">
+            <div class="table-responsive">
+                <table class="grid-table table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                        {% for field in fields %}
+                            <th>{{ field }}</th>
+                        {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                        <tr id="{{ row.id }}" class="{% if row.link != null and row.link != empty %}clickable-row {% endif %}{{ row.class }}" data-href="{{ row.link }}">
+                            <td>{{ row.data | Split:',' | Join:'</td><td>' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .clickable-row:hover {
+        cursor: pointer;
+    }
+</style>
+<script>
+    jQuery(document).ready(function($) {
+        $(".clickable-row").click(function() {
+            window.open($(this).data("href"), '_blank');
+        });
+    });
+</script>
+
+//- *********************************** PARAMETERS *********************************
+title   -
+iconcss -
+fields  -
+
+//- *********************************** ENABLED COMMANDS ***************************
+None
