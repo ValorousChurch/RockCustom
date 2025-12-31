@@ -154,9 +154,9 @@ namespace com.barefootchurch.MergeTemplates
         /// <param name="mergeObjectList">The merge object list.</param>
         /// <param name="globalMergeFields">The global merge fields.</param>
         /// <returns></returns>
-        private static DotLiquid.Hash GetMergeObjects(List<object> mergeObjectList, Dictionary<string, object> globalMergeFields, int currentRecordIndex)
+        private static Dictionary<string, object> GetMergeObjects(List<object> mergeObjectList, Dictionary<string, object> globalMergeFields, int currentRecordIndex)
         {
-            DotLiquid.Hash mergeObjects = new DotLiquid.Hash()
+            Dictionary<string, object> mergeObjects = new Dictionary<string, object>()
             {
                 { "Row", mergeObjectList[currentRecordIndex] }
             };
