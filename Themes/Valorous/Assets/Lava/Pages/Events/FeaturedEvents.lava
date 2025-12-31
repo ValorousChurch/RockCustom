@@ -6,7 +6,8 @@
 %}
 
 {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}" && EventItemOccurrence.NextStartDateTime > "{{ now }}"' securityenabled:'false' iterator:'items' %}
-    {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
+    //-{% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
+    {% assign itemsSorted = items | OrderBy:'ContentChannelItem.Order','asc' %}
     {% for item in itemsSorted limit:maxEvents %}
         {% if forloop.first %}
             <a name="featured" style="scroll-margin-top:100px"></a>
@@ -23,7 +24,7 @@
                 <div class="col-md-6 mb-4">
                     <div class="featured-event rounded-lg card">
                         <a href="{{ link | Trim }}" target="_blank">
-                            <img src="/GetImage.ashx?guid={{ imageGuid }}&w=720" class="img-responsive" />
+                            <img src="/GetImage.ashx?guid={{ imageGuid }}&w=720&h=405&mode=crop&anchor=middlecenter&scale=both" class="img-responsive" />
                         </a>
                     </div>
                 </div>

@@ -2,7 +2,6 @@
     webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ 'Global' | PageParameter:'GroupKey' }}' return:'group'
     endwebrequest
     assign leaderSize = group.Leaders | Size
-    assign startDateOffset = 'Now' | DateDiff:startDate,'d'
     assign showRegister = true
     if group.IsFull or group.Status == 'Closed'
         assign showRegister = false
@@ -63,18 +62,18 @@
                 <p>
                     <strong>Schedule:</strong><br>
                     {{ group.Schedule.Text }}
-    {% if startDateOffset > 0 %}
+    {% if group.Schedule.StartDateOffset > 0 %}
                     (Beginning on {{ group.Schedule.StartDate | Date:'MMM.' }} {{ group.Schedule.StartDate | Date:'d' | NumberToOrdinal }})
     {% endif %}
                 </p>
 {% endif %}
                 <p>
                     <strong>About the group:</strong><br>
-                    {{ group.ExtendedDescription | Default:group.Description}}
+                    {{ group.ExtendedDescription | Default:group.Description }}
                 </p>
                 <p>
                     <strong>About the {{ 'leader' | PluralizeForQuantity:leaderSize }}:</strong><br>
-                    {{ group.LeaderBio }}
+                    {{ group.LeaderBio | NewlineToBr }}
                 </p>
             </div><!-- /card-body -->
             <div class="card-footer">

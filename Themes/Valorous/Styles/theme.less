@@ -911,7 +911,12 @@ footer {
 .label-default { background-color: @compass-primary; }
 .calendar-month a { text-decoration: none !important; }
 /* END misc small fixes */
-/* Fix */
-
-/* END Fix */
+/* Fix push footer for short pages */
+body>form {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+#body-wrap { flex-grow: 1; }
+/* END push footer for short pages */
 @import "_css-overrides.less";

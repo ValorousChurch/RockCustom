@@ -33,7 +33,6 @@
         webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ g.IdKey }}' return:'group'
         endwebrequest
         assign leaderSize = group.Leaders | Size
-        assign startDateOffset = 'Now' | DateDiff:startDate,'d'
     %}
     <div class="card">
         <img src="{{ group.Location.ImageUrl | Default:group.Location.MapUrl }}" class="card-img-top" />
@@ -86,14 +85,14 @@
                     <td>{{ group.Schedule.Text }}</td>
                 </tr>
     {% endif %}
-    {% if startDateOffset > 0 %}
+    {% if group.Schedule.StartDateOffset > 0 %}
                 <tr>
-                    <th>Starts On:</th>
+                    <th>Starts&nbsp;On:</th>
                     <td>{{ group.Schedule.StartDate | Date:'MMM.' }} {{ group.Schedule.StartDate | Date:'d' | NumberToOrdinal }}</td>
                 </tr>
     {% endif %}
             </table>
-            {{ group.Description }}
+            {{ group.Description | Trim | TruncateWords:50 }}
         </div>
         <div class="card-footer">
 //-            <a class="btn btn-primary w-100" role="button" onclick="Rock.controls.modal.show($(this), '/connect/group-finder/info-modal/{{ group.IdKey }}?pb=&sb=Close&t={{ group.Name | UrlEncode }}&r={{ LinkedPages.RegisterPage | UrlEncode }}');">

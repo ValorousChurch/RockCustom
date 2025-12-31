@@ -68,6 +68,10 @@
 <style>#no-events{display:none}</style>
 {% endif %}
 {% for event in events %}
+    {%- assign displayStartDate = event.EventItemOccurrence | Attribute:'StartDate' | Date:'yyyy-MM-dd' -%}
+    {%- if displayStartDate and displayStartDate > now -%}
+        {%- continue -%}
+    {%- endif -%}
     {% lava
         if event.DetailPage != null
             assign eventLink = event.DetailPage

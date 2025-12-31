@@ -1,28 +1,30 @@
-{% assign speaker = Item | Attribute:'Speaker','Object' %}
-{% assign speakerPerson = speaker | Attribute:'Person','Object' %}
-{% assign speakerFb = speakerPerson | Attribute:'Facebook','RawValue' %}
-{% assign speakerIg= speakerPerson | Attribute:'Instagram','RawValue' %}
-{% assign videoId = Item | Attribute:'Video','Id' %}
+{% lava
+    assign speaker = Item | Attribute:'Speaker','Object'
+    assign speakerPerson = speaker | Attribute:'Person','Object'
+    assign speakerFb = speakerPerson | Attribute:'Facebook','RawValue'
+    assign speakerIg= speakerPerson | Attribute:'Instagram','RawValue'
+    assign videoId = Item | Attribute:'Video','Id'
 
-{% assign podcastLink = Item | Attribute:'PodcastLink','RawValue' %}
-{% assign videoDownload = Item | Attribute:'VideoDownload','RawValue' %}
-{% assign audioDownload = Item | Attribute:'AudioDownload','RawValue' %}
+    assign podcastLink = Item | Attribute:'PodcastLink','RawValue'
+    assign videoDownload = Item | Attribute:'VideoDownload','RawValue'
+    assign audioDownload = Item | Attribute:'AudioDownload','RawValue'
 
-{% assign studyGuide = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' | First %}
-{% if studyGuide != null and studyGuide != '' %}
-    {% assign studyGuideLink = '/watch/notes/' | Append:studyGuide.Guid %}
-{% endif %}
+    assign studyGuide = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','31' | First
+    if studyGuide != null and studyGuide != ''
+        assign studyGuideLink = '/watch/notes/' | Append:studyGuide.Guid
+    endif
 
-{% assign transcript = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','93' | First %}
-{% if transcript != null and transcript != '' %}
-    {% assign transcriptLink = '/watch/transcript/' | Append:transcript.Guid %}
-{% endif %}
+    assign transcript = Item.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','93' | First
+    if transcript != null and transcript != ''
+        assign transcriptLink = '/watch/transcript/' | Append:transcript.Guid
+    endif
+%}
 {% capture resources %}
 [
 {% if studyGuideLink and studyGuideLink != '' %}
     {
         Title: "Study Guide",
-        Link: "{{ studyGuideLink }}",
+        Link: {{ studyGuideLink | ToJSON }},
         Icon: "fa fa-file-pdf",
         Popup: "true"
     },
@@ -30,14 +32,14 @@
 {% if podcastLink and podcastLink != '' %}
     {
         Title: "Audio Podcast",
-        Link: "{{ podcastLink }}",
+        Link: {{ podcastLink | ToJSON }},
         Icon: "fa fa-headphones"
     },
 {% endif %}
 {% if transcriptLink and transcriptLink != '' %}
     {
         Title: "Transcript",
-        Link: "{{ transcriptLink }}",
+        Link: {{ transcriptLink | ToJSON }},
         Icon: "fa fa-file-alt",
         Popup: "true"
     },
@@ -45,14 +47,14 @@
 {% if videoDownload and videoDownload != '' %}
     {
         Title: "Video Download",
-        Link: "{{ videoDownload }}",
+        Link: {{ videoDownload | ToJSON }},
         Icon: "fa fa-film"
     },
 {% endif %}
 {% if audioDownload and audioDownload != '' %}
     {
         Title: "Audio Download",
-        Link: "{{ audioDownload }}",
+        Link: {{ audioDownload | ToJSON }},
         Icon: "fa fa-volume-up"
     },
 {% endif %}
@@ -105,16 +107,14 @@
         <div class="col-md-8 ">
             <!-- begin speaker bio -->
             <div class="col-xs-5 col-sm-4 col-sm-3 col-md-3 mb-2 photo-wrap">
-            {% assign imageGuid = speaker | Attribute:'Photo','Guid' %}
-            {% unless imageGuid and imageGuid != '' %}
-                {% assign imageGuid = speakerPerson.Photo.Guid %}
-            {% endunless %}
-                <img src="/getimage.ashx?Guid={{ imageGuid }}&amp;w=220&amp;h=220&amp;format=jpg&amp;quality=70&amp;mode=crop&amp;scale=both" class="img-responsive rounded shadow-md" alt="{{ speakerPerson.FullName }}" style="border:3px solid white">
+            {% assign imageGuid = speakerPerson | Attribute:'PublicPhoto','RawValue' | Default:speakerPerson.Photo.Guid %}
+                <img src="{{ imageGuid | ImageUrl }}&w=220&h=220&format=jpg&quality=70&mode=crop&scale=both" class="img-responsive rounded shadow-md" alt="{{ speakerPerson.FullName }}" style="border:3px solid white">
             </div>
             <div class="details col-xs-12 col-sm-8 col-sm-9 col-md-9">
                 <h3 class="name-title mt-0">{{ speaker.Value }}</h4>
+            {% assign bio = speakerPerson | Attribute:'PersonBio' | RunLava | Trim %}
                 <div class="bio">
-                    <p class="mb-2">{{ speaker.Description | RegExReplace:'\n+','</p><p class="mb-2">' }}</p>
+                    <p class="mb-2">{{ bio | FromMarkdown | RegExReplace:'<p','<p class="mb-2"' }}</p>
                 </div>
                 <ul class="social-connect list-unstyled list-inline">
                 {% if speakerFb and speakerFb != '' %}

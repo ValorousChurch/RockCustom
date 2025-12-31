@@ -1,6 +1,6 @@
 <script>$(function(){ $('body').addClass('home') });</script>
 
-{[ jarallax image:'/Themes/Valorous/Assets/img/theme/hero-2024-thumbnail.jpg' videourl:'https://vimeo.com/1021482547' height:'100vh' speed:'-25' position:'80% 50%' churchonlinecountdown:'false' addclass:'tw-relative tw-w-full tw-h-full' ]}
+{[ jarallax image:'/Themes/Valorous/Assets/img/theme/hero-2024-thumbnail.jpg' videourl:'https://vimeo.com/1120861155' height:'100vh' speed:'-25' position:'80% 50%' churchonlinecountdown:'false' addclass:'tw-relative tw-w-full tw-h-full' ]}
 
     <div class="tw-flex tw-w-full tw-h-full tw-justify-center tw-items-center" style="background:rgba(0,0,0,0.5)">
         <div class="tw-max-w-6xl tw-mx-5">

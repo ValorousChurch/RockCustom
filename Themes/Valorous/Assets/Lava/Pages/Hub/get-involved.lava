@@ -1,9 +1,10 @@
+
 <h3 class="mt-0">Get Involved</h3>
 <p>No matter your age or stage in life, there is a place for you to get involved, grow, and lead.</p>
 <hr>
 <a class="d-flex align-items-center text-current" href="/connect/group-finder" target="_blank">
     <div style="flex-grow:1">
-        <b style="font-size:1.2em">Find a Small Group</b><br>
+        <b style="font-size:1.2em">Find a Life Group</b><br>
         <p class="mb-1">Life Groups are one of the best ways that people connect and grow in their faith.</p>
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
@@ -16,3 +17,13 @@
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
+/-
+<hr>
+<a class="d-flex align-items-center text-current" href="/connect/equip" target="_blank">
+    <div style="flex-grow:1">
+        <b style="font-size:1.2em">Attend an Equip Class</b><br>
+        <p class="mb-1">Equip classes are for believers who want to grow deeper in their faith.</p>
+    </div>
+    <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
+</a>
+-/

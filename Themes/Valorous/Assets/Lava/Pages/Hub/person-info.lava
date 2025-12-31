@@ -50,7 +50,7 @@
             <img src="/Assets/Images/person-no-photo-male.svg" class="img-responsive img-circle mx-auto" style="max-width:250px; width:100%">
         </div>
         <div id="contact-info" class="col-xs-8 col-md-9 text-left">
-            <p class="mb-2">Consider logging in or creating an account to see your information.</p>
+            <p class="mb-2">Consider logging in or creating an account to personalize your experience.</p>
             <div class="row">
                 <div class="col-sm-6 mb-2">
                     <a class="btn btn-primary btn-block" href="/Login?returnurl=/info" role="button">

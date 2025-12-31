@@ -10,7 +10,7 @@
         <div class="card h-100" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
     //- Watch progress indicator
     {%- if CurrentPerson -%}
-        {%- stylesheet id:'watch-indicator'%}
+        {%- stylesheet id:'watch-indicator' %}
             .watchIndicator {
                 border-radius: 25px;
                 color: white;
@@ -22,39 +22,42 @@
             .complete { background-color: green }
             .resume { background-color: orange }
         {%- endstylesheet -%}
-        {% assign mediaElementId = message | Attribute:'Video','Id' | AsInteger %}
-        {% assign interactionChannelId = 22 %} //- SELECT [Id] FROM [InteractionChannel] WHERE [Guid] = 'd5b9bdaf-6e52-40d5-8e74-4e23973df159';
-        {% assign watchedPercent = 0 %}
-        {% assign interaction = '' %}
-        {% interaction expression:'InteractionComponent.InteractionChannelId == {{ interactionChannelId }} && InteractionComponent.EntityId == {{ mediaElementId }} && Operation == "WATCH" && PersonAlias.PersonId == {{ CurrentPerson.Id }}' securityenabled:'false' select:'new( InteractionData, InteractionDateTime )' sort:'InteractionDateTime DESC' limit:'1' %}
-            {% assign watchedPercent = interaction.InteractionData | FromJSON | Property:'WatchedPercentage' | AsDecimal %}
+        {% lava
+            assign mediaElementId = message | Attribute:'Video','Id' | AsInteger
+            //- SELECT [Id] FROM [InteractionChannel] WHERE [Guid] = 'd5b9bdaf-6e52-40d5-8e74-4e23973df159';
+            assign interactionChannelId = 22
+            assign watchedPercent = 0
+            assign interaction = ''
+            interaction expression:'InteractionComponent.InteractionChannelId == {{ interactionChannelId }} && InteractionComponent.EntityId == {{ mediaElementId }} && Operation == "WATCH" && PersonAlias.PersonId == {{ CurrentPerson.Id }}' securityenabled:'false' select:'new( InteractionData, InteractionDateTime )' sort:'InteractionDateTime DESC' limit:'1'
+            endinteraction
+        %}
+        {% assign watchedPercent = interaction.InteractionData | FromJSON | Property:'WatchedPercentage' | AsDecimal %}
             <!-- Video Id: {{ mediaElementId }}; Watched Percent: {{ watchedPercent }} -->
-            {% if watchedPercent != null and watchedPercent != '' and watchedPercent > 0 %}
-                {% if watchedPercent > 75 %}
+        {% if watchedPercent != null and watchedPercent != '' and watchedPercent > 0 %}
+            {% if watchedPercent > 75 %}
             <i class="fa fa-check-square watchIndicator complete" data-toggle="tooltip" data-html="true" data-title="<strong>Watched</strong><br>You watched this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
-                {% elseif watchedPercent > 5 %}
+            {% elseif watchedPercent > 5 %}
             <i class="fa fa-clock watchIndicator resume" data-toggle="tooltip" data-html="true" data-title="<strong>In Progress</strong><br>You watched {{ watchedPercent | AsInterger }}% of this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
-                {% endif %}
             {% endif %}
-        {% endinteraction %}
+        {% endif %}
     {%- endif -%}
             <img src="{{ message | Attribute:'Video','DefaultThumbnailUrl' }}" class="card-img-top" alt="{{ message.Title }}">
             <div class="card-body">
-        {% assign titleParts = message.Title | Split:' - ', true, 2 %}
-        {% assign titleSize = titleParts | Size %}
+    {% assign titleParts = message.Title | Split:' - ', true, 2 %}
+    {% assign titleSize = titleParts | Size %}
                 <h3 class="card-title">
                     {{ titleParts[0] }}
-        {% if titleSize > 1 %}
+    {% if titleSize > 1 %}
                     <br><small style="position:relative;top:-5px">[{{ titleParts[1] | Replace:' ','&nbsp;' }}]</small>
-        {% endif %}
+    {% endif %}
                 </h3>
                 <h4 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h4>
                 <p class="card-text">{{ message.StartDateTime | Date:'MMMM d, yyyy' }}</p>
-            </div>
-        </div>
+            </div><!-- /card-body -->
+        </div><!-- /card -->
     </div>
 {% endfor %}
-</div>
+</div><!-- /row -->
 {% comment %} Page Navigation {% endcomment %}
 {%- if Pagination.TotalPages > 1 -%}
     <style>.pagination>.disabled>span{color:#ccc}</style>

@@ -59,9 +59,7 @@
   <!-- Theme Included CSS Files -->
   <link href="<%# ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
   <link href="<%# ResolveRockUrl("~~/Styles/font-awesome.css", true) %>" rel="stylesheet">
-  <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
   <link href="<%# ResolveRockUrl("~~/Assets/vendor/magnific-popup/magnific-popup.css", true) %>" rel="stylesheet">
-  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -76,6 +74,8 @@
   <script src="<%# ResolveRockUrl("~~/Assets/Vendor/scrollreveal/scrollreveal.min.js") %>"></script>
   <script src="<%# ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
 
+  <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
+  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
   <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
 </head>
 <body runat="server" id="body" class="compass-body">
@@ -193,7 +193,7 @@
       if(sessionStorage.getItem('debug') == 1) $('body').addClass('tw-debug-screens');
 
       // Replace page title
-      var pageTitle = $( '#page-title' );
+      var pageTitle = $( 'header:not(.replacementHeader) #page-title' );
       var rockTitle = $( '#rock-title' );
       if ( pageTitle.length > 0 && rockTitle.length > 0 ) {
         pageTitle.text( rockTitle.text() );
