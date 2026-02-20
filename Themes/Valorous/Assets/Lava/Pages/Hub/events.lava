@@ -1,36 +1,14 @@
-{% cache key:'hub-events' duration:'3600' twopass:'true' %}
-    {% assign channelId = 84 %} //- Featured Event - Valorous.info
-    {% assign maxEvents = 3 %}
-    {% assign now = 'Now' | Date:'yyyy-MM-ddTHH:mm:ss' %}
-
+{% assign items = 'featuredevent-hub' | PersistedDataset %}
 <h3 class="mt-0">Featured Events</h3>
-    {% eventitemoccurrencechannelitem expression:'ContentChannelItem.ContentChannelId == "{{ channelId }}" && ContentChannelItem.StartDateTime <= "{{ now }}" && ContentChannelItem.ExpireDateTime > "{{ now }}" && EventItemOccurrence.NextStartDateTime > "{{ now }}"' securityenabled:'false' lazyloadenabled:'false' iterator:'items' select:'new( new( ContentChannelItem.Title, ContentChannelItem.Content ) as ContentChannelItem, new( EventItemOccurrenceId as Id, EventItemOccurrence.NextStartDateTime, EventItemOccurrence.EventItem.DetailsUrl ) as EventItemOccurrence )' %}
-        {% assign itemsSorted = items | OrderBy:'EventItemOccurrence.NextStartDateTime' %}
-    {% endeventitemoccurrencechannelitem %}
-    {% for item in itemsSorted limit:maxEvents %}
-        {% assign startTime = item.EventItemOccurrence.NextStartDateTime | Date:'HH:mm:ss' %}
+{% for item in items limit:3 %}
 <hr>
-        {% capture link -%}
-            {% assign detailsUrlOverride = item.EventItemOccurrence.DetailsUrl | Trim %}
-            {% if detailsUrlOverride and detailsUrlOverride != '' %}{{ detailsUrlOverride }}
-            {% else %}/events/{{ item.EventItemOccurrence.Id }}
-            {% endif %}
-        {%- endcapture %}
-<a class="d-flex align-items-center text-current" href="{{ link | Trim }}" target="_blank">
+<a class="d-flex align-items-center text-current" href="{{ item.Link | Default:'#' }}" target="_blank">
     <div style="flex-grow:1">
         <p class="mb-1" style="font-size:1.2em">
-            <b>{{ item.ContentChannelItem.Title }}</b><br>
-            //- "hack" to fix date locale formatting getting cached
-        {% raw %}{% capture startdate %}{% endraw %}
-                {{- item.EventItemOccurrence.NextStartDateTime | Date:'yyyy-MM-ddTHH:mm:ss' -}}
-        {% raw %}{% endcapture %}{% endraw %}
-        {% if startTime == '00:00:00' %}
-                {% raw %}{{ startdate | Date:'ddd. MMM.' }} {{ startdate | Date:'d' | NumberToOrdinal }}{% endraw %}
-        {% else %}
-                {% raw %}{{ startdate | Date:'ddd. MMM.' }} {{ startdate | Date:'d' | NumberToOrdinal }} at {{ startdate | Date:'h:mm tt' }}{% endraw %}
-        {% endif %}
+            <b>{{ item.Title }}</b><br>
+            {{ item.Subtitle }}
         </p>
-        {{ item.ContentChannelItem.Content | Replace:'<p>','<p class="mb-1">' }}
+        {{ item.Description | Replace:'<p>','<p class="mb-1">' }}
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
@@ -43,4 +21,3 @@
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
-{% endcache %}
