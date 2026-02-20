@@ -77,10 +77,13 @@
 {% endif %}
                 </h1>
                 <p class="mb-0"><strong>{{ speaker.Value }}</strong> - {{ Item.StartDateTime | Date:'MMM. d, yyyy' }}</p>
+/-
 {% assign summary = Item.Content | StripHtml | Trim %}
 {% if summary != null and summary != '' %}
-                <p class="mt-2 mb-0">{{ summary | NewlineToBr }}</p>
+    <p class="mt-2 mb-0">{{ summary | NewlineToBr }}</p>
 {% endif %}
+-/
+                {{ Item.Content | Replace:'<p>','<p class="mb-3">' }}
             </div>
         </div>
     </div>
