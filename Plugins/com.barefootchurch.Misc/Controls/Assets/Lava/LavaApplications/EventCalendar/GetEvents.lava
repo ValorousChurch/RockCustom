@@ -43,7 +43,7 @@
             endcalendarevents
             assign events = EventScheduledInstances
         endif
-        assign events = events | OrderBy:'DateTimeSort'
+        assign events = events | OrderBy:'DateTime'
 
         //- Calculate next dates
         assign nextStart = startDate | DateAdd:dateRange | Date:'yyy-MM-dd'
