@@ -1,6 +1,0 @@
-.my-alerts {
-    position: absolute;
-    z-index: 100;
-    right: -99999px; /* We will move it later with javascript */
-    top: 7px;
-}
