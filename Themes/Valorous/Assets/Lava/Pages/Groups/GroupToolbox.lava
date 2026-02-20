@@ -65,9 +65,11 @@
 {% endif %}
 {% endraw %}{% endcapture %}
 {% if Group.GroupTypeId == 25 %}
+    {%- capture group -%}
+        {%- renderlavaendpoint route:'^/lifegroups/groupinfo?g={{ Group.IdKey }}' -%}
+    {%- endcapture -%}
     {% lava
-        webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ Group.IdKey }}' return:'group'
-        endwebrequest
+        assign group = group | FromJSON
         assign leaderSize = group.Leaders | Size
         assign startDateOffset = 'Now' | DateDiff:startDate,'d'
 

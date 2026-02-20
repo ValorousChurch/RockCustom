@@ -1,6 +1,9 @@
+{% assign groupKey = 'Global' | PageParameter:'GroupKey' %}
+{% capture group -%}
+    {%- renderlavaendpoint route:'^/lifegroups/groupinfo?g={{ groupKey }}' -%}
+{%- endcapture %}
 {% lava
-    webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ 'Global' | PageParameter:'GroupKey' }}' return:'group'
-    endwebrequest
+    assign group = group | FromJSON
     assign leaderSize = group.Leaders | Size
     assign showRegister = true
     if group.IsFull or group.Status == 'Closed'

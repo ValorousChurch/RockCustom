@@ -29,9 +29,11 @@
 </style>
 <div class="mt-4 d-grid grid-cols-sm-1 grid-cols-md-2 grid-cols-lg-3 gap-3 p-1">
 {% for g in Groups %}
+    {%- capture group -%}
+        {%- renderlavaendpoint route:'^/lifegroups/groupinfo?g={{ g.IdKey }}' -%}
+    {%- endcapture %}
     {% lava
-        webrequest url:'https://rock.valorouschurch.com/api/lava-app/v1/lifegroups/groupinfo?g={{ g.IdKey }}' return:'group'
-        endwebrequest
+        assign group = group | FromJSON
         assign leaderSize = group.Leaders | Size
     %}
     <div class="card">
