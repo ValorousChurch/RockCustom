@@ -62,20 +62,26 @@ function loadVideo(el,guid) {
             <div class="tab-content">
                 <div id="worshiprec{{ index }}" class="tab-pane fade in active">
             {% if service.Videos.Worship.VideoGuid and service.Videos.Worship.VideoGuid != '' %}
-                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                            <img class="img-responsive" src="{{ service.Videos.Worship.Thumbnail }}">
-                            <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Worship.VideoGuid }}');">Load Video</button>
-                        </div>
+                    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                        <img class="img-responsive" src="{{ service.Videos.Worship.Thumbnail }}">
+                        <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Worship.VideoGuid }}');">Load Video</button>
+                    </div>
+                {% if service.Videos.Worship.DownloadLink and service.Videos.Worship.DownloadLink != '' %}
+                    <a href="{{ service.Videos.Worship.DownloadLink }}" class="btn btn-primary mt-2" download><i class="ti ti-file-download"></i> Download</a>
+                {% endif %}
             {% else %}
-                        <div class="alert alert-warning mt-2">Broadcast recording hasn't been posted yet.</div>
+                    <div class="alert alert-warning mt-2">Broadcast recording hasn't been posted yet.</div>
             {% endif %}
                 </div>
             {% if service.Videos.Multiviewer.VideoGuid and service.Videos.Multiviewer.VideoGuid != '' %}
                 <div id="mvrec{{ index }}" class="tab-pane fade">
-                        <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
-                            <img class="img-responsive" src="{{ service.Videos.Multiviewer.Thumbnail }}">
-                            <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Multiviewer.VideoGuid }}');">Load Video</button>
-                        </div>
+                    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
+                        <img class="img-responsive" src="{{ service.Videos.Multiviewer.Thumbnail }}">
+                        <button class="btn btn-primary rounded" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);" onclick="loadVideo(this,'{{ service.Videos.Multiviewer.VideoGuid }}');">Load Video</button>
+                    </div>
+                    {% if service.Videos.Multiviewer.DownloadLink and service.Videos.Multiviewer.DownloadLink != '' %}
+                        <a href="{{ service.Videos.Multiviewer.DownloadLink }}" class="btn btn-primary mt-2" download><i class="ti ti-file-download"></i> Download</a>
+                    {% endif %}
                 </div>
             {% endif %}
             </div>
