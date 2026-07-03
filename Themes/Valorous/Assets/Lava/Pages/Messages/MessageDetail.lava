@@ -136,23 +136,25 @@
     {% assign seriesItems = series.ChildItems | Select:'ChildContentChannelItem' | Where:'ContentChannelId','5' | Where:'Status','Approved' | OrderBy:'StartDateTime' %}
     {% assign seriesCount = seriesItems | Size %}
     {% if seriesCount > 1 %}
-    <div class="row"><!-- begin series listing -->
+    <div class="row d-flex flex-wrap"><!-- begin series listing -->
         <div class="col-md-12">
             <h3>More from the series: {{ series.Title }}</h3>
         </div>
         {% for message in seriesItems %}
-        <div class=" col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="card" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card h-100" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
                 <img src="{{ message | Attribute:'Video','DefaultThumbnailUrl' }}" class="card-img-top" alt="{{ message.Title }}">
-                <div class="card-body">
+                <div class="card-body pb-0">
             {% assign titleParts = message.Title | Split:' - ' %}
             {% assign titleSize = titleParts | Size %}
                     <h4 class="card-title">
-                        {{ titleParts[0] }}
             {% if titleSize > 1 %}
-                        <small style="position:relative;top:-2px">[{{ titleParts | Last | Replace:' ','&nbsp;' }}]</small>
+                        <small style="position:relative;top:-2px">[{{ titleParts | Last | Replace:' ','&nbsp;' }}]</small><br>
             {% endif %}
+                        {{ titleParts[0] }}
                     </h4>
+                </div>
+                <div class="card-footer border-top-0">
                     <h5 class="card-subtitle mb-2">{{ message | Attribute:'Speaker' }}</h5>
                     <p class="card-text">{{ message.StartDateTime | Date:'MMMM d, yyyy' }}</p>
                 </div>
