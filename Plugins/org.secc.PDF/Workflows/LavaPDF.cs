@@ -34,12 +34,33 @@ namespace org.secc.PDF
     [ExportMetadata( "ComponentName", "Lava PDF" )]
 
     // Settings
-    [CodeEditorField( "Lava", "The lava to convert to a PDF", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 300, order: 1 )]
-    [CodeEditorField( "Header", "The html/lava to use in the page header.", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 100, required: false, order: 2 )]
-    [CodeEditorField( "Footer", "The html/lava to use in the page footer.", Rock.Web.UI.Controls.CodeEditorMode.Lava, height: 100, required: false, order: 3 )]
-    [BooleanField( "Remove Margins", "Remove the default margins on the PDF file.", false, order: 4 )]
-    [WorkflowAttribute( "PDF", "Binary File attribute to output PDF to.", fieldTypeClassNames: new string[] { "Rock.Field.Types.FileFieldType" }, order: 5 )]
-    [TextField( "Document Name", "The name of the document <span class='tip tip-lava'></span>.", true, "LavaDocument.pdf", order: 6 )]
+    [CodeEditorField( "Lava",
+        Description = "The lava to convert to a PDF",
+        EditorMode = Rock.Web.UI.Controls.CodeEditorMode.Lava,
+        Order = 1 )]
+    [CodeEditorField( "Header",
+        Description = "The html/lava to use in the page header.",
+        EditorMode = Rock.Web.UI.Controls.CodeEditorMode.Lava,
+        IsRequired = false,
+        Order = 2 )]
+    [CodeEditorField( "Footer",
+        Description = "The html/lava to use in the page footer.",
+        EditorMode = Rock.Web.UI.Controls.CodeEditorMode.Lava,
+        IsRequired = false,
+        Order =  3 )]
+    [BooleanField( "Remove Margins",
+        Description = "Remove the default margins on the PDF file.",
+        DefaultBooleanValue = false,
+        Order = 4 )]
+    [WorkflowAttribute( "PDF",
+        Description = "Binary File attribute to output PDF to.",
+        FieldTypeClassNames = new string[] { "Rock.Field.Types.FileFieldType" },
+        Order = 5 )]
+    [TextField( "Document Name",
+        Description = "The name of the document <span class='tip tip-lava'></span>.",
+        IsRequired = true,
+        DefaultValue = "LavaDocument.pdf",
+        Order = 6 )]
     class LavaPDF : ActionComponent
     {
         /// <summary>

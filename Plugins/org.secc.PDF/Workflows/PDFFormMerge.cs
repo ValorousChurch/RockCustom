@@ -37,8 +37,10 @@ namespace org.secc.PDF
 
     // Settings
     [BinaryFileField( "D587ECCB-F548-452A-A442-FE383CBED283", "PDF Template", "PDF to merge information into" )]
-    [WorkflowAttribute( "PDF Output", "Workflow attribute to output pdf into." )]
-    [BooleanField( "Flatten", "Should the action flatten the PDF locking the form fields" )]
+    [WorkflowAttribute( "PDF Output",
+        Description = "Workflow attribute to output pdf into." )]
+    [BooleanField( "Flatten",
+        Description = "Should the action flatten the PDF locking the form fields" )]
 
     class PDFFormMerge : ActionComponent
     {
