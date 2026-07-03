@@ -1,4 +1,4 @@
-﻿// <copyright>
+// <copyright>
 // Copyright by the Spark Development Network
 //
 // Licensed under the Rock Community License (the "License");
@@ -563,6 +563,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             tbComments.Text = tbPrayerRequests.Text = string.Empty;
             acAddress.Street1 = acAddress.Street2 = acAddress.City = acAddress.PostalCode = string.Empty;
             pnlNewPerson.Enabled = tbFirstName.Required = tbLastName.Required = true;
+            acAddress.ValidationIsDisabled = false;
 
             Children = new List<PreRegistrationChild>();
             prChildren.ClearRows();
@@ -640,6 +641,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             if ( ppGuest.PersonId.HasValue )
             {
                 pnlNewPerson.Enabled = tbFirstName.Required = tbLastName.Required = tbEmail.Required = false;
+                acAddress.ValidationIsDisabled = true;
 
                 Children = new List<PreRegistrationChild>();
                 prChildren.ClearRows();
@@ -655,6 +657,7 @@ namespace RockWeb.Plugins.com_barefootchurch
             else
             {
                 pnlNewPerson.Enabled = tbFirstName.Required = tbLastName.Required = true;
+                acAddress.ValidationIsDisabled = false;
 
                 lbPersonProfile.Visible = false;
                 lbPersonProfile.NavigateUrl = "";
