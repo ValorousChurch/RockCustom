@@ -207,6 +207,21 @@ p {
     },
   {%- endfor -%}
 
+  {% comment %} Room Reservations - Outside Events {%endcomment %}
+  {%- assign reservationItems = reservations | Where:'Type',5 -%}
+  {%- for item in reservationItems -%}
+    {
+      "eventType": "reservationOutside",
+      "color": "purple",
+      "name": {{ item.Name | ToJSON }},
+      "description": "<b>Reserved location(s): </b> {{ item.Locations | Join:', ' | ToJSON | Remove:'"' }}",
+      "link": "/ReservationDetail?ReservationId={{ item.Id }}",
+      "start": "{{ item.Start | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "end": "{{ item.End | Date:'yyyy-MM-ddTHH:mm:ss' }}",
+      "timed": true,
+    },
+  {%- endfor -%}
+
 {% comment %} Room Reservations - Setup/Cleanup Times {%endcomment %}
   {%- assign reservationItems = reservations | Where:'Type',99 -%}
   {%- for item in reservationItems -%}
@@ -458,10 +473,11 @@ p {
       ],
       eventTypes: [
         { value: 'oncall',                  text: 'On-Call Pastors' },
-        { value: 'reservationGeneral',      text: 'Room Reservations - General' },
-        { value: 'reservationGroups',       text: 'Room Reservations - Life Groups' },
-        { value: 'reservationSchool',       text: 'Room Reservations - Daily School' },
-        { value: 'reservationSetupCleanup', text: 'Room Reservations - Setup & Cleanup Times' },
+        { value: 'reservationGeneral',      text: 'Reservation - General' },
+        { value: 'reservationGroups',       text: 'Reservation - Life Groups' },
+        { value: 'reservationSchool',       text: 'Reservation - Daily School' },
+        { value: 'reservationOutside',      text: 'Reservation - Outside Events' },
+        { value: 'reservationSetupCleanup', text: 'Reservation - Setup & Cleanup Times' },
         { value: 'staff',                   text: 'Staff Life Events' },
         { value: 'pto',                     text: 'Time Off' },
         { value: 'blackout',                text: 'Vacation Blackouts' },
