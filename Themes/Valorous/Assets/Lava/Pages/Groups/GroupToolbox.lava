@@ -16,6 +16,11 @@
                 else
             endcase
         endfor
+        assign currentPersonIsLeader = false
+        assign currentGroupMember = CurrentPerson | Group:Group.Id | First
+        if currentGroupMember != null and currentGroupMember.GroupRole.IsLeader == true
+            assign currentPersonIsLeader = true
+        endif
     %}
 <style>
     .card,
@@ -48,15 +53,17 @@
 <div class="avatarImg"><img src="/GetAvatar.ashx?Radius=circle&Size=70&PersonGuid={{ member.Person.Guid }}" /></div>
     <div class="pl-3">
         <strong>{{ member.Person.FullName }}</strong><br>
-{% for phone in member.Person.PhoneNumbers %}
-    {% if phone.IsUnlisted != true and phone.NumberTypeValue.Value == 'Mobile' %}
+{% if AllowedActions.ManageMembers == true or member.GroupRole.IsLeader == true or currentPersonIsLeader %}
+        {% for phone in member.Person.PhoneNumbers %}
+        {% if phone.IsUnlisted != true and phone.NumberTypeValue.Value == 'Mobile' %}
         <i class="ti ti-phone"></i>&nbsp;<a href="tel:{{ phone.NumberFormatted | RegExReplace:'[^0-9]','' }}">{{ phone.NumberFormatted }}</a>
         <br>
-    {% endif %}
-{% endfor %}
-{% if member.Person.IsEmailActive == true %}
+        {% endif %}
+    {% endfor %}
+    {% if member.Person.IsEmailActive == true %}
         <i class="ti ti-mail"></i>&nbsp;<a href="mailto:{{ member.Person.Email }}">{{ member.Person.Email }}</a>
         <br>
+    {% endif %}
 {% endif %}
 {% if member.Person.BirthDate and member.Person.BirthDate != '' %}
         <i class="ti ti-cake"></i>&nbsp;{{ member.Person.BirthDate | Date:'MMMM' }} {{ member.Person.BirthDate | Date:'d' | NumberToOrdinalumberToOrdinal }}
@@ -151,7 +158,8 @@
         <h3 class="mt-1">Meeting Location</h3>
         <p>
             <img src="{{ group.Location.MapUrl | Default:group.Location.ImageUrl }}" class="img-responsive rounded-lg locationImg" />
-            {{ group.Location.Address }}
+//-            {{ group.Location.Address }}
+            Please contact the group leader for an exact location.
         </p>
         <h3 class="mt-2">Group {{ 'Leader' | PluralizeForQuantity:leaderSize }}</h3>
         <div class="avatars d-grid grid-cols-md-1 gap-3">
@@ -233,7 +241,7 @@
 <h4>Inactive Members</h4>
 <div class="avatars d-grid grid-cols-md-2 gap-3">
         {% for member in Group.Members %}
-            {% if member.GroupMemberStatus == 'Inactive' and member.GroupRole.Name != 'Leader' %}
+            {% if member.GroupMemberStatus == 'Inactive' and member.GroupRole.IsLeader == false %}
     <div class="avatarBox rollover-container d-flex justify-content-start align-items-center border border-gray-400 rounded-lg p-2">
         {{ memberAvatarTemplate | RunLava }}
     </div>
@@ -248,12 +256,12 @@
     <a href="#" onclick="{{ '' | Postback:'AddGroupMember' }}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Add Member</a>
 {% endif %}
 {% if LinkedPages.CommunicationPage %}
-    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true %}
+    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true or currentPersonIsLeader %}
     <a href="#" onclick="{{ '' | Postback:'SendCommunication' }}" class="btn btn-default btn-xs"><i class="fa fa-envelope-o"></i> Email Roster</a>
     {% endif %}
 {% endif %}
 {% if LinkedPages.AlternateCommunicationPage %}
-    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true %}
+    {% if AllowedActions.Edit == true or AllowedActions.ManageMembers == true or currentPersonIsLeader %}
     <a href="#" onclick="{{ '' | Postback:'SendAlternateCommunication' }}" class="btn btn-default btn-xs"><i class="fa fa-mobile-phone"></i> Text Roster</a>
     {% endif %}
 {% endif %}
