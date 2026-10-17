@@ -1,38 +1,46 @@
-# This script is run by AppVeyor's deploy agent after the deploy
+# AppVeyor Agent post-deployment hook. Default is report-only.
+$ErrorActionPreference = 'Stop'
+$postDeployDelete = @('deployment-manifest.json', 'before-deploy.ps1', 'deploy.ps1', 'Sync-DeploymentFiles.ps1', 'Apply-WebConfigTransform.ps1')
 
-$bkupfolder = "$env:application_path\..\bkup"
-$webroot = "$env:application_path"
+$webroot = (Resolve-Path -LiteralPath $env:application_path).ProviderPath
+$backup = Join-Path (Split-Path -Parent $webroot) 'bkup'
 
-Write-Output "Running post-deploy script"
+# Change to 'Cleanup' only after reports have been compared with official Rock lists.
+$cleanupMode = 'Report'
+Write-Host "Post-deploy: $webroot (cleanup mode: $cleanupMode)"
 Write-Output "--------------------------------------------------"
-Write-Output "Backup folder: $bkupfolder"
-Write-Output "Web root folder: $webroot"
 Write-Output "Running script as: $env:userdomain\$env:username"
-
-# move files back from bkup (IIS will auto-restart because we are moving web.config)
-If (Test-Path "$bkupfolder"){
-	Write-Host "Moving files from bkup directory"
-	Copy-Item -Path "$bkupfolder\*" -Destination "$webroot" -Recurse -Force
-	Write-Host "Removing bkup directory"
-	Remove-Item "$bkupfolder\*" -Recurse -Force
+if (-not (Test-Path -LiteralPath $backup)) { throw "Missing backup staging folder: $backup" }
+# Restore connection strings and theme overrides. Keep backed-up web.config for rollback,
+# but never restore it over the newly deployed upstream Rock web.config.
+Get-ChildItem -LiteralPath $backup -File -Recurse | ForEach-Object {
+    $rel = $_.FullName.Substring($backup.Length).TrimStart('\', '/')
+    if ($rel -ieq 'web.config') { return }
+    $dest = Join-Path $webroot $rel
+    New-Item -ItemType Directory -Path (Split-Path -Parent $dest) -Force | Out-Null
+    Copy-Item -LiteralPath $_.FullName -Destination $dest -Force -Verbose
 }
+# Apply production-specific configuration while the application is still offline.
+$transformScript = Join-Path $webroot 'Apply-WebConfigTransform.ps1'
+$transformPath = 'C:\RockDeployment\Config\web.production.xdt'
+if (-not (Test-Path -LiteralPath $transformScript -PathType Leaf)) { throw "Missing XDT script: $transformScript" }
+& $transformScript -WebRoot $webroot -TransformPath $transformPath
+if (-not $?) { throw 'Production web.config transform failed.' }
 
-# flush IIS temp files (Fixes Obsidian caching issue)
-Remove-Item "C:\inetpub\temp\IIS Temporary Compressed Files\*" -Recurse -Force
-
-# remove the app offline flag
-If (Test-Path "$webroot\app_offline.htm"){
-	Write-Host "Removing app offline template"
-	Remove-Item "$webroot\app_offline.htm"
+$sync = Join-Path $webroot 'Sync-DeploymentFiles.ps1'
+if (-not (Test-Path -LiteralPath $sync -PathType Leaf)) { throw "Missing cleanup script in artifact: $sync" }
+& $sync -WebRoot $webroot -Mode $cleanupMode
+if (-not $?) { throw 'Deployment file comparison failed.' }
+$compressed = 'C:\inetpub\temp\IIS Temporary Compressed Files'
+if (Test-Path -LiteralPath $compressed) {
+    Get-ChildItem -LiteralPath $compressed -Force | Remove-Item -Recurse -Force -ErrorAction Continue
 }
-
-# delete deploy scripts
-If (Test-Path "$webroot\deploy.ps1"){
-	Remove-Item "$webroot\deploy.ps1"
+$offline = Join-Path $webroot 'app_offline.htm'
+if (Test-Path -LiteralPath $offline) { Remove-Item -LiteralPath $offline -Force }
+# Only remove staging files after the application is back online.
+Get-ChildItem -LiteralPath $backup -Force | Remove-Item -Recurse -Force
+foreach ($name in $postDeployDelete) {
+    $p = Join-Path $webroot $name
+    if (Test-Path -LiteralPath $p -PathType Leaf) { Remove-Item -LiteralPath $p -Force }
 }
-If (Test-Path "$webroot\before-deploy.ps1"){
-	Remove-Item "$webroot\before-deploy.ps1"
-}
-
-
-Write-Output "Post-deploy script complete"
+Write-Host 'Post-deploy completed.'
