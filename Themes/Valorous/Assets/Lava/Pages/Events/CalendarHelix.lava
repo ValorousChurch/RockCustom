@@ -65,6 +65,8 @@
 </lava-form>
 
 <div class="row d-flex flex-wrap tw-clear-both" id="calendar-event-items">
+    {% renderlavaendpoint route:'^/calendar/events-cache?audience={{ audience }}&calendar={{ calendar }}&campus={{ campus }}' %}
+/-
     <div hx-get="^/calendar/events?audience={{ audience }}&calendar={{ calendar }}&campus={{ campus }}&date-range={{ dateRange }}&initial=true"
         hx-trigger="load"
         hx-swap="outerHTML"
@@ -74,5 +76,5 @@
     <div id="loading-calendar-events" class="htmx-indicator loading-indicator">
         <img src="/Content/ExternalSite/svg-spinners/3-dots-fade.svg">
     </div>
-
+-/
 </div>
