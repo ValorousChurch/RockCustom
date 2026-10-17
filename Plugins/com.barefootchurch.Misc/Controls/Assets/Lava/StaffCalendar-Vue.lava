@@ -270,7 +270,33 @@ p {
     {%- endfor -%}
   {%- endcontentchannelitem -%}
 
-  {% comment %} Blackout Dates - From the content channel {%endcomment %}
+{% comment %}Other Events - Froom Google Calendar API{% endcomment %}
+{% cache key:'staffcalendar-usholidays' duration:'86400' %}
+  {% lava
+    assign apiKey = 'AIzaSyDN-lCAkw_zHYIZQicKfUfPzszRyLGoDvI'
+    assign startofmonth = 'Now' | Date:'yyyy-MM-01'
+    assign startDate = startofmonth | DateAdd:-6,'M' | Date:'yyyy-MM-dd'
+    assign endDate = startofmonth | DateAdd:7,'M' | DateAdd:-1,'d' | Date:'yyyy-MM-dd'
+  %}
+  {% capture googleCalendarUrl %}https://www.googleapis.com/calendar/v3/calendars/en.usa%23holiday%40group.v.calendar.google.com/events?timeMin={{ startDate | Date:'yyyy-MM-dd' }}T00%3A00%3A00Z&timeMax={{ endDate | Date:'yyyy-MM-dd' }}T23%3A59%3A59Z&key={{ apiKey }}{% endcapture %}
+  {% webrequest url:'{{ googleCalendarUrl }}' %}
+    {% for holiday in results.items %}
+      {
+        "eventType": "holiday",
+        "color": "blue",
+        "name": {{ "🗓️ " | Append:holiday.summary | TitleCase | ToJSON }},
+        "description": "From \"US Holidays\" calendar API",
+        "link": "",
+        "editLink": "",
+        "start": "{{ holiday.start.date | Date:'yyyy-MM-dd' }}",
+        "end": "{{ holiday.end.date | DateAdd:-1,'s' | Date:'yyyy-MM-dd' }}",
+        "timed": false,
+      },
+    {% endfor %}
+  {% endwebrequest %}
+{% endcache %}
+
+  {% comment %} Blackout Dates - From the content channel {% endcomment %}
   {%- contentchannelitem where:'ContentChannelId == 59' securityenabled:'false' lazyloadenabled:'false' -%}
     {%- for item in contentchannelitemItems -%}
       {
@@ -497,6 +523,7 @@ p {
         { value: 'reservationSetupCleanup', text: 'Reservation - Setup & Cleanup Times' },
         { value: 'staff',                   text: 'Staff Life Events' },
         { value: 'pto',                     text: 'Time Off' },
+        { value: 'holiday',                 text: 'US Holidays' },
         { value: 'blackout',                text: 'Vacation Blackouts' },
         { value: 'other',                   text: 'Other Events' },
       ],
