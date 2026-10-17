@@ -4,6 +4,12 @@
     {{ detailsUrlOverride | PageRedirect }}
 {% endif %}
 
+//- If the event is in the past, ask search engines not to index the page
+{% assign nextStart = EventItemOccurrence.NextStartDateTime -%}
+{% if nextStart == null or nextStart == '' -%}
+    {{ 'noindex, follow' | AddMetaTagToHead:'property','robots' }}
+{% endif -%}
+
 {% stylesheet compile:'less' %}
     .registration-card .icons {
         font-size: .75em;
