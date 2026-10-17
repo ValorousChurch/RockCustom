@@ -87,7 +87,7 @@
 }
 
 /* Event Item Styles */
-.card {
+.calendar-lava .card {
     box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 6px -1px, rgba(0, 0, 0, 0.11) 0px 2px 4px -1px;
     overflow: hidden;
     transition: all 0.3s ease;

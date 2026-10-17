@@ -17,13 +17,11 @@
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
-/-
 <hr>
-<a class="d-flex align-items-center text-current" href="/connect/equip" target="_blank">
+<a class="d-flex align-items-center text-current" href="/connect/outreach" target="_blank">
     <div style="flex-grow:1">
-        <b style="font-size:1.2em">Attend an Equip Class</b><br>
-        <p class="mb-1">Equip classes are for believers who want to grow deeper in their faith.</p>
+        <b style="font-size:1.2em">Missions & Outreach</b><br>
+        <p class="mb-1">Looking for a meaningful way to make a difference in our community and around the world?</p>
     </div>
     <div style="flex-shrink:0;width:20px;height:20px;transform:rotate(45deg);border-width:2px 2px 0 0" class="border-gray-700"></div>
 </a>
--/

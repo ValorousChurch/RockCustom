@@ -1,7 +1,6 @@
 <!-- FundraisingList.lava -->
 {% assign GroupList = GroupList | Where:'IsPublic',true %}
 {% assign size = GroupList | Size %}
-<h3>Upcoming Mission Trips</h3>
 <div class='panel panel-default margin-t-md'>
 {% if size <= 0 %}
     <div class="margin-all-md"> There are no trips found that match that criteria.</div>

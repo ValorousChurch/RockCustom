@@ -2,6 +2,9 @@
     p {
         margin-bottom: 1em;
     }
+    .card-title {
+        text-wrap: pretty;
+    }
     .leaders {
         text-align: center;
         margin-top: -26px;
@@ -19,9 +22,16 @@
         transform: translateY(-3px) translateX(-1.5px);
         z-index: 25 !important;
     }
+    .infoTable tr {
+        margin-bottom: 2px;
+    }
+    .infoTable tr:last-child {
+        margin-bottom: 0;
+    }
     .infoTable th {
         text-align: right;
         padding: 0 5px 0 0 !important;
+        vertical-align: top !important;
     }
     .infoTable td {
         padding: 0 !important;
@@ -73,7 +83,7 @@
             <table class="infoTable table mb-4">
                 <tr>
                     <th>{{ 'Leader' | PluralizeForQuantity:leaderSize }}:</th>
-                    <td>{{ group.Leaders | Select:'FullName' | Join:', ' | ReplaceLast:', ',' & ' }}</td>
+                    <td>{{ group.Leaders | Select:'FullName' | Join:', ' |  RegExReplace:'(?<!,) ','&nbsp;','i' | ReplaceLast:', ',' &amp;&nbsp;' }}</td>
                 </tr>
     {% if group.Location.Description != '' %}
                 <tr>

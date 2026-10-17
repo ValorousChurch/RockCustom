@@ -6,6 +6,12 @@
 </style>
 <div class="row d-flex flex-wrap">
 {% for message in Items %}
+    {% lava
+        assign mediaElementId = message | Attribute:'Video','Id' | AsInteger | Default:'0'
+        if mediaElementId == 0
+            continue
+        endif
+    %}
     <div class=" col-md-4 col-sm-6 mb-4">
         <div class="card h-100" onclick="window.location.href='/watch/{{ message.Id }}'" style="cursor:pointer;">
     //- Watch progress indicator
@@ -14,7 +20,8 @@
             .watchIndicator {
                 border-radius: 25px;
                 color: white;
-                padding:5px 7px;
+                font-size: 1.25em;
+                padding: 1px 5px;
                 position: absolute;
                 right: 5px;
                 top: 5px;
@@ -23,7 +30,6 @@
             .resume { background-color: orange }
         {%- endstylesheet -%}
         {% lava
-            assign mediaElementId = message | Attribute:'Video','Id' | AsInteger
             //- SELECT [Id] FROM [InteractionChannel] WHERE [Guid] = 'd5b9bdaf-6e52-40d5-8e74-4e23973df159';
             assign interactionChannelId = 22
             assign watchedPercent = 0
@@ -35,9 +41,9 @@
             <!-- Video Id: {{ mediaElementId }}; Watched Percent: {{ watchedPercent }} -->
         {% if watchedPercent != null and watchedPercent != '' and watchedPercent > 0 %}
             {% if watchedPercent > 75 %}
-            <i class="fa fa-check-square watchIndicator complete" data-toggle="tooltip" data-html="true" data-title="<strong>Watched</strong><br>You watched this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
+            <i class="ti ti-circle-check-filled watchIndicator complete" data-toggle="tooltip" data-html="true" data-title="<strong>Watched</strong><br>You watched this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
             {% elseif watchedPercent > 5 %}
-            <i class="fa fa-clock watchIndicator resume" data-toggle="tooltip" data-html="true" data-title="<strong>In Progress</strong><br>You watched {{ watchedPercent | AsInterger }}% of this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
+            <i class="ti ti-clock-filled watchIndicator resume" data-toggle="tooltip" data-html="true" data-title="<strong>In Progress</strong><br>You watched {{ watchedPercent | AsInterger }}% of this on {{ interaction.InteractionDateTime | Date:'MMM. d, yyyy' }}"></i>
             {% endif %}
         {% endif %}
     {%- endif -%}
