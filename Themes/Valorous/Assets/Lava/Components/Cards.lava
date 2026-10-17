@@ -1,68 +1,88 @@
-{%- assign channelTitleSize  =  ContentChannel | Attribute:'TitleSize' | Default:'h1' -%}
-{%- assign channelContentAlignment  =  ContentChannel | Attribute:'ContentAlignment' -%}
-{%- assign cardSize  =  ContentChannel | Attribute:'Size' | Default:'Medium' -%}
-{%- capture cardSizeClass -%}
-    {%- case cardSize -%}
-        {%- when 'Small' -%}
-            col-md-4
-        {%- when 'Medium' -%}
-            col-md-6
-        {%- when 'Large' -%}
-            col-md-12
-    {%- endcase -%}
-{%- endcapture -%}
-{%- assign cardSizeClass = cardSizeClass | Trim -%}
-{% stylesheet id:'contentcomponent-vc-cards' compile:'less' cacheduration:'1' %}
+{%- lava
+    assign channelTitleSize = ContentChannel | Attribute:'TitleSize' | Default:'h1'
+    assign channelContentAlignment = ContentChannel | Attribute:'ContentAlignment'
+    assign cardSize = ContentChannel | Attribute:'Size' | Default:'Medium'
+    case cardSize
+        when 'Small'
+            assign cardSizeClass = 'grid-cols-sm-1 grid-cols-md-3 grid-cols-lg-4'
+        when 'Medium'
+            assign cardSizeClass = 'grid-cols-sm-1 grid-cols-md-2 grid-cols-lg-3'
+        when 'Large'
+        assign cardSizeClass = 'grid-cols-sm-1 grid-cols-md-1 grid-cols-lg-1'
+    endcase
+-%}
+{%- stylesheet id:'contentcomponent-vc-cards' compile:'less' cacheduration:'1' -%}
 .contentcomponent-vc-cards {
-    margin: 50px 0 -50px;
+    margin: 20px 0;
+    p:last-child {
+        margin-bottom: 0;
+    }
     .card {
-        margin-bottom: 50px;
-    }
-    p {
-        font-size: 1.3em;
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-    h1, h2, h3, h4, h5, h6 {
-        margin-top: 0;
-        margin-bottom: 20px;
+        overflow: hidden;
     }
 }
-{% endstylesheet %}
+.modal-header {
+    background-color: var(--primary-hex) !important;
+}
+{%- endstylesheet -%}
 <section class="contentComponent contentcomponent-vc-cards">
-    <div class="row {% if channelContentAlignment and channelContentAlignment != '' %}text-{{ channelContentAlignment | Downcase }}{% endif %}">
+    <div class="d-grid gap-3 {{ cardSizeClass }} {% if channelContentAlignment and channelContentAlignment != '' %}text-{{ channelContentAlignment | Downcase }}{% endif %}">
 {% for item in Items %}
-    {%- assign validDates = item | Attribute:'ValidDates','RawValue' | Split:',',false %}
-    {%- assign validSize = validDates | Size -%}
-    {%- if validSize == 2 -%}
-        {%- assign now = 'Now' | Date:'yyyy-MM-dd' %}
-        {%- assign validStart = validDates[0] | Date:'yyyy-MM-dd' -%}
-        {%- if validStart != '' and now <= validStart -%}
-            {% continue %}
+    {%- lava
+        assign validDates = item | Attribute:'ValidDates','RawValue' | Split:',',false
+        assign validSize = validDates | Size
+        if validSize == 2
+            assign now = 'Now' | Date:'yyyy-MM-dd'
+            assign validStart = validDates[0] | Date:'yyyy-MM-dd'
+            if validStart != '' and now <= validStart
+                continue
+            endif
+            assign validEnd = validDates[1] | Date:'yyyy-MM-dd'
+            if validEnd != '' and now >= validEnd
+                continue
+            endif
+        endif
+        assign imageGuid = item | Attribute:'Image','RawValue'
+        assign description = item | Attribute:'CardDescription' | NewlineToBr | Trim
+        assign CTAText = item | Attribute:'CTAText','RawValue'
+        assign CTALink = item | Attribute:'CTALink','RawValue'
+    -%}
+        <div class="card h-100">
+            <{{ channelTitleSize }} class="card-header">{{ item.Title }}</{{ channelTitleSize }}>
+            <div class="card-body"><p>{{ description }}</p></div>
+            <div class="text-center card-footer p-0">
+    {%- if CTALink and CTALink != '' -%}
+                <a class="btn btn-primary w-100 h-100 py-3"
+                    href="{{ CTALink }}"
+                    target="_blank"
+                >
+                    {{ CTAText }}&nbsp;<i class="fa fa-chevron-circle-right"></i>
+                </a>
+    {%- else -%}
+                <a class="btn btn-primary w-100 h-100 py-3"
+                    data-toggle="modal"
+                    data-target="#modal-{{forloop.index}}"
+                >
+                    {{ CTAText }}&nbsp;<i class="fa fa-chevron-circle-right"></i>
+                </a>
+                <div class="modal container modal-content rock-modal rock-modal-frame" id="modal-{{ forloop.index}}">
+                    <div class="modal-header">
+                        <button type="button" class="close js-modaldialog-close-link" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3 class="modal-title">{{ item.Title }}</h3>
+                    </div>
+                    <div class="modal-body clearfix">
+        {%- if imageGuid and imageGuid != '' -%}
+                        <img src="/GetImage.ashx?guid={{ imageGuid }}&w=500"
+                            class="pull-right mr-3 mb-3"
+                            style="max-width: 40%;"
+                        />
         {%- endif -%}
-        {%- assign validEnd = validDates[1] | Date:'yyyy-MM-dd' -%}
-        {%- if validEnd != '' and now >= validEnd -%}
-            {% continue %}
-        {%- endif -%}
+                        {{ item.Content }}
+                    </div><!-- /modal-body -->
+                </div><!-- /modal -->
     {%- endif -%}
-    {%- assign imageGuid = item | Attribute:'Image','RawValue' -%}
-    {%- assign CTAText = item | Attribute:'CTAText','RawValue' -%}
-    {%- assign CTALink = item | Attribute:'CTALink','RawValue' -%}
-        <div class="{{ cardSizeClass }}">
-            <div class="card">
-    {%- if imageGuid != '' -%}
-                <img alt="{{ item.Title }}" src="/GetImage.ashx?Guid={{ imageGuid }}" class="card-img-top">
-    {%- endif -%}
-                <div class="card-body">
-                    <{{ channelTitleSize }} class="card-title">{{ item.Title }}</{{ channelTitleSize }}>
-                    {{ item.Content }}
-    {%- if CTAText and CTAText != '' -%}
-                    <a href="{{ CTALink }}" class="btn btn-primary">{{ CTAText }}</a>
-    {%- endif -%}
-                </div>
-            </div>
-        </div>
+            </div><!-- /card-footer -->
+        </div><!-- /card -->
 {% endfor %}
     </div>
 </section>
