@@ -1,7 +1,7 @@
 <style>.nav-tabs{margin-left:0}</style>
 <script>
 function loadVideo(el,guid) {
-    $(el).parent().html('<iframe src="/media-player/' + guid + '" style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>');
+    $(el).parent().html('<iframe src="/media-player/' + guid + '" style="border:0;position:absolute;top:0;left:0;width:100%;height:100%;" scrolling="no"></iframe>');
 }
 </script>
 
