@@ -287,8 +287,25 @@ p {
   {%- endcontentchannelitem -%}
 ]
 {%- endcapture -%}
-{% comment %} Debug {% endcomment %}
-{% comment %} <div class="hidden"><pre>{{ events }}</pre></div> {% endcomment %}
+
+{% assign debug = 'Global' | PageParameter:'debug' | Default:'0' %}
+{% if debug == '1' %}
+  {% assign eventsTemp = events | FromJSON %}
+  {% assign eventsGrouped = eventsTemp | GroupBy:'eventType' %}
+  <div class="m-4 alert alert-warning">
+    There are {{ eventsTemp | Size }} total events.
+    <ul class="ml-3">
+    {% for type in eventsGrouped %}
+      {% assign typeKV = type | PropertyToKeyValue %}
+      <li>{{ typeKV.Key }}: {{ typeKV.Value | Size }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+  {[ accordion firstopen:'false' ]}
+    [[ item title:'Raw JSON' ]]<pre>{{ events }}</pre>[[ enditem ]]
+    [[ item title:'Formatted JSON']]<pre>{{ eventsTemp | ToJSON }}</pre>[[ enditem ]]
+  {[ endaccordion ]}
+{% else %}
 
 <div id="app">
   <v-app id="inspire">
@@ -561,3 +578,4 @@ p {
     },
   })
 </script>
+{% endif %}
