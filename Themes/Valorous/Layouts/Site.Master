@@ -49,7 +49,7 @@
   <title></title>
 
   <script src="<%# System.Web.Optimization.Scripts.Url("~/Scripts/Bundles/RockJQueryLatest" ) %>"></script>
-  <script src="<%# ResolveRockUrl("~/Scripts/modernizr.js" ) %>" ></script>
+  <script src="<%# ((RockPage)Page).ResolveRockUrl("~/Scripts/modernizr.js" ) %>" ></script>
 
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -57,9 +57,9 @@
   <asp:ContentPlaceHolder ID="css" runat="server" />
 
   <!-- Theme Included CSS Files -->
-  <link href="<%# ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
-  <link href="<%# ResolveRockUrl("~~/Styles/font-awesome.css", true) %>" rel="stylesheet">
-  <link href="<%# ResolveRockUrl("~~/Assets/vendor/magnific-popup/magnific-popup.css", true) %>" rel="stylesheet">
+  <link href="<%# ((RockPage)Page).ResolveRockUrl("~~/Styles/twcss/src/tailwind.css", true) %>" rel="stylesheet">
+  <link href="<%# ((RockPage)Page).ResolveRockUrl("~~/Styles/font-awesome.css", true) %>" rel="stylesheet">
+  <link href="<%# ((RockPage)Page).ResolveRockUrl("~~/Assets/vendor/magnific-popup/magnific-popup.css", true) %>" rel="stylesheet">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -69,13 +69,13 @@
   <![endif]-->
 
   <!-- Theme Plugins -->
-  <!-- <script src="<%# ResolveRockUrl("~~/Assets/Vendor/bootstrap/js/bootstrap.min.js") %>"></script> -->
+  <!-- <script src="<%# ((RockPage)Page).ResolveRockUrl("~~/Assets/Vendor/bootstrap/js/bootstrap.min.js") %>"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-  <script src="<%# ResolveRockUrl("~~/Assets/Vendor/scrollreveal/scrollreveal.min.js") %>"></script>
-  <script src="<%# ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
+  <script src="<%# ((RockPage)Page).ResolveRockUrl("~~/Assets/Vendor/scrollreveal/scrollreveal.min.js") %>"></script>
+  <script src="<%# ((RockPage)Page).ResolveRockUrl("~~/Assets/Vendor/magnific-popup/jquery.magnific-popup.min.js") %>"></script>
 
-  <link href="<%# ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
-  <link rel="stylesheet" href="<%# ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
+  <link href="<%# ((RockPage)Page).ResolveRockUrl("~~/Styles/bootstrap.css", true) %>" rel="stylesheet">
+  <link rel="stylesheet" href="<%# ((RockPage)Page).ResolveRockUrl("~~/Styles/theme.css", true) %>"/>
   <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
 </head>
 <body runat="server" id="body" class="compass-body">
