@@ -4,7 +4,7 @@
 param(
     [Parameter(Mandatory = $true)]
     [string]$WebRoot,
-    [string]$TransformPath = 'C:\inetpub\Config\web.production.xdt'
+    [string]$TransformPath = 'C:\RockDeployment\Config\web.production.xdt'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -61,8 +61,15 @@ try {
     }
 
     # Atomically replace only after successful XDT application and validation.
-    [System.IO.File]::Replace($tempFile, $configPath, $null)
+    $backupPath = Join-Path (Split-Path $webRootFull -Parent) 'web.config.pre-xdt.bak'
+    [System.IO.File]::Replace($tempFile, $configPath, $backupPath)
     Write-Host 'Production web.config XDT applied and validated.'
+    try {
+        Remove-Item -LiteralPath $backupPath -Force -ErrorAction Stop
+    }
+    catch {
+        Write-Warning "Could not remove temporary web.config backup."
+    }
 }
 finally {
     $transformation.Dispose()
